@@ -119,9 +119,13 @@
             const coordinates = document.getElementById("coordinates").innerText;
             const address = document.getElementById("address").innerText;
             const timestamp = document.getElementById("timestamp").innerText;
-            const message = `Eu estive aqui:\n\n${coordinates}\n${address}\n${timestamp}`;
+            const description = document.getElementById("description").value || "Nenhuma descrição fornecida.";
+            const userName = "Usuário Logado"; // Aqui você pode substituir pela lógica de obtenção do nome do usuário
+
+            const message = `*Marcador de Presença*\n\nEu estive aqui:\n\nUsuário: ${userName}\n${coordinates}\n${address}\nDescrição: ${description}\nData/Hora: ${timestamp}\n\nhttps://maps.google.com/?q=${currentLatitude},${currentLongitude}`;
 
             const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
+
             window.open(whatsappUrl, "_blank");
         }
 
@@ -184,7 +188,7 @@
             <p id="address">Endereço: -</p>
         </div>
 
-        <button class="button" onclick="shareLocation()">Compartilhar via WhatsApp</button>
+        <button class="button" onclick="shareLocation()">Compartilhar</button>
         <button class="button" onclick="generatePDF()">Gerar PDF</button>
         
         <h2>Histórico de Presenças</h2>
