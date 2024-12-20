@@ -121,14 +121,8 @@
             const timestamp = document.getElementById("timestamp").innerText;
             const message = `Eu estive aqui:\n\n${coordinates}\n${address}\n${timestamp}`;
 
-            if (navigator.share) {
-                navigator.share({
-                    title: "Marcador de Presença",
-                    text: message,
-                }).catch(error => console.error("Erro ao compartilhar:", error));
-            } else {
-                alert("Compartilhamento não suportado neste navegador.");
-            }
+            const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, "_blank");
         }
 
         async function generatePDF() {
@@ -190,7 +184,7 @@
             <p id="address">Endereço: -</p>
         </div>
 
-        <button class="button" onclick="shareLocation()">Compartilhar</button>
+        <button class="button" onclick="shareLocation()">Compartilhar via WhatsApp</button>
         <button class="button" onclick="generatePDF()">Gerar PDF</button>
         
         <h2>Histórico de Presenças</h2>
