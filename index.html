@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marcador de Presença</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script>
+        let currentLatitude = "-";
+        let currentLongitude = "-";
+
+        function trackLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        currentLatitude = position.coords.latitude;
+                        currentLongitude = position.coords.longitude;
+
+                        const timestamp = new Date().toLocaleString();
+
+                        document.getElementById("coordinates").innerText =
+                            `Latitude: ${currentLatitude}\nLongitude: ${currentLongitude}`;
+                        document.getElementById("timestamp").innerText = `Data e Hora: ${timestamp}`;
+
+                        getAddressFromCoordinates(currentLatitude, currentLongitude);
+                        updateMap(currentLatitude, currentLongitude);
+                        playSound("location-sound.mp3");
+                    },
+                    (error) => {
+                        console.error("Erro ao obter localização:", error);
+                        document.getElementById("coordinates").innerText =
+                            "Erro ao obter localização.";
+                        playSound("error-sound.mp3");
+                    }
+                );
+            } else {
+                alert("Geolocalização não é suportada neste navegador.");
+            }
+        }
+
+        function getAddressFromCoordinates(latitude, longitude) {
+            const apiUrl = `https://us1.locationiq.com/v1/reverse?key=pk.73c7ec951f7e0c38e842f740a1a63917&lat=${latitude}&lon=${longitude}&format=json`;
+
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    const address = `Rua: ${data.address.road || "N/A"},
+                                     Bairro: ${data.address.residential || "N/A"},
+                                     Cidade: ${data.address.city || "N/A"},
+                                     Estado: ${data.address.state || "N/A"},
+                                     CEP: ${data.address.postcode || "N/A"},
+                                     País: ${data.address.country || "N/A"}`;
+
+                    document.getElementById("address").innerText = address;
+                })
+                .catch(error => {
+                    console.error("Erro ao obter endereço:", error);
+                    document.getElementById("address").innerText =
+                        "Erro ao obter endereço.";
+                });
+        }
+
+        function saveRecord() {
+            const coordinates = document.getElementById("coordinates").innerText;
+            const address = document.getElementById("address").innerText;
+            const timestamp = document.getElementById("timestamp").innerText;
+            const description = document.getElementById("description").value;
+
+            const record = {
+                coordinates,
+                address,
+                timestamp,
+                description
+            };
+
+            const records = JSON.parse(localStorage.getItem("presenceRecords")) || [];
+            records.push(record);
+            localStorage.setItem("presenceRecords", JSON.stringify(records));
+
+            playSound("save-sound.mp3");
+            displayRecords();
+        }
+
+        function displayRecords() {
+            const records = JSON.parse(localStorage.getItem("presenceRecords")) || [];
+            const recordsContainer = document.getElementById("records");
+            recordsContainer.innerHTML = "";
+
+            records.forEach((record, index) => {
+                const recordElement = document.createElement("div");
+                recordElement.classList.add("record");
+                recordElement.innerHTML = `
+                    <p><strong>Registro ${index + 1}</strong></p>
+                    <p>${record.coordinates}</p>
+                    <p>${record.address}</p>
+                    <p>${record.timestamp}</p>
+                    <p>Descrição: ${record.description || "Nenhuma descrição fornecida."}</p>
+                    <button onclick="deleteRecord(${index})">Excluir</button>
+                `;
+                recordsContainer.appendChild(recordElement);
+            });
+        }
+
+        function deleteRecord(index) {
+            const records = JSON.parse(localStorage.getItem("presenceRecords")) || [];
+            records.splice(index, 1);
+            localStorage.setItem("presenceRecords", JSON.stringify(records));
+            playSound("delete-sound.mp3");
+            displayRecords();
+        }
+
+        function updateMap(lat, lon) {
+            const map = document.getElementById("map");
+            map.src = `https://maps.google.com/maps?q=${lat},${lon}&z=15&output=embed`;
+        }
+
+        function shareLocation() {
+            const coordinates = document.getElementById("coordinates").innerText;
+            const address = document.getElementById("address").innerText;
+            const timestamp = document.getElementById("timestamp").innerText;
+            const message = `Eu estive aqui:\n\n${coordinates}\n${address}\n${timestamp}`;
+
+            if (navigator.share) {
+                navigator.share({
+                    title: "Marcador de Presença",
+                    text: message,
+                }).catch(error => console.error("Erro ao compartilhar:", error));
+            } else {
+                alert("Compartilhamento não suportado neste navegador.");
+            }
+        }
+
+        async function generatePDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            const coordinates = document.getElementById("coordinates").innerText;
+            const address = document.getElementById("address").innerText;
+            const timestamp = document.getElementById("timestamp").innerText;
+            const description = document.getElementById("description").value || "Nenhuma descrição fornecida.";
+
+            doc.text("Marcador de Presença", 10, 10);
+            doc.text("Data e Hora:", 10, 20);
+            doc.text(timestamp, 10, 30);
+            doc.text("Coordenadas:", 10, 40);
+            doc.text(coordinates, 10, 50);
+            doc.text("Endereço:", 10, 60);
+            doc.text(address, 10, 70);
+            doc.text("Descrição:", 10, 80);
+            doc.text(description, 10, 90);
+
+            doc.save("Registro_Presenca.pdf");
+        }
+
+        function playSound(soundFile) {
+            const audio = new Audio(soundFile);
+            audio.play();
+        }
+
+        window.onload = function () {
+            trackLocation();
+            displayRecords();
+        };
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Marcador de Presença</h1>
+    </header>
+
+    <div class="container">
+        <h2>Registrar Presença</h2>
+        <iframe id="map" width="100%" height="300" style="border:0;" allowfullscreen></iframe>
+        <textarea id="description" placeholder="Adicione uma descrição (opcional)"></textarea>
+        <button class="button green" onclick="saveRecord()">Salvar Registro</button>
+        
+        <div class="field">
+            <h2>Coordenadas</h2>
+            <p id="coordinates">Latitude: -, Longitude: -</p>
+        </div>
+
+        <div class="field">
+            <h2>Data e Hora</h2>
+            <p id="timestamp">Data e Hora: -</p>
+        </div>
+
+        <div class="field">
+            <h2>Endereço</h2>
+            <p id="address">Endereço: -</p>
+        </div>
+
+        <button class="button" onclick="shareLocation()">Compartilhar</button>
+        <button class="button" onclick="generatePDF()">Gerar PDF</button>
+        
+        <h2>Histórico de Presenças</h2>
+        <div id="records" class="history"></div>
+    </div>
+
+    <footer>
+        <p>© 2024 Marcador de Presença. Todos os direitos reservados.</p>
+    </footer>
+</body>
+</html>
