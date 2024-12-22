@@ -6,9 +6,121 @@
     <title>Marcador de Presença</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        header {
+            text-align: center;
+            padding: 20px;
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .container {
+            padding: 20px;
+            max-width: 800px;
+            margin: auto;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        .container h2 {
+            font-size: 18px;
+            color: #4CAF50;
+        }
+
+        #map {
+            border-radius: 8px;
+        }
+
+        textarea {
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            resize: none;
+            font-size: 14px;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+            transform: scale(1.02);
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        button:nth-child(1) {
+            background: linear-gradient(to right, #4CAF50, #81C784);
+            color: white;
+        }
+
+        button:nth-child(2) {
+            background: linear-gradient(to right, #2196F3, #64B5F6);
+            color: white;
+        }
+
+        button:nth-child(3) {
+            background: linear-gradient(to right, #FFC107, #FFD54F);
+            color: #333;
+        }
+
+        /* Aqui está a modificação! Cor do botão "Ver Histórico de Presença" alterada para azul */
+        button:nth-child(4) {
+            background: linear-gradient(to right, #2196F3, #64B5F6); /* Gradiente azul */
+            color: white;
+        }
+
+        .field {
+            margin: 10px 0;
+        }
+
+        .field h2 {
+            font-size: 16px;
+            color: #333;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
     <script>
         let currentLatitude = "-";
         let currentLongitude = "-";
+        let userName = "Usuário Logado";
 
         function trackLocation() {
             if (navigator.geolocation) {
@@ -21,7 +133,7 @@
 
                         document.getElementById("coordinates").innerText =
                             `Latitude: ${currentLatitude}\nLongitude: ${currentLongitude}`;
-                        document.getElementById("timestamp").innerText = `Data e Hora: ${timestamp}`;
+                        document.getElementById("timestamp").innerText = timestamp;
 
                         getAddressFromCoordinates(currentLatitude, currentLongitude);
                         updateMap(currentLatitude, currentLongitude);
@@ -47,6 +159,7 @@
                 .then(data => {
                     const address = `Rua: ${data.address.road || "N/A"},
                                      Bairro: ${data.address.residential || "N/A"},
+                                     Região: ${data.address.suburb || "N/A"},
                                      Cidade: ${data.address.city || "N/A"},
                                      Estado: ${data.address.state || "N/A"},
                                      CEP: ${data.address.postcode || "N/A"},
@@ -65,54 +178,25 @@
             const coordinates = document.getElementById("coordinates").innerText;
             const address = document.getElementById("address").innerText;
             const timestamp = document.getElementById("timestamp").innerText;
-            const description = document.getElementById("description").value;
+            const description = document.getElementById("description").value || "Nenhuma descrição fornecida.";
 
             const record = {
+                userName,
                 coordinates,
                 address,
+                description,
                 timestamp,
-                description
             };
 
             const records = JSON.parse(localStorage.getItem("presenceRecords")) || [];
             records.push(record);
             localStorage.setItem("presenceRecords", JSON.stringify(records));
-
-            playSound("save-sound.mp3");
-            displayRecords();
-        }
-
-        function displayRecords() {
-            const records = JSON.parse(localStorage.getItem("presenceRecords")) || [];
-            const recordsContainer = document.getElementById("records");
-            recordsContainer.innerHTML = "";
-
-            records.forEach((record, index) => {
-                const recordElement = document.createElement("div");
-                recordElement.classList.add("record");
-                recordElement.innerHTML = `
-                    <p><strong>Registro ${index + 1}</strong></p>
-                    <p>${record.coordinates}</p>
-                    <p>${record.address}</p>
-                    <p>${record.timestamp}</p>
-                    <p>Descrição: ${record.description || "Nenhuma descrição fornecida."}</p>
-                    <button onclick="deleteRecord(${index})">Excluir</button>
-                `;
-                recordsContainer.appendChild(recordElement);
-            });
-        }
-
-        function deleteRecord(index) {
-            const records = JSON.parse(localStorage.getItem("presenceRecords")) || [];
-            records.splice(index, 1);
-            localStorage.setItem("presenceRecords", JSON.stringify(records));
-            playSound("delete-sound.mp3");
-            displayRecords();
-        }
-
-        function updateMap(lat, lon) {
-            const map = document.getElementById("map");
-            map.src = `https://maps.google.com/maps?q=${lat},${lon}&z=15&output=embed`;
+            
+            const saveButton = document.querySelector("button[onclick='saveRecord()']");
+            saveButton.innerText = "Registro salvo com sucesso!";
+            setTimeout(() => {
+                saveButton.innerText = "Salvar Registro";
+            }, 2000);
         }
 
         function shareLocation() {
@@ -120,13 +204,11 @@
             const address = document.getElementById("address").innerText;
             const timestamp = document.getElementById("timestamp").innerText;
             const description = document.getElementById("description").value || "Nenhuma descrição fornecida.";
-            const userName = "Usuário Logado"; // Aqui você pode substituir pela lógica de obtenção do nome do usuário
 
-            const message = `*Marcador de Presença*\n\nEu estive aqui:\n\nUsuário: ${userName}\n${coordinates}\n${address}\nDescrição: ${description}\nLocal: ${timestamp}\n\nhttps://maps.google.com/?q=${currentLatitude},${currentLongitude}`;
+            const message = `*Marcador de Presença*\n\nEu estive aqui:\n\nUsuário: ${userName}\n${coordinates}\n${address}\nDescrição: ${description}\nData/hora local: ${timestamp}\n\nhttps://maps.google.com/?q=${currentLatitude},${currentLongitude}`;
 
             const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
-
-            window.open(whatsappUrl, "_blank");
+            window.open(whatsappUrl, '_blank');
         }
 
         async function generatePDF() {
@@ -138,17 +220,25 @@
             const timestamp = document.getElementById("timestamp").innerText;
             const description = document.getElementById("description").value || "Nenhuma descrição fornecida.";
 
-            doc.text("Marcador de Presença", 10, 10);
-            doc.text("Data e Hora:", 10, 20);
-            doc.text(timestamp, 10, 30);
-            doc.text("Coordenadas:", 10, 40);
-            doc.text(coordinates, 10, 50);
-            doc.text("Endereço:", 10, 60);
-            doc.text(address, 10, 70);
-            doc.text("Descrição:", 10, 80);
-            doc.text(description, 10, 90);
+            const title = "Marcador de Presença";
+            const message = `Eu estive aqui:\n\nUsuário: ${userName}\n${coordinates}\n${address}\nDescrição: ${description}\nData/hora local: ${timestamp}\n\nhttps://maps.google.com/?q=${currentLatitude},${currentLongitude}`;
 
-            doc.save("Registro_Presenca.pdf");
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(16);
+            doc.text(title, 10, 20);
+
+            doc.setFont("helvetica", "normal");
+            doc.setFontSize(12);
+            const textStartY = 30;
+            const textWidth = 180;
+            doc.text(message, 10, textStartY, { maxWidth: textWidth });
+
+            doc.save("Marcador de Presença.pdf");
+        }
+
+        function updateMap(lat, lon) {
+            const map = document.getElementById("map");
+            map.src = `https://maps.google.com/maps?q=${lat},${lon}&z=15&output=embed`;
         }
 
         function playSound(soundFile) {
@@ -158,7 +248,6 @@
 
         window.onload = function () {
             trackLocation();
-            displayRecords();
         };
     </script>
 </head>
@@ -168,10 +257,10 @@
     </header>
 
     <div class="container">
-        <h2>Registrar Presença</h2>
+        <h2>Usuário: Usuário Logado</h2>
         <iframe id="map" width="100%" height="300" style="border:0;" allowfullscreen></iframe>
         <textarea id="description" placeholder="Adicione uma descrição (opcional)"></textarea>
-        <button class="button green" onclick="saveRecord()">Salvar Registro</button>
+        <button class="button" onclick="saveRecord()">Salvar Registro</button>
         
         <div class="field">
             <h2>Coordenadas</h2>
@@ -180,19 +269,17 @@
 
         <div class="field">
             <h2>Data e Hora</h2>
-            <p id="timestamp">Data e Hora: -</p>
+            <p id="timestamp">Local</p>
         </div>
 
         <div class="field">
             <h2>Endereço</h2>
-            <p id="address">Endereço: -</p>
+            <p id="address">Local</p>
         </div>
 
-        <button class="button" onclick="shareLocation()">Compartilhar</button>
+        <button class="button" onclick="shareLocation()">Compartilhar pelo WhatsApp</button>
         <button class="button" onclick="generatePDF()">Gerar PDF</button>
-        
-        <h2>Histórico de Presenças</h2>
-        <div id="records" class="history"></div>
+        <button class="button" onclick="window.location.href='historico.html'">Ver Histórico de Presença</button>
     </div>
 
     <footer>
