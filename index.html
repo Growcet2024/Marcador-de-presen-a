@@ -14,31 +14,31 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #007bff;
+            background-color: #f9f9f9;
             color: #333;
         }
 
         /* Estilos do Cabeçalho */
         header {
-            text-align: center;
-            padding: 20px;
-            background-color: #007bff;
-            color: #ffffff;
+            text-align: left;
+            padding: 10px;
+            background-color: #f9f9f9;
+            color: #000000;
         }
 
         header h1 {
             margin: 0;
-            font-size: 24px;
+            font-size: 20px;
         }
 
         /* Estilos do Container Principal */
         .container {
-            padding: 20px;
-            max-width: 800px;
+            padding: 10px;
+            max-width: 600px;
             margin: auto;
             background-color: #fff;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 20px;
+            border-radius: 15px;
         }
 
         .container h2 {
@@ -52,7 +52,7 @@
         }
 
         /* Estilos da Área de Texto (Descrição) */
-        textarea {
+        textarea, input[type="text"] {
             width: 100%;
             padding: 10px;
             margin: 10px 0;
@@ -118,10 +118,10 @@
 
         /* Estilos do Rodapé */
         footer {
-            text-align: center;
+            text-align: left;
             padding: 10px;
-            background-color: #007bff;
-            color: #ffffff;
+            background-color: #f9f9f9;
+            color: #000000;
             position: relative;
             bottom: 0;
             width: 100%;
@@ -177,7 +177,8 @@
             fetch(apiUrl)
                 .then(response => response.json())
                 .then(data => {
-                    const address = `Rua: ${data.address.road || "N/A"},
+                    const roadName = data.address.road || "N/A";
+                    const address = `Local: ${roadName},
                                      Bairro: ${data.address.residential || "N/A"},
                                      Região: ${data.address.suburb || "N/A"},
                                      Cidade: ${data.address.city || "N/A"},
@@ -185,12 +186,13 @@
                                      CEP: ${data.address.postcode || "N/A"},
                                      País: ${data.address.country || "N/A"}`;
 
+                    document.getElementById("road-name").innerText = `Local: ${roadName}`;
                     document.getElementById("address").innerText = address;
                 })
                 .catch(error => {
                     console.error("Erro ao obter endereço:", error);
-                    document.getElementById("address").innerText =
-                        "Erro ao obter endereço.";
+                    document.getElementById("road-name").innerText = "Erro ao obter nome da rua.";
+                    document.getElementById("address").innerText = "Erro ao obter endereço.";
                 });
         }
 
@@ -199,10 +201,11 @@
             const coordinates = document.getElementById("coordinates").innerText;
             const address = document.getElementById("address").innerText;
             const timestamp = document.getElementById("timestamp").innerText;
+            const userInput = document.getElementById("user-name").value || "Usuário Anônimo";
             const description = document.getElementById("description").value || "Nenhuma descrição fornecida.";
 
             const record = {
-                userName,
+                userName: userInput,
                 coordinates,
                 address,
                 description,
@@ -225,9 +228,10 @@
             const coordinates = document.getElementById("coordinates").innerText;
             const address = document.getElementById("address").innerText;
             const timestamp = document.getElementById("timestamp").innerText;
+            const userInput = document.getElementById("user-name").value || "Usuário Anônimo";
             const description = document.getElementById("description").value || "Nenhuma descrição fornecida.";
 
-            const message = `*Marcador de Presença*\n\nEu estive aqui:\n\nUsuário: ${userName}\n${coordinates}\n${address}\nDescrição: ${description}\nData/hora local: ${timestamp}\n\nhttps://maps.google.com/?q=${currentLatitude},${currentLongitude}`;
+            const message = `*Marcador de Presença*\n\nEu estive aqui:\n\nUsuário: ${userInput}\n${coordinates}\n${address}\nDescrição: ${description}\nData/hora local: ${timestamp}\n\nhttps://maps.google.com/?q=${currentLatitude},${currentLongitude}`;
 
             const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
             window.open(whatsappUrl, '_blank');
@@ -241,10 +245,11 @@
             const coordinates = document.getElementById("coordinates").innerText;
             const address = document.getElementById("address").innerText;
             const timestamp = document.getElementById("timestamp").innerText;
+            const userInput = document.getElementById("user-name").value || "Usuário Anônimo";
             const description = document.getElementById("description").value || "Nenhuma descrição fornecida.";
 
             const title = "Marcador de Presença";
-            const message = `Eu estive aqui:\n\nUsuário: ${userName}\n${coordinates}\n${address}\nDescrição: ${description}\nData/hora local: ${timestamp}\n\nhttps://maps.google.com/?q=${currentLatitude},${currentLongitude}`;
+            const message = `Eu estive aqui:\n\nUsuário: ${userInput}\n${coordinates}\n${address}\nDescrição: ${description}\nData/hora local: ${timestamp}\n\nhttps://maps.google.com/?q=${currentLatitude},${currentLongitude}`;
 
             doc.setFont("helvetica", "bold");
             doc.setFontSize(16);
@@ -286,11 +291,14 @@
 
     <!-- Container Principal -->
     <div class="container">
-        <h2>Usuário: Usuário Logado</h2>
-        <h2 id="region">Região: N/A</h2>
+        <!-- Nome da Rua -->
+        <h2 id="road-name">Rua: Local desconhecido</h2>
 
         <!-- Mapa -->
         <iframe id="map" width="100%" height="300" style="border:0;" allowfullscreen></iframe>
+
+        <!-- Campo para o Nome do Usuário -->
+        <input type="text" id="user-name" placeholder="Digite seu nome">
 
         <!-- Área de Descrição -->
         <textarea id="description" placeholder="Adicione uma descrição (opcional)"></textarea>
@@ -322,13 +330,80 @@
         <!-- Gerar PDF -->
         <button class="button" onclick="generatePDF()">Gerar PDF</button>
 
-        <!-- Histórico de Presença -->
-        <button class="button" onclick="window.location.href='historico.html'">Ver Histórico de Presença</button>
-    </div>
+       <!-- Botão para Exibir o Histórico dentro do mesmo container -->
+<button class="button" onclick="toggleHistory()">Ver Histórico de Presença</button>
+
 
     <!-- Rodapé -->
     <footer>
         <p>© 2024 Marcador de Presença. Todos os direitos reservados.</p>
     </footer>
+
+
+
+ <!-- PARTE DO HISTÓRICO  -->
+
+  <!-- Container para Exibir o Histórico de Presença -->
+<div id="history-container" style="display: none;">
+    <h2>Histórico de Presença</h2>
+    <div id="records-list">
+        <!-- Lista de registros será carregada aqui -->
+    </div>
+</div>
+
+
+<script>
+    // Função para alternar a visibilidade do histórico
+    function toggleHistory() {
+        const historyContainer = document.getElementById("history-container");
+        const records = JSON.parse(localStorage.getItem("presenceRecords")) || [];
+
+        // Verifica se há registros
+        if (records.length === 0) {
+            alert("Não há registros de presença.");
+        } else {
+            if (historyContainer.style.display === "none") {
+                // Mostrar o histórico
+                historyContainer.style.display = "block";
+                displayHistory(); // Chama a função para preencher os dados
+            } else {
+                // Esconder o histórico
+                historyContainer.style.display = "none";
+            }
+        }
+    }
+
+    // Função para exibir o histórico de registros
+    function displayHistory() {
+        const records = JSON.parse(localStorage.getItem("presenceRecords")) || [];
+        const recordsList = document.getElementById("records-list");
+        recordsList.innerHTML = ""; // Limpa o conteúdo existente
+
+        // Itera sobre os registros e os exibe
+        records.forEach(record => {
+            const recordDiv = document.createElement("div");
+            recordDiv.classList.add("record");
+
+            recordDiv.innerHTML = `
+                <p><strong>Usuário:</strong> ${record.userName}</p>
+                <p><strong>Coordenadas:</strong> ${record.coordinates}</p>
+                <p><strong>Endereço:</strong> ${record.address}</p>
+                <p><strong>Descrição:</strong> ${record.description}</p>
+                <p><strong>Data/Hora:</strong> ${record.timestamp}</p>
+                <hr>
+            `;
+            recordsList.appendChild(recordDiv);
+        });
+    }
+
+</script>
+
+
+
+<!-- NÃO REMOVER O PONTO ABAIXO ESTREMAMENTE NECESSÁRIO -->
+.
+<!-- NÃO REMOVER O PONTO ACIMA ESTREMAMENTE NECESSÁRIO -->
+
 </body>
 </html>
+
