@@ -201,7 +201,7 @@
             const coordinates = document.getElementById("coordinates").innerText;
             const address = document.getElementById("address").innerText;
             const timestamp = document.getElementById("timestamp").innerText;
-            const userInput = document.getElementById("user-name").value || "Usuário Anônimo";
+            const userInput = document.getElementById("user-name").value || "Edson";
             const description = document.getElementById("description").value || "Nenhuma descrição fornecida.";
 
             const record = {
@@ -228,7 +228,7 @@
             const coordinates = document.getElementById("coordinates").innerText;
             const address = document.getElementById("address").innerText;
             const timestamp = document.getElementById("timestamp").innerText;
-            const userInput = document.getElementById("user-name").value || "Usuário Anônimo";
+            const userInput = document.getElementById("user-name").value || "Usuário Edson";
             const description = document.getElementById("description").value || "Nenhuma descrição fornecida.";
 
             const message = `*Marcador de Presença*\n\nEu estive aqui:\n\nUsuário: ${userInput}\n${coordinates}\n${address}\nDescrição: ${description}\nData/hora local: ${timestamp}\n\nhttps://maps.google.com/?q=${currentLatitude},${currentLongitude}`;
@@ -245,7 +245,7 @@
             const coordinates = document.getElementById("coordinates").innerText;
             const address = document.getElementById("address").innerText;
             const timestamp = document.getElementById("timestamp").innerText;
-            const userInput = document.getElementById("user-name").value || "Usuário Anônimo";
+            const userInput = document.getElementById("user-name").value || "Usuário Edson";
             const description = document.getElementById("description").value || "Nenhuma descrição fornecida.";
 
             const title = "Marcador de Presença";
@@ -292,7 +292,7 @@
     <!-- Container Principal -->
     <div class="container">
         <!-- Nome da Rua -->
-        <h2 id="road-name">Rua: Local desconhecido</h2>
+        <h2 id="road-name">Rua: Local Carregando!</h2>
 
         <!-- Mapa -->
         <iframe id="map" width="100%" height="300" style="border:0;" allowfullscreen></iframe>
@@ -343,14 +343,30 @@
 
  <!-- PARTE DO HISTÓRICO  -->
 
-  <!-- Container para Exibir o Histórico de Presença -->
+<!-- Container para Exibir o Histórico de Presença -->
 <div id="history-container" style="display: none;">
     <h2>Histórico de Presença</h2>
-    <div id="records-list">
+    <div id="records-list" style="max-width: 800px; margin: auto; background-color: #f9f9f9; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); overflow-y: auto;">
         <!-- Lista de registros será carregada aqui -->
     </div>
 </div>
 
+<!-- Estilos CSS -->
+<style>
+    #history-container {
+        margin-top: 20px;
+        padding: 0 10px; /* Ajuste para garantir que o conteúdo não fique colado nas laterais */
+    }
+
+    .record {
+        background-color: #ffffff;
+        border: 2px solid #ddd; /* Borda do contorno do registro */
+        padding: 15px;
+        margin-bottom: 10px; /* Espaçamento entre os registros */
+        border-radius: 8px;  /* Arredondamento nas bordas */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra leve para destacar o registro */
+    }
+</style>
 
 <script>
     // Função para alternar a visibilidade do histórico
@@ -363,6 +379,10 @@
                 historyContainer.style.display = "block";
                 const recordsList = document.getElementById("records-list");
                 recordsList.innerHTML = ""; // Limpar a lista antes de adicionar novamente
+
+// Ordenar os registros de forma decrescente (mais recente primeiro)
+records.reverse();  // Aqui é onde você inverte a ordem dos registros
+
 
                 // Adicionar os registros
                 records.forEach((record, index) => {
@@ -380,7 +400,7 @@
                             <button onclick="generatePDFHistory(${index})">Gerar PDF</button>
                             <button onclick="deleteRecord(${index})">Apagar Registro</button>
                         </div>
-                        <hr>
+                       
                     `;
                     recordsList.appendChild(recordDiv);
                 });
@@ -391,7 +411,12 @@
 
         function shareLocationHistory(index) {
             const records = JSON.parse(localStorage.getItem("presenceRecords")) || [];
-            const record = records[index];
+           
+
+            // Ordenar os registros de forma decrescente (mais recente primeiro)
+             records.reverse();  // Aqui é onde você inverte a ordem dos registros
+             
+            const record = records[index];  // Agora pega o registro corretamente após a reversão
 
             const message = `*Marcador de Presença*\n\nEu estive aqui:\n\nUsuário: ${record.userName}\n${record.coordinates}\n${record.address}\nDescrição: ${record.description}\nData/hora local: ${record.timestamp}\n\nhttps://maps.google.com/?q=${record.coordinates.split(": ")[1].split(",")[0]},${record.coordinates.split(": ")[2]}`;
 
@@ -399,8 +424,12 @@
             window.open(whatsappUrl, '_blank');
         }
 
-        async function generatePDFHistory(index) {
+            async function generatePDFHistory(index) {
             const records = JSON.parse(localStorage.getItem("presenceRecords")) || [];
+
+            // Ordenar os registros de forma decrescente (mais recente primeiro)
+            records.reverse();  // Inverte a ordem dos registros
+
             const record = records[index];
 
             const { jsPDF } = window.jspdf;
@@ -422,19 +451,17 @@
             doc.save(`${record.userName}_Marcador_de_Presença.pdf`);
         }
 
-        function deleteRecord(index) {
+            function deleteRecord(index) {
             const records = JSON.parse(localStorage.getItem("presenceRecords")) || [];
             records.splice(index, 1);
             localStorage.setItem("presenceRecords", JSON.stringify(records));
             toggleHistory();
         }
     </script>
-</head>
-<body>
+
     <header>
    
 
         
 </body>
 </html>
-
