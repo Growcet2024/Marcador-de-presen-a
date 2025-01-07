@@ -354,56 +354,87 @@
 
 <script>
     // Função para alternar a visibilidade do histórico
-    function toggleHistory() {
-        const historyContainer = document.getElementById("history-container");
-        const records = JSON.parse(localStorage.getItem("presenceRecords")) || [];
 
-        // Verifica se há registros
-        if (records.length === 0) {
-            alert("Não há registros de presença.");
-        } else {
+    function toggleHistory() {
+            const historyContainer = document.getElementById("history-container");
+            const records = JSON.parse(localStorage.getItem("presenceRecords")) || [];
+
             if (historyContainer.style.display === "none") {
-                // Mostrar o histórico
                 historyContainer.style.display = "block";
-                displayHistory(); // Chama a função para preencher os dados
+                const recordsList = document.getElementById("records-list");
+                recordsList.innerHTML = ""; // Limpar a lista antes de adicionar novamente
+
+                // Adicionar os registros
+                records.forEach((record, index) => {
+                    const recordDiv = document.createElement("div");
+                    recordDiv.classList.add("record");
+
+                    recordDiv.innerHTML = `
+                        <p><strong>Usuário:</strong> ${record.userName}</p>
+                        <p><strong>Coordenadas:</strong> ${record.coordinates}</p>
+                        <p><strong>Endereço:</strong> ${record.address}</p>
+                        <p><strong>Descrição:</strong> ${record.description}</p>
+                        <p><strong>Data/Hora:</strong> ${record.timestamp}</p>
+                        <div class="history-buttons">
+                            <button onclick="shareLocationHistory(${index})">Compartilhar no WhatsApp</button>
+                            <button onclick="generatePDFHistory(${index})">Gerar PDF</button>
+                            <button onclick="deleteRecord(${index})">Apagar Registro</button>
+                        </div>
+                        <hr>
+                    `;
+                    recordsList.appendChild(recordDiv);
+                });
             } else {
-                // Esconder o histórico
                 historyContainer.style.display = "none";
             }
         }
-    }
 
-    // Função para exibir o histórico de registros
-    function displayHistory() {
-        const records = JSON.parse(localStorage.getItem("presenceRecords")) || [];
-        const recordsList = document.getElementById("records-list");
-        recordsList.innerHTML = ""; // Limpa o conteúdo existente
+        function shareLocationHistory(index) {
+            const records = JSON.parse(localStorage.getItem("presenceRecords")) || [];
+            const record = records[index];
 
-        // Itera sobre os registros e os exibe
-        records.forEach(record => {
-            const recordDiv = document.createElement("div");
-            recordDiv.classList.add("record");
+            const message = `*Marcador de Presença*\n\nEu estive aqui:\n\nUsuário: ${record.userName}\n${record.coordinates}\n${record.address}\nDescrição: ${record.description}\nData/hora local: ${record.timestamp}\n\nhttps://maps.google.com/?q=${record.coordinates.split(": ")[1].split(",")[0]},${record.coordinates.split(": ")[2]}`;
 
-            recordDiv.innerHTML = `
-                <p><strong>Usuário:</strong> ${record.userName}</p>
-                <p><strong>Coordenadas:</strong> ${record.coordinates}</p>
-                <p><strong>Endereço:</strong> ${record.address}</p>
-                <p><strong>Descrição:</strong> ${record.description}</p>
-                <p><strong>Data/Hora:</strong> ${record.timestamp}</p>
-                <hr>
-            `;
-            recordsList.appendChild(recordDiv);
-        });
-    }
+            const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+        }
 
-</script>
+        async function generatePDFHistory(index) {
+            const records = JSON.parse(localStorage.getItem("presenceRecords")) || [];
+            const record = records[index];
 
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
 
+            const title = "Marcador de Presença";
+            const message = `Eu estive aqui:\n\nUsuário: ${record.userName}\n${record.coordinates}\n${record.address}\nDescrição: ${record.description}\nData/hora local: ${record.timestamp}\n\nhttps://maps.google.com/?q=${record.coordinates.split(": ")[1].split(",")[0]},${record.coordinates.split(": ")[2]}`;
 
-<!-- NÃO REMOVER O PONTO ABAIXO ESTREMAMENTE NECESSÁRIO -->
-.
-<!-- NÃO REMOVER O PONTO ACIMA ESTREMAMENTE NECESSÁRIO -->
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(16);
+            doc.text(title, 10, 20);
 
+            doc.setFont("helvetica", "normal");
+            doc.setFontSize(12);
+            const textStartY = 30;
+            const textWidth = 180;
+            doc.text(message, 10, textStartY, { maxWidth: textWidth });
+
+            doc.save(`${record.userName}_Marcador_de_Presença.pdf`);
+        }
+
+        function deleteRecord(index) {
+            const records = JSON.parse(localStorage.getItem("presenceRecords")) || [];
+            records.splice(index, 1);
+            localStorage.setItem("presenceRecords", JSON.stringify(records));
+            toggleHistory();
+        }
+    </script>
+</head>
+<body>
+    <header>
+   
+
+        
 </body>
 </html>
 
