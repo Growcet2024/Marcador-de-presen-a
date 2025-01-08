@@ -456,17 +456,26 @@ records.reverse();  // Aqui é onde você inverte a ordem dos registros
         }
 
             // Função delete a partir do histórico
+           
             function deleteRecord(index) {
             const records = JSON.parse(localStorage.getItem("presenceRecords")) || [];
-            records.splice(index, 1);
+    
+            // Índice original no localStorage (sem inversão)
+            const originalIndex = records.length - 1 - index; // Corrigido para usar o índice original
+
+            // Remover o registro correto
+            records.splice(originalIndex, 1);
+
+            // Salvar os registros atualizados no localStorage
             localStorage.setItem("presenceRecords", JSON.stringify(records));
+
+            // Recarregar o histórico com a lista atualizada
             toggleHistory();
-        }
+}
+
     </script>
 
     <header>
-   
-
-        
+          
 </body>
 </html>
