@@ -409,20 +409,19 @@ records.reverse();  // Aqui é onde você inverte a ordem dos registros
             }
         }
 
-        function shareLocationHistory(index) {
-            const records = JSON.parse(localStorage.getItem("presenceRecords")) || [];
-           
+       // Função para compartilhar no WhatsApp a partir do histórico
+function shareLocationHistory(index) {
+    const records = JSON.parse(localStorage.getItem("presenceRecords")) || [];
+    const record = records[index];
 
-            // Ordenar os registros de forma decrescente (mais recente primeiro)
-             records.reverse();  // Aqui é onde você inverte a ordem dos registros
-             
-            const record = records[index];  // Agora pega o registro corretamente após a reversão
+    const message = `*Marcador de Presença*\n\nEu estive aqui:\n\nUsuário: ${record.userName}\n${record.coordinates}\n${record.address}\nDescrição: ${record.description}\nData/hora local: ${record.timestamp}\n\nhttps://maps.google.com/?q=${currentLatitude},${currentLongitude}`;
 
-            const message = `*Marcador de Presença*\n\nEu estive aqui:\n\nUsuário: ${record.userName}\n${record.coordinates}\n${record.address}\nDescrição: ${record.description}\nData/hora local: ${record.timestamp}\n\nhttps://maps.google.com/?q=${record.coordinates.split(": ")[1].split(",")[0]},${record.coordinates.split(": ")[2]}`;
+    const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+}
 
-            const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
-            window.open(whatsappUrl, '_blank');
-        }
+
+    
 
             async function generatePDFHistory(index) {
             const records = JSON.parse(localStorage.getItem("presenceRecords")) || [];
