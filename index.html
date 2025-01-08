@@ -408,21 +408,25 @@ records.reverse();  // Aqui é onde você inverte a ordem dos registros
                 historyContainer.style.display = "none";
             }
         }
+         
+             // Função para compartilhar no WhatsApp a partir do histórico
+             function shareLocationHistory(index) {
+             const records = JSON.parse(localStorage.getItem("presenceRecords")) || [];
+           
+             // Ordenar os registros de forma decrescente (mais recente primeiro)
+             records.reverse();  // Aqui é onde você inverte a ordem dos registros
+             
+             const record = records[index];  // Agora pega o registro corretamente após a reversão
 
-       // Função para compartilhar no WhatsApp a partir do histórico
-function shareLocationHistory(index) {
-    const records = JSON.parse(localStorage.getItem("presenceRecords")) || [];
-    const record = records[index];
+             const message = `*Marcador de Presença*\n\nEu estive aqui:\n\nUsuário: ${record.userName}\n${record.coordinates}\n${record.address}\nDescrição: ${record.description}\nData/hora local:
 
-    const message = `*Marcador de Presença*\n\nEu estive aqui:\n\nUsuário: ${record.userName}\n${record.coordinates}\n${record.address}\nDescrição: ${record.description}\nData/hora local: ${record.timestamp}\n\nhttps://maps.google.com/?q=${currentLatitude},${currentLongitude}`;
+             ${record.timestamp}\n\nhttps://maps.google.com/?q=${currentLatitude},${currentLongitude}`;
 
-    const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, '_blank');
-}
+             const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
+             window.open(whatsappUrl, '_blank');
+        }
 
-
-    
-
+            // Função para Gerar PDF a partir do histórico
             async function generatePDFHistory(index) {
             const records = JSON.parse(localStorage.getItem("presenceRecords")) || [];
 
@@ -435,7 +439,8 @@ function shareLocationHistory(index) {
             const doc = new jsPDF();
 
             const title = "Marcador de Presença";
-            const message = `Eu estive aqui:\n\nUsuário: ${record.userName}\n${record.coordinates}\n${record.address}\nDescrição: ${record.description}\nData/hora local: ${record.timestamp}\n\nhttps://maps.google.com/?q=${record.coordinates.split(": ")[1].split(",")[0]},${record.coordinates.split(": ")[2]}`;
+            const message = `Eu estive aqui:\n\nUsuário: ${record.userName}\n${record.coordinates}\n${record.address}\nDescrição: ${record.description}\nData/hora local: 
+            ${record.timestamp}\n\nhttps://maps.google.com/?q=${currentLatitude},${currentLongitude}`;
 
             doc.setFont("helvetica", "bold");
             doc.setFontSize(16);
@@ -450,6 +455,7 @@ function shareLocationHistory(index) {
             doc.save(`${record.userName}_Marcador_de_Presença.pdf`);
         }
 
+            // Função delete a partir do histórico
             function deleteRecord(index) {
             const records = JSON.parse(localStorage.getItem("presenceRecords")) || [];
             records.splice(index, 1);
