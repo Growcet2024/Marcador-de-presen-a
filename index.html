@@ -170,6 +170,83 @@
             }
         }
 
+
+
+      
+
+        // Função para verificar se o nome já foi salvo
+        function checkUserName() {
+            const savedUserName = localStorage.getItem("userName");
+            if (savedUserName) {
+                document.getElementById("user-name").style.display = "none";
+                document.getElementById("user-name-display").style.display = "inline";
+                document.getElementById("user-name-display").innerText = `Usuário: ${savedUserName}`;
+                document.getElementById("save-name-button").style.display = "none";
+                document.getElementById("edit-name-button").style.display = "inline";
+            } else {
+                document.getElementById("user-name").style.display = "inline";
+                document.getElementById("save-name-button").style.display = "inline";
+                document.getElementById("edit-name-button").style.display = "none";
+            }
+        }
+
+        // Função para salvar o nome do usuário
+        function saveUserName() {
+            const userName = document.getElementById("user-name").value.trim();
+            if (userName) {
+                localStorage.setItem("userName", userName);
+                checkUserName();
+            } else {
+                alert("Por favor, digite um nome.");
+            }
+        }
+
+        // Função para permitir editar o nome do usuário
+        function editUserName() {
+            document.getElementById("user-name").style.display = "inline";
+            document.getElementById("save-name-button").style.display = "inline";
+            document.getElementById("user-name-display").style.display = "none";
+            document.getElementById("edit-name-button").style.display = "none";
+            document.getElementById("user-name").value = localStorage.getItem("userName");
+        }
+
+        // Função para pegar o nome do usuário e usar em registros
+        function getUserName() {
+            return localStorage.getItem("userName") || "Usuário Anônimo";
+        }
+
+        // Função para rastrear a localização do usuário
+        function trackLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        currentLatitude = position.coords.latitude;
+                        currentLongitude = position.coords.longitude;
+
+                        const timestamp = new Date().toLocaleString();
+
+                        document.getElementById("coordinates").innerText =
+                            `Latitude: ${currentLatitude}\nLongitude: ${currentLongitude}`;
+                        document.getElementById("timestamp").innerText = timestamp;
+
+                        getAddressFromCoordinates(currentLatitude, currentLongitude);
+                    },
+                    (error) => {
+                        console.error("Erro ao obter localização:", error);
+                        document.getElementById("coordinates").innerText =
+                            "Erro ao obter localização.";
+                    }
+                );
+            } else {
+                alert("Geolocalização não é suportada neste navegador.");
+            }
+        }
+
+
+
+
+
+
         // Função para obter o endereço a partir das coordenadas
         function getAddressFromCoordinates(latitude, longitude) {
             const apiUrl = `https://us1.locationiq.com/v1/reverse?key=pk.73c7ec951f7e0c38e842f740a1a63917&lat=${latitude}&lon=${longitude}&format=json`;
@@ -195,6 +272,7 @@
                     document.getElementById("address").innerText = "Erro ao obter endereço.";
                 });
         }
+
 
         // Função para salvar o registro
         function saveRecord() {
@@ -264,6 +342,7 @@
             doc.save("Marcador de Presença.pdf");
         }
 
+
         // Função para atualizar o mapa no iframe
         function updateMap(lat, lon) {
             const map = document.getElementById("map");
@@ -297,8 +376,9 @@
         <!-- Mapa -->
         <iframe id="map" width="100%" height="300" style="border:0;" allowfullscreen></iframe>
 
-        <!-- Campo para o Nome do Usuário -->
-        <input type="text" id="user-name" placeholder="Digite seu nome">
+          <!-- Campo para o Nome do Usuário -->
+          <input type="text" id="user-name" placeholder="Digite seu nome">
+
 
         <!-- Área de Descrição -->
         <textarea id="description" placeholder="Adicione uma descrição (opcional)"></textarea>
@@ -474,8 +554,21 @@ records.reverse();  // Aqui é onde você inverte a ordem dos registros
 }
 
     </script>
+</head>
+<body>
 
-    <header>
-          
+
+    <div>
+        <!-- Campo para o Nome do Usuário -->
+        <div>
+            <input type="text" id="user-name" placeholder="Digite seu nome" style="display: none;">
+            <span id="user-name-display" style="font-weight: bold; display: none;"></span>
+            <button id="save-name-button" onclick="saveUserName()">Salvar</button>
+            <button id="edit-name-button" onclick="editUserName()" style="display: none;">Editar</button>
+        </div>
+
+       
+        
 </body>
 </html>
+
