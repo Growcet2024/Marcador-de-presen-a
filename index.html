@@ -132,7 +132,7 @@
         }
     </style>
 
-
+ // Bloco do nome usuário salvo
 
 
 <script>
@@ -300,7 +300,8 @@
         doc.save("Marcador de Presença.pdf");
     }
 
-
+    // Bloco do iframe google mapas
+    // Função para atualizar o mapa no iframe
     function updateMap(lat, lon) {
     const map = document.getElementById("map");
     // Atualizando o src do iframe com a URL correta do Google Maps
@@ -334,10 +335,6 @@ function trackLocation() {
     }
 }
 
-
-
-
-
     // Função para tocar um som
     function playSound(soundFile) {
         const audio = new Audio(soundFile);
@@ -350,6 +347,12 @@ function trackLocation() {
         trackLocation();   // Rastrear a localização do usuário
     };
 </script>
+
+
+
+
+
+
 
 
 </head>
@@ -368,8 +371,7 @@ function trackLocation() {
         <!-- Mapa -->
         <iframe id="map" width="100%" height="300" style="border:0;" allowfullscreen></iframe>
 
-          <!-- Campo para o Nome do Usuário -->
-          <input type="text" id="user-name" placeholder="Digite seu nome">
+           <!-- Campo para o Nome do Usuário -->
 
 
         <!-- Área de Descrição -->
@@ -480,7 +482,7 @@ records.reverse();  // Aqui é onde você inverte a ordem dos registros
                 historyContainer.style.display = "none";
             }
         }
-         
+        
              // Função para compartilhar no WhatsApp a partir do histórico
              function shareLocationHistory(index) {
              const records = JSON.parse(localStorage.getItem("presenceRecords")) || [];
@@ -544,24 +546,21 @@ records.reverse();  // Aqui é onde você inverte a ordem dos registros
             // Recarregar o histórico com a lista atualizada
             toggleHistory();
 }
-
     </script>
 </head>
 <body>
 
-
-    <div>
+   <div>
         <!-- Campo para o Nome do Usuário -->
         <div>
             <input type="text" id="user-name" placeholder="Digite seu nome" style="display: none;">
             <span id="user-name-display" style="font-weight: bold; display: none;"></span>
             <button id="save-name-button" onclick="saveUserName()">Salvar</button>
             <button id="edit-name-button" onclick="editUserName()" style="display: none;">Editar</button>
+           
         </div>
 
        
         
 </body>
 </html>
-
-
