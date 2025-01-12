@@ -132,9 +132,6 @@
         }
     </style>
 
- 
-
-
 <script>
     /* Variáveis Globais */
     let currentLatitude = "-";
@@ -142,12 +139,6 @@
     let userName = "Usuário Logado";
 
     /* Funções JavaScript */
-
-
-
-
-
-
 
 
     // Função para gerar um ID único de 8 caracteres aleatórios (números e letras)
@@ -179,11 +170,6 @@ function checkUserName() {
 }
 
 
-
-
-
-
-
 // Função para salvar o nome do usuário e gerar um ID único
 
 function saveUserName() {
@@ -207,30 +193,14 @@ function saveUserName() {
 }
 
 
-
-
-
-
-
-
 // Função para permitir editar o nome do usuário
 function editUserName() {
     document.getElementById("user-name").style.display = "inline";
     document.getElementById("save-name-button").style.display = "inline";
     document.getElementById("user-name-display").style.display = "none";
-
     document.getElementById("edit-name-button").style.display = "none";
-    
     document.getElementById("user-name").value = localStorage.getItem("userName");
 }
-
-
-
-
-
-
-
-
 
     // Função para obter o endereço a partir das coordenadas
     function getAddressFromCoordinates(latitude, longitude) {
@@ -257,9 +227,6 @@ function editUserName() {
                 document.getElementById("address").innerText = "Erro ao obter endereço.";
             });
     }
-
-
-
 
 
     // Função para salvar o registro
@@ -291,12 +258,6 @@ function saveRecord() {
     }, 2000);
 }
 
-
-
-
-
-
-
     // Função para compartilhar a localização via WhatsApp
 function shareLocation() {
     const coordinates = document.getElementById("coordinates").innerText;
@@ -312,10 +273,6 @@ function shareLocation() {
     const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
 }
-
-
-
-
 
    // Função para gerar o PDF
 async function generatePDF() {
@@ -345,12 +302,8 @@ async function generatePDF() {
     doc.save("Marcador_de_Presença.pdf");
 }
 
-
-
-
-
-
     // Bloco do iframe google mapas
+
     // Função para atualizar o mapa no iframe
     function updateMap(lat, lon) {
     const map = document.getElementById("map");
@@ -385,7 +338,6 @@ function trackLocation() {
     }
 }
 
-
     // Função para tocar um som
     function playSound(soundFile) {
         const audio = new Audio(soundFile);
@@ -402,8 +354,10 @@ function trackLocation() {
 
 </head>
 
+
+
 <body>
-    <!-- Cabeçalho -->
+    <!-- Cabeçalho Tela principal-->
     <header>
         <h1>Marcador de Presença</h1>
     </header>
@@ -415,12 +369,6 @@ function trackLocation() {
 
         <!-- Mapa -->
         <iframe id="map" width="100%" height="300" style="border:0;" allowfullscreen></iframe>
-
-        <!-- Área de Descrição -->
-        <textarea id="description" placeholder="Adicione uma descrição (opcional)"></textarea>
-
-        <!-- Botões -->
-        <button class="button" onclick="saveRecord()">Salvar Registro</button>
 
         <!-- Coordenadas -->
         <div class="field">
@@ -440,48 +388,78 @@ function trackLocation() {
             <p id="address">Local</p>
         </div>
 
+        <!-- Movendo o campo de descrição e o botão "Salvar Registro" acima do botão Compartilhar -->
+        <div class="description-container">
+            <textarea id="description" placeholder="Adicione uma descrição (opcional)"></textarea>
+            <button class="button" onclick="saveRecord()">Salvar Registro</button>
+        </div>
+
         <!-- Compartilhar via WhatsApp -->
         <button class="button" onclick="shareLocation()">Compartilhar pelo WhatsApp</button>
 
         <!-- Gerar PDF -->
         <button class="button" onclick="generatePDF()">Gerar PDF</button>
 
-       <!-- Botão para Exibir o Histórico dentro do mesmo container -->
-<button class="button" onclick="toggleHistory()">Ver Histórico de Presença</button>
+        <!-- Botão para Exibir o Histórico dentro do mesmo container -->
+        <button class="button" onclick="toggleHistory()">Ver Histórico de Presença</button>
 
+        <!-- Frase de Copyright -->
+        <p class="copyright">© 2024 Marcador de Presença. Todos os direitos reservados.</p>
+    </div>
 
     <!-- Rodapé -->
-    <footer>
-        <p>© 2024 Marcador de Presença. Todos os direitos reservados.</p>
-    </footer>
+    <!-- Não é mais necessário, já que movemos a frase para dentro do container -->
 
+    <!-- CSS para estilizar a frase de copyright -->
+    <style>
+        .copyright {
+            font-size: 12px; /* Ajuste o tamanho da fonte aqui */
+            color: #888; /* Cor do texto */
+            text-align: center; /* Centralizar o texto */
+            margin-top: 20px; /* Distância do conteúdo acima */
+        }
+    </style>
+</body>
 
-
- <!-- PARTE DO HISTÓRICO  -->
+  <!-- PARTE DO HISTÓRICO -->
 
 <!-- Container para Exibir o Histórico de Presença -->
 <div id="history-container" style="display: none;">
     <h2>Histórico de Presença</h2>
-    <div id="records-list" style="max-width: 800px; margin: auto; background-color: #f9f9f9; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); overflow-y: auto;">
+    <div id="records-list" style="background-color: #f9f9f9; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); overflow-y: auto; padding: 10px;">
         <!-- Lista de registros será carregada aqui -->
     </div>
 </div>
 
 <!-- Estilos CSS -->
 <style>
-    #history-container {
-        margin-top: 20px;
-        padding: 0 10px; /* Ajuste para garantir que o conteúdo não fique colado nas laterais */
-    }
+
+   
+/* Estilos do Container do Histórico */
+#history-container {
+    padding: 10px;
+    max-width: 600px; /* Tamanho igual ao do container principal */
+    margin-left: auto; /* Centraliza o conteúdo horizontalmente */
+    margin-right: auto; /* Centraliza o conteúdo horizontalmente */
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 15px; /* Bordas arredondadas */
+}
 
     .record {
         background-color: #ffffff;
-        border: 2px solid #ddd; /* Borda do contorno do registro */
+        border: 2px solid #ddd;
         padding: 15px;
-        margin-bottom: 10px; /* Espaçamento entre os registros */
-        border-radius: 8px;  /* Arredondamento nas bordas */
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra leve para destacar o registro */
+        margin-bottom: 10px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
+
+/* Estilos para o histórico */
+#history-container {
+    margin-top: 20px; /* Adiciona um espaço acima do histórico */
+    padding: 0 10px; /* Ajuste para garantir que o conteúdo não fique colado nas laterais */
+
 </style>
 
 
@@ -501,13 +479,16 @@ function trackLocation() {
 records.reverse();  // Aqui é onde você inverte a ordem dos registros
 
 
-                // Adicionar os registros
-                records.forEach((record, index) => {
+
+
+// Adicionar os registros
+records.forEach((record, index) => {
                     const recordDiv = document.createElement("div");
                     recordDiv.classList.add("record");
 
                     recordDiv.innerHTML = `
-                        <p><strong>Usuário:</strong> ${record.userName}</p>
+                    
+                         <p><strong>Usuário:</strong> ${record.userName} (ID: ${record.userID})</p> <!-- Aqui foi a modificação -->
                         <p><strong>Coordenadas:</strong> ${record.coordinates}</p>
                         <p><strong>Endereço:</strong> ${record.address}</p>
                         <p><strong>Descrição:</strong> ${record.description}</p>
@@ -526,9 +507,8 @@ records.reverse();  // Aqui é onde você inverte a ordem dos registros
             }
         }
         
-             // Função para compartilhar no WhatsApp a partir do histórico
-
-             // Função para compartilhar no WhatsApp a partir do histórico
+   
+  // Função para compartilhar no WhatsApp a partir do histórico
 function shareLocationHistory(index) {
     const records = JSON.parse(localStorage.getItem("presenceRecords")) || [];
 
@@ -546,14 +526,7 @@ function shareLocationHistory(index) {
     const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
 }
-
-
-
-
-
-
-
-            // Função para Gerar PDF a partir do histórico
+           
 
            // Função para gerar PDF a partir do histórico
          async function generatePDFHistory(index) {
@@ -588,8 +561,6 @@ function shareLocationHistory(index) {
 }
 
 
-
-
             // Função delete a partir do histórico
            
             function deleteRecord(index) {
@@ -611,17 +582,74 @@ function shareLocationHistory(index) {
 </head>
 <body>
 
-   <div>
-        <!-- Campo para o Nome do Usuário -->
-        <div>
-            <input type="text" id="user-name" placeholder="Digite seu nome" style="display: none;">
-            <span id="user-name-display" style="font-weight: bold; display: none;"></span>
-            <button id="save-name-button" onclick="saveUserName()">Salvar</button>
-            <button id="edit-name-button" onclick="editUserName()" style="display: none;">Editar</button>
-           
-        </div>
+  <!-- Campo para o Nome do Usuário -->
+ <!-- Campo para o Nome do Usuário -->
+<div class="container">
+    <div style="padding: 10px; max-width: 600px; margin: auto;">
+        <input type="text" id="user-name" placeholder="Digite seu nome" style="display: none; width: 100%; padding: 8px; margin-bottom: 10px;">
+        <span id="user-name-display" style="font-weight: bold; display: none;"></span>
+        
+        <!-- Botão Salvar com estilo alterado -->
+        <button id="save-name-button" onclick="saveUserName()" class="button" style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 15px; background-color: #28a745;">
+            Salvar
+        </button>
+        
+        <!-- Botão Editar com estilo alterado -->
+        <button id="edit-name-button" onclick="editUserName()" style="display: none; width: 100%; padding: 10px; border-radius: 15px; background-color: #ffc107;">
+            Editar
+        </button>
+    </div>
+</div>
 
-       
+<!-- Estilos CSS -->
+<style>
+    /* Estilos para os campos de nome de usuário e botões dentro do container */
+    .container {
+        padding: 10px;
+        max-width: 600px; /* Limite de largura */
+        margin-top: 5px; /* Margem superior de 30px */
+        background-color: #fff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 15px; /* Bordas arredondadas */
+    }
+
+    .button {
+        background-color: #cdd6d3;
+        color: white;
+        border: none;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 15px; /* Bordas arredondadas para outros botões */
+    }
+
+    .button:hover {
+        background-color: #95b9ec;
+    }
+
+    /* Estilos para os botões específicos Salvar e Editar */
+    #save-name-button, #edit-name-button {
+        border-radius: 15px; /* Botões arredondados */
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    #save-name-button {
+        background-color: #28a745; /* Verde para Salvar */
+    }
+
+    #save-name-button:hover {
+        background-color: #218838;
+    }
+
+    #edit-name-button {
+        background-color: #ffc107; /* Amarelo para Editar */
+    }
+
+    #edit-name-button:hover {
+        background-color: #e0a800;
+    }
+</style>
+
         
 </body>
 </html>
