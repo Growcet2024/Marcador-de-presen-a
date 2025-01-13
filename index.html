@@ -426,7 +426,7 @@ function trackLocation() {
 <!-- Container para Exibir o Histórico de Presença -->
 <div id="history-container" style="display: none;">
     <h2>Histórico de Presença</h2>
-    <div id="records-list" style="background-color: #f9f9f9; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); overflow-y: auto; padding: 10px;">
+    <div id="records-list" style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); overflow-y: auto; padding: 10px;">
         <!-- Lista de registros será carregada aqui -->
     </div>
 </div>
@@ -436,29 +436,33 @@ function trackLocation() {
 
    
 /* Estilos do Container do Histórico */
+
+/* Estilos do Container do Histórico */
+
 #history-container {
     padding: 10px;
     max-width: 600px; /* Tamanho igual ao do container principal */
     margin-left: auto; /* Centraliza o conteúdo horizontalmente */
     margin-right: auto; /* Centraliza o conteúdo horizontalmente */
-    background-color: #fff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;  fundo
+    box-shadow: 0 4px 8px  rgba(0, 0, 0, 0.1)
     border-radius: 15px; /* Bordas arredondadas */
 }
 
-    .record {
+.record {
         background-color: #ffffff;
-        border: 2px solid #ddd;
+        border: 2px solid #ddd; /* Borda do contorno do registro */
         padding: 15px;
-        margin-bottom: 10px;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 10px; /* Espaçamento entre os registros */
+        border-radius: 8px;  /* Arredondamento nas bordas */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra leve para destacar o registro */
     }
+   
 
 /* Estilos para o histórico */
 #history-container {
     margin-top: 20px; /* Adiciona um espaço acima do histórico */
-    padding: 0 10px; /* Ajuste para garantir que o conteúdo não fique colado nas laterais */
+    padding: 0 5px; /* Ajuste para garantir que o conteúdo não fique colado nas laterais */
 
 </style>
 
@@ -488,16 +492,16 @@ records.forEach((record, index) => {
 
                     recordDiv.innerHTML = `
                     
-                         <p><strong>Usuário:</strong> ${record.userName} (ID: ${record.userID})</p> <!-- Aqui foi a modificação -->
-                        <p><strong>Coordenadas:</strong> ${record.coordinates}</p>
-                        <p><strong>Endereço:</strong> ${record.address}</p>
-                        <p><strong>Descrição:</strong> ${record.description}</p>
-                        <p><strong>Data/Hora:</strong> ${record.timestamp}</p>
-                        <div class="history-buttons">
-                            <button onclick="shareLocationHistory(${index})">Compartilhar no WhatsApp</button>
-                            <button onclick="generatePDFHistory(${index})">Gerar PDF</button>
-                            <button onclick="deleteRecord(${index})">Apagar Registro</button>
-                        </div>
+                    <p><strong>Usuário:</strong> ${record.userName}</p>
+                    <p><strong>Coordenadas:</strong> ${record.coordinates}</p>
+                    <p><strong>Endereço:</strong> ${record.address}</p>
+                    <p><strong>Descrição:</strong> ${record.description}</p>
+                    <p><strong>Data/Hora:</strong> ${record.timestamp}</p>
+                    <div class="history-buttons">
+                    <button onclick="shareLocationHistory(${index})">Compartilhar no WhatsApp</button>
+                    <button onclick="generatePDFHistory(${index})">Gerar PDF</button>
+                    <button onclick="deleteRecord(${index})">Apagar Registro</button>
+                    </div>
                        
                     `;
                     recordsList.appendChild(recordDiv);
@@ -583,23 +587,37 @@ function shareLocationHistory(index) {
 <body>
 
   <!-- Campo para o Nome do Usuário -->
- <!-- Campo para o Nome do Usuário -->
+ 
+  <!-- Carregando o Font Awesome -->
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+
+<!-- Carregando o Font Awesome -->
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+
+<!-- Campo para o Nome do Usuário -->
 <div class="container">
     <div style="padding: 10px; max-width: 600px; margin: auto;">
+        <!-- Input do Nome -->
         <input type="text" id="user-name" placeholder="Digite seu nome" style="display: none; width: 100%; padding: 8px; margin-bottom: 10px;">
-        <span id="user-name-display" style="font-weight: bold; display: none;"></span>
         
-        <!-- Botão Salvar com estilo alterado -->
+        <!-- Nome do Usuário exibido e Ícone de Lápis para Editar -->
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+            <span id="user-name-display" style="font-weight: bold; display: none;"></span>
+            <!-- Ícone de Lápis (apenas o ícone, sem botão) -->
+            <i id="edit-name-button" onclick="editUserName()" class="fas fa-pencil-alt" style="font-size: 24px; color: #ffc107; cursor: pointer; background: none; border: none;"></i>
+        </div>
+
+        <!-- Botão Salvar -->
         <button id="save-name-button" onclick="saveUserName()" class="button" style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 15px; background-color: #28a745;">
             Salvar
         </button>
-        
-        <!-- Botão Editar com estilo alterado -->
-        <button id="edit-name-button" onclick="editUserName()" style="display: none; width: 100%; padding: 10px; border-radius: 15px; background-color: #ffc107;">
-            Editar
-        </button>
     </div>
 </div>
+
 
 <!-- Estilos CSS -->
 <style>
@@ -614,7 +632,7 @@ function shareLocationHistory(index) {
     }
 
     .button {
-        background-color: #cdd6d3;
+        background-color: #ccc;
         color: white;
         border: none;
         font-size: 16px;
@@ -623,7 +641,7 @@ function shareLocationHistory(index) {
     }
 
     .button:hover {
-        background-color: #95b9ec;
+        background-color: #2196f3;
     }
 
     /* Estilos para os botões específicos Salvar e Editar */
