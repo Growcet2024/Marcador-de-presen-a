@@ -268,7 +268,7 @@ function shareLocation() {
     const description = document.getElementById("description").value || "Nenhuma descrição fornecida.";
 
     // Verificando se o nome e o ID estão corretos e preparando a mensagem
-    const message = `*Marcador de Presença*\n\nEu estive aqui:\n\nUsuário: ${userName} (ID: ${userID})\n${coordinates}\n${address}\nDescrição: ${description}\nData/hora local: ${timestamp}\n\nhttps://maps.google.com/?q=${currentLatitude},${currentLongitude}`;
+    const message = `*Marcador de Presença*\n\nDeclaraçao de comparecimento: Eu estive aqui,\n\nUsuário: ${userName} (ID: ${userID})\n${coordinates}\n${address}\nDescrição: ${description}\nData/hora local: ${timestamp}\n\nhttps://maps.google.com/?q=${currentLatitude},${currentLongitude}`;
 
     const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
@@ -287,7 +287,7 @@ async function generatePDF() {
     const description = document.getElementById("description").value || "Nenhuma descrição fornecida.";
 
     const title = "Marcador de Presença";
-    const message = `Eu estive aqui:\n\nUsuário: ${userName} (ID: ${userID})\n${coordinates}\n${address}\nDescrição: ${description}\nData/hora local: ${timestamp}\n\nhttps://maps.google.com/?q=${currentLatitude},${currentLongitude}`;
+    const message = `Declaraçao de comparecimento: Eu estive aqui,\n\nUsuário: ${userName} (ID: ${userID})\n${coordinates}\n${address}\nDescrição: ${description}\nData/hora local: ${timestamp}\n\nhttps://maps.google.com/?q=${currentLatitude},${currentLongitude}`;
 
     doc.setFont("helvetica", "bold");
     doc.setFontSize(16);
@@ -351,10 +351,7 @@ function trackLocation() {
     };
 </script>
 
-
 </head>
-
-
 
 <body>
     <!-- Cabeçalho Tela principal-->
@@ -394,6 +391,14 @@ function trackLocation() {
             <button class="button" onclick="saveRecord()">Salvar Registro</button>
         </div>
 
+        <!-- Declaração de comparecimento na tela -->
+
+<p class="copyright">
+    Declaração de comparecimento:
+    comprove sua presença em unidades de saúde, trabalho, escola e outros locais, com um clique.
+    Gere o registro com seu nome e ID, e envie por WhatsApp ou gere um PDF rapidamente
+    </p>
+
         <!-- Compartilhar via WhatsApp -->
         <button class="button" onclick="shareLocation()">Compartilhar pelo WhatsApp</button>
 
@@ -421,6 +426,8 @@ function trackLocation() {
     </style>
 </body>
 
+
+
   <!-- PARTE DO HISTÓRICO -->
 
 <!-- Container para Exibir o Histórico de Presença -->
@@ -433,9 +440,6 @@ function trackLocation() {
 
 <!-- Estilos CSS -->
 <style>
-
-   
-/* Estilos do Container do Histórico */
 
 /* Estilos do Container do Histórico */
 
@@ -484,13 +488,14 @@ records.reverse();  // Aqui é onde você inverte a ordem dos registros
 
 
 
-
-// Adicionar os registros
+// Adicionar os registros parte ver na tela do app
 records.forEach((record, index) => {
                     const recordDiv = document.createElement("div");
                     recordDiv.classList.add("record");
 
                     recordDiv.innerHTML = `
+                    
+                    <p><strong>Declaração de comparecimento:</strong>
                     
                     <p><strong>Usuário:</strong> ${record.userName}</p>
                     <p><strong>Coordenadas:</strong> ${record.coordinates}</p>
@@ -511,7 +516,7 @@ records.forEach((record, index) => {
             }
         }
         
-   
+      
   // Função para compartilhar no WhatsApp a partir do histórico
 function shareLocationHistory(index) {
     const records = JSON.parse(localStorage.getItem("presenceRecords")) || [];
@@ -525,7 +530,7 @@ function shareLocationHistory(index) {
     const userName = localStorage.getItem("userName") || "Usuário";  // Nome fixo
     const userID = localStorage.getItem("userID");  // ID fixo
 
-    const message = `*Marcador de Presença*\n\nEu estive aqui:\n\nUsuário: ${userName} (ID: ${userID})\n${record.coordinates}\n${record.address}\nDescrição: ${record.description}\nData/hora local: ${record.timestamp}\n\nhttps://maps.google.com/?q=${record.latitude},${record.longitude}`;
+    const message = `*Marcador de Presença*\n\nDeclaraçao de comparecimento: Eu estive aqui,\n\nUsuário: ${userName} (ID: ${userID})\n${record.coordinates}\n${record.address}\nDescrição: ${record.description}\nData/hora local: ${record.timestamp}\n\nhttps://maps.google.com/?q=${record.latitude},${record.longitude}`;
 
     const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
@@ -549,7 +554,7 @@ function shareLocationHistory(index) {
          const userID = localStorage.getItem("userID");  // ID fixo
 
          const title = "Marcador de Presença";
-         const message = `Eu estive aqui:\n\nUsuário: ${userName} (ID: ${userID})\n${record.coordinates}\n${record.address}\nDescrição: ${record.description}\nData/hora local: ${record.timestamp}\n\nhttps://maps.google.com/?q=${record.latitude},${record.longitude}`;
+         const message = `Declaraçao de comparecimento: Eu estive aqui,\n\nUsuário: ${userName} (ID: ${userID})\n${record.coordinates}\n${record.address}\nDescrição: ${record.description}\nData/hora local: ${record.timestamp}\n\nhttps://maps.google.com/?q=${record.latitude},${record.longitude}`;
 
          doc.setFont("helvetica", "bold");
          doc.setFontSize(16);
@@ -586,6 +591,7 @@ function shareLocationHistory(index) {
 </head>
 <body>
 
+
   <!-- Campo para o Nome do Usuário -->
  
   <!-- Carregando o Font Awesome -->
@@ -597,6 +603,7 @@ function shareLocationHistory(index) {
 <head>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
+
 
 <!-- Campo para o Nome do Usuário -->
 <div class="container">
