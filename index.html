@@ -268,7 +268,7 @@ function shareLocation() {
     const description = document.getElementById("description").value || "Nenhuma descrição fornecida.";
 
     // Verificando se o nome e o ID estão corretos e preparando a mensagem
-    const message = `*Marcador de Presença*\n\nDeclaraçao de comparecimento: %0AEu estive aqui,\n\nUsuário: ${userName} (ID: ${userID})\n${coordinates}\n${address}\nDescrição: ${description}\nData/hora local: ${timestamp}\n\nhttps://maps.google.com/?q=${currentLatitude},${currentLongitude}`;
+    const message = `*Marcador de Presença*\n\nDeclaraçao de comparecimento:/nEu estive aqui,\n\nUsuário: ${userName} (ID: ${userID})\n${coordinates}\n${address}\nDescrição: ${description}\nData/hora local: ${timestamp}\n\nhttps://maps.google.com/?q=${currentLatitude},${currentLongitude}`;
 
     const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
@@ -287,7 +287,7 @@ async function generatePDF() {
     const description = document.getElementById("description").value || "Nenhuma descrição fornecida.";
 
     const title = "Marcador de Presença";
-    const message = `Declaraçao de comparecimento: <p>Eu estive aqui,\n\nUsuário: ${userName} (ID: ${userID})\n${coordinates}\n${address}\nDescrição: ${description}\nData/hora local: ${timestamp}\n\nhttps://maps.google.com/?q=${currentLatitude},${currentLongitude}`;
+    const message = `Declaraçao de comparecimento:/nEu estive aqui,\n\nUsuário: ${userName} (ID: ${userID})\n${coordinates}\n${address}\nDescrição: ${description}\nData/hora local: ${timestamp}\n\nhttps://maps.google.com/?q=${currentLatitude},${currentLongitude}`;
 
     doc.setFont("helvetica", "bold");
     doc.setFontSize(16);
@@ -530,7 +530,7 @@ function shareLocationHistory(index) {
     const userName = localStorage.getItem("userName") || "Usuário";  // Nome fixo
     const userID = localStorage.getItem("userID");  // ID fixo
 
-    const message = `*Marcador de Presença*\n\nDeclaraçao de comparecimento: Eu estive aqui,\n\nUsuário: ${userName} (ID: ${userID})\n${record.coordinates}\n${record.address}\nDescrição: ${record.description}\nData/hora local: ${record.timestamp}\n\nhttps://maps.google.com/?q=${record.latitude},${record.longitude}`;
+    const message = `*Marcador de Presença*\n\nDeclaraçao de comparecimento: /nEu estive aqui,\n\nUsuário: ${userName} (ID: ${userID})\n${record.coordinates}\n${record.address}\nDescrição: ${record.description}\nData/hora local: ${record.timestamp}\n\nhttps://maps.google.com/?q=${record.latitude},${record.longitude}`;
 
     const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
@@ -554,7 +554,7 @@ function shareLocationHistory(index) {
          const userID = localStorage.getItem("userID");  // ID fixo
 
          const title = "Marcador de Presença";
-         const message = `Declaraçao de comparecimento: Eu estive aqui,\n\nUsuário: ${userName} (ID: ${userID})\n${record.coordinates}\n${record.address}\nDescrição: ${record.description}\nData/hora local: ${record.timestamp}\n\nhttps://maps.google.com/?q=${record.latitude},${record.longitude}`;
+         const message = `Declaraçao de comparecimento: /nEu estive aqui,\n\nUsuário: ${userName} (ID: ${userID})\n${record.coordinates}\n${record.address}\nDescrição: ${record.description}\nData/hora local: ${record.timestamp}\n\nhttps://maps.google.com/?q=${record.latitude},${record.longitude}`;
 
          doc.setFont("helvetica", "bold");
          doc.setFontSize(16);
