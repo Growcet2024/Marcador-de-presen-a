@@ -41,6 +41,46 @@
             border-radius: 15px;
         }
 
+
+ /* Estilos do contêiner secundário */
+        .extra-container {
+            padding: 10px;
+            max-width: 600px;
+            margin: auto;
+            background-color: #0078BF;  /* Cor de fundo azul claro */
+            border: 2px solid #e5ecef;  /* Borda azul */
+            border-radius: 15px;
+            margin-top: 2px;  /* Dá um espaço para que fique abaixo do topo */
+            margin-bottom: 5px; /* Dá um espaço entre o contêiner secundário e o principal */
+        }
+
+        /* Título do contêiner secundário */
+        .extra-text h2 {
+            color: #ffffff;
+            font-size: 18px;
+            text-align: center;
+        }
+
+        /* Parágrafos dentro do contêiner secundário */
+        .extra-text p {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #ffffff;
+        }
+
+        /* Cor para os ícones ✔ dentro dos parágrafos */
+        .extra-text span {
+            color: #ffffff;
+        }
+
+
+
+
+
+
+
+
+
         .container h2 {
             font-size: 18px;
             color: #000000;
@@ -268,7 +308,7 @@ function shareLocation() {
     const description = document.getElementById("description").value || "Nenhuma descrição fornecida.";
 
     // Verificando se o nome e o ID estão corretos e preparando a mensagem
-    const message = `*Marcador de Presença*\n\nDeclaraçao de comparecimento: \n\nEu estive aqui,\nUsuário: ${userName} (ID: ${userID})\n${coordinates}\n${address}\nDescrição: ${description}\nData/hora local: ${timestamp}\n\nhttps://maps.google.com/?q=${currentLatitude},${currentLongitude}`;
+    const message = `*Marcador de Presença*\n\nDeclaração de comparecimento: \n\nEu estive aqui,\nUsuário: ${userName} (ID: ${userID})\n${coordinates}\n${address}\nDescrição: ${description}\nData/hora local: ${timestamp}\n\nhttps://maps.google.com/?q=${currentLatitude},${currentLongitude}`; 
 
     const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
@@ -287,7 +327,7 @@ async function generatePDF() {
     const description = document.getElementById("description").value || "Nenhuma descrição fornecida.";
 
     const title = "Marcador de Presença";
-    const message = `Declaraçao de comparecimento: \n\nEu estive aqui,\nUsuário: ${userName} (ID: ${userID})\n${coordinates}\n${address}\nDescrição: ${description}\nData/hora local: ${timestamp}\n\nhttps://maps.google.com/?q=${currentLatitude},${currentLongitude}`;
+    const message = `Declaração de comparecimento: \n\nEu estive aqui,\nUsuário: ${userName} (ID: ${userID})\n${coordinates}\n${address}\nDescrição: ${description}\nData/hora local: ${timestamp}\n\nhttps://maps.google.com/?q=${currentLatitude},${currentLongitude}`;
 
     doc.setFont("helvetica", "bold");
     doc.setFontSize(16);
@@ -360,6 +400,23 @@ function trackLocation() {
     </header>
 
     <!-- Container Principal -->
+
+
+<!-- Contêiner secundário para as frases -->
+ <div class="extra-container">
+    <div class="extra-text">
+        <h2>Por Coordenadas Geográficas</h2>
+        <p><span>✔</span> Você já precisou comprovar que esteve ou está em um determinado lugar?</p>
+        <p><span>✔</span> Comprove sua entrada e saída em locais de trabalho, eventos ou reuniões.</p>
+        <p><span>✔</span> Registre sua presença em um local específico com data e hora.</p>
+        <p><span>✔</span> Compartilhe os detalhes do local via WhatsApp ou em PDF.</p>
+    </div>
+</div>
+
+
+
+
+
     <div class="container">
         <!-- Nome da Rua -->
         <h2 id="road-name">Rua: Local Carregando!</h2>
@@ -393,12 +450,12 @@ function trackLocation() {
 
         <!-- Declaração de comparecimento na tela -->
 
-<p class="copyright">
-Precisa provar que esteve ou está em algum lugar? 
-Precisa provar ao seu chefe que foi ao médico? 
-Comprove com um clique. 
-Gere o registro com seu nome e ID, e envie por WhatsApp ou em formato PDF.
-</p> 
+        <p class="copyright">
+            Precisa provar que esteve ou está em algum lugar? 
+            Precisa provar ao seu chefe que foi ao médico? 
+            Comprove com um clique. 
+            Gere o registro com seu nome e ID, e envie por WhatsApp ou em formato PDF.
+            </p> 
 
         <!-- Compartilhar via WhatsApp -->
         <button class="button" onclick="shareLocation()">Compartilhar pelo WhatsApp</button>
@@ -410,7 +467,7 @@ Gere o registro com seu nome e ID, e envie por WhatsApp ou em formato PDF.
         <button class="button" onclick="toggleHistory()">Ver Histórico de Presença</button>
 
         <!-- Frase de Copyright -->
-        <p class="copyright">Growcet © Desenvolvedor </p>
+        <p class="copyright">© 2024 Marcador de Presença. Todos os direitos reservados.</p>
     </div>
 
     <!-- Rodapé -->
@@ -419,8 +476,8 @@ Gere o registro com seu nome e ID, e envie por WhatsApp ou em formato PDF.
     <!-- CSS para estilizar a frase de copyright -->
     <style>
         .copyright {
-            font-size: 14px; /* Ajuste o tamanho da fonte aqui */
-            color: #9b9999; /* Cor do texto */
+            font-size: 13px; /* Ajuste o tamanho da fonte aqui */
+            color: #000000; /* Cor do texto */
             text-align: center; /* Centralizar o texto */
             margin-top: 20px; /* Distância do conteúdo acima */
         }
@@ -531,7 +588,7 @@ function shareLocationHistory(index) {
     const userName = localStorage.getItem("userName") || "Usuário";  // Nome fixo
     const userID = localStorage.getItem("userID");  // ID fixo
 
-    const message = `*Marcador de Presença*\n\nDeclaraçao de comparecimento: \n\nEu estive aqui,\nUsuário: ${userName} (ID: ${userID})\n${record.coordinates}\n${record.address}\nDescrição: ${record.description}\nData/hora local: ${record.timestamp}\n\nhttps://maps.google.com/?q=${record.latitude},${record.longitude}`;
+    const message = `*Marcador de Presença*\n\nDeclaração de comparecimento: \n\nEu estive aqui,\nUsuário: ${userName} (ID: ${userID})\n${record.coordinates}\n${record.address}\nDescrição: ${record.description}\nData/hora local: ${record.timestamp}\n\nhttps://maps.google.com/?q=${record.latitude},${record.longitude}`;
 
     const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
@@ -555,7 +612,7 @@ function shareLocationHistory(index) {
          const userID = localStorage.getItem("userID");  // ID fixo
 
          const title = "Marcador de Presença";
-         const message = `Declaraçao de comparecimento: \n\nEu estive aqui,\nUsuário: ${userName} (ID: ${userID})\n${record.coordinates}\n${record.address}\nDescrição: ${record.description}\nData/hora local: ${record.timestamp}\n\nhttps://maps.google.com/?q=${record.latitude},${record.longitude}`;
+         const message = `Declaração de comparecimento: \n\nEu estive aqui,\nUsuário: ${userName} (ID: ${userID})\n${record.coordinates}\n${record.address}\nDescrição: ${record.description}\nData/hora local: ${record.timestamp}\n\nhttps://maps.google.com/?q=${record.latitude},${record.longitude}`;
 
          doc.setFont("helvetica", "bold");
          doc.setFontSize(16);
@@ -592,90 +649,3 @@ function shareLocationHistory(index) {
 </head>
 <body>
 
-
-  <!-- Campo para o Nome do Usuário -->
- 
-  <!-- Carregando o Font Awesome -->
-<head>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-</head>
-
-<!-- Carregando o Font Awesome -->
-<head>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-</head>
-
-
-<!-- Campo para o Nome do Usuário -->
-<div class="container">
-    <div style="padding: 10px; max-width: 600px; margin: auto;">
-        <!-- Input do Nome -->
-        <input type="text" id="user-name" placeholder="Digite seu nome" style="display: none; width: 100%; padding: 8px; margin-bottom: 10px;">
-        
-        <!-- Nome do Usuário exibido e Ícone de Lápis para Editar -->
-        <div style="display: flex; align-items: center; justify-content: space-between;">
-            <span id="user-name-display" style="font-weight: bold; display: none;"></span>
-            <!-- Ícone de Lápis (apenas o ícone, sem botão) -->
-            <i id="edit-name-button" onclick="editUserName()" class="fas fa-pencil-alt" style="font-size: 24px; color: #ffc107; cursor: pointer; background: none; border: none;"></i>
-        </div>
-
-        <!-- Botão Salvar -->
-        <button id="save-name-button" onclick="saveUserName()" class="button" style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 15px; background-color: #28a745;">
-            Salvar
-        </button>
-    </div>
-</div>
-
-
-<!-- Estilos CSS -->
-<style>
-    /* Estilos para os campos de nome de usuário e botões dentro do container */
-    .container {
-        padding: 10px;
-        max-width: 600px; /* Limite de largura */
-        margin-top: 5px; /* Margem superior de 30px */
-        background-color: #fff;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        border-radius: 15px; /* Bordas arredondadas */
-    }
-
-    .button {
-        background-color: #ccc;
-        color: white;
-        border: none;
-        font-size: 16px;
-        cursor: pointer;
-        border-radius: 15px; /* Bordas arredondadas para outros botões */
-    }
-
-    .button:hover {
-        background-color: #2196f3;
-    }
-
-    /* Estilos para os botões específicos Salvar e Editar */
-    #save-name-button, #edit-name-button {
-        border-radius: 15px; /* Botões arredondados */
-        font-weight: bold;
-        text-transform: uppercase;
-    }
-
-    #save-name-button {
-        background-color: #28a745; /* Verde para Salvar */
-    }
-
-    #save-name-button:hover {
-        background-color: #218838;
-    }
-
-    #edit-name-button {
-        background-color: #ffc107; /* Amarelo para Editar */
-    }
-
-    #edit-name-button:hover {
-        background-color: #e0a800;
-    }
-</style>
-
-        
-</body>
-</html>
