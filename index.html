@@ -341,10 +341,8 @@ async function generatePDF() {
 
 
    // Bloco= 1 inicio  Carregando mapa
-               
-// Bloco= 1 inicio  Carregando mapa
-
-// Função que não foi alterada (permanece a mesma)
+              
+   // Função que não foi alterada (permanece a mesma)
 function trackLocation() {
     // Mostra o GIF de carregamento assim que começamos a buscar a localização
     showLoading();
@@ -370,11 +368,6 @@ function trackLocation() {
 
                 // Esconde o GIF de carregamento assim que o mapa foi carregado
                 hideLoading();
-
-                // Tornar o mapa visível após as coordenadas serem carregadas
-                const mapContainer = document.getElementById("map");
-                mapContainer.style.visibility = 'visible'; // Torna o mapa visível
-                mapContainer.style.height = '400px'; // Ajusta a altura conforme necessário
             },
             (error) => {
                 console.error("Erro ao obter localização:", error);
@@ -403,26 +396,11 @@ function hideLoading() {
 
 // Chama a função trackLocation quando a página for carregada
 window.onload = function () {
-    // Inicialmente, o mapa não será visível nem terá altura
-    const mapContainer = document.getElementById("map");
-    mapContainer.style.visibility = 'hidden'; // Torna o mapa invisível
-    mapContainer.style.height = '0'; // Ajusta a altura para 0 até o carregamento
-    mapContainer.style.width = '100%'; // Ajuste a largura conforme necessário
-
     trackLocation();
 };
 
-// Bloco= 1 fim
+ // Bloco= 1 fim
 // Bloco mapa na tela fim
-
-
-// Bloco= 1 fim
-// Bloco mapa na tela fim
-
-
-
-
-
 
 
 
