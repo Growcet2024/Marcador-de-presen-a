@@ -399,25 +399,6 @@ window.onload = function () {
     trackLocation();
 };
 
-
-
-<!-- inicio acrescentei-->
-
-       function mostrarMapa() {
-     setTimeout(() => {
-        const mapa = document.getElementById('map');
-        mapa.style.display = 'block';       // Faz o mapa aparecer
-        mapa.style.visibility = 'visible';  // Garante que fique visível sem espaço vazio
-     }, 1500);  // Aguarda 0.5 segundo para garantir o carregamento
-     }
-
-     <!-- fim -->
-      mostrarMapa();  // Isso vai exibir o mapa depois que ele for carregado
-
-        <!-- fim acrescentei-->
-
-
-
  // Bloco= 1 fim
 // Bloco mapa na tela fim
 
@@ -456,9 +437,8 @@ window.onload = function () {
     <img src="https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif" alt="Carregando..." style="width: 100px; height: 100px;">
 </div>
 
-
-<!-- Local do mapa OpenStreetMap oculto-->
-<div id="map" style="width: 100%; height: 300px; display: none;"></div>
+<!-- Local do mapa OpenStreetMap -->
+        <div id="map" style="width: 100%; height: 300px;"></div>
 
 
         <!-- Coordenadas -->
