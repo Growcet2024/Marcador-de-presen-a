@@ -340,12 +340,15 @@ async function generatePDF() {
 
 
 
-   // Bloco= 1 inicio  Carregando mapa
+   // Bloco= 1 inicio  Carregando mapa projeto perfeito
               
-   // Função que não foi alterada (permanece a mesma)
+   // Função para carregar a localização
 function trackLocation() {
-    // Mostra o GIF de carregamento assim que começamos a buscar a localização
+    // Exibe o GIF de carregamento assim que começamos a buscar a localização
     showLoading();
+
+    // Esconde o mapa antes de começar
+    document.getElementById("map").style.display = 'none';
 
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
@@ -361,18 +364,30 @@ function trackLocation() {
 
                 getAddressFromCoordinates(currentLatitude, currentLongitude);
 
-                // Agora, atualiza o mapa com Leaflet
-                updateMap(currentLatitude, currentLongitude); 
+                // Agora, exibe o mapa
+                document.getElementById("map").style.display = 'block';
 
-                playSound("location-sound.mp3");
+                // Inicializa o mapa com as coordenadas obtidas
+                map = L.map('map').setView([currentLatitude, currentLongitude], 15);
 
-                // Esconde o GIF de carregamento assim que o mapa foi carregado
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                }).addTo(map);
+
+                // Adiciona o marcador e a popup
+                L.marker([currentLatitude, currentLongitude]).addTo(map)
+                    .bindPopup('Você está aqui!')
+                    .openPopup();
+
+                // Corrige o redimensionamento do mapa após a exibição
+                map.invalidateSize();
+
+                // Esconde o GIF de carregamento após o mapa ser exibido
                 hideLoading();
             },
             (error) => {
                 console.error("Erro ao obter localização:", error);
-                document.getElementById("coordinates").innerText =
-                    "Erro ao obter localização.";
+                document.getElementById("coordinates").innerText = "Erro ao obter localização.";
                 playSound("error-sound.mp3");
 
                 // Esconde o GIF de carregamento em caso de erro
@@ -381,9 +396,10 @@ function trackLocation() {
         );
     } else {
         alert("Geolocalização não é suportada neste navegador.");
+        hideLoading(); // Garante que o GIF seja escondido em caso de erro
     }
 }
-
+    
 // Função para exibir o GIF de carregamento
 function showLoading() {
     document.getElementById("loadingImage").style.display = 'block'; // Exibe o GIF de carregamento
@@ -401,6 +417,7 @@ window.onload = function () {
 
  // Bloco= 1 fim
 // Bloco mapa na tela fim
+
 
 
 
