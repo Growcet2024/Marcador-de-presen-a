@@ -5,16 +5,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Marcador de Presença</title>
+
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
-
- <title>Marcador de Presença</title>
- <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <title>Marcador de Presença</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-
-
 
     <style>
         /* Estilos Globais */
@@ -106,13 +105,30 @@
 
         button:nth-child(3) {
             background: linear-gradient(to right, #FFC107, #FFD54F);
-            color: #333;
+            color: #ffffff;
         }
 
         button:nth-child(4) {
             background: linear-gradient(to right, #2196F3, #64B5F6);
             color: white;
+
+
         }
+
+        .history-buttons button:nth-child(1) {
+    background: linear-gradient(to right, #25D366, #66E592); /* Verde do WhatsApp */
+    color: white;
+}
+
+.history-buttons button:nth-child(2) {
+    background: linear-gradient(to right, #ff9800, #ffb74d); /* Laranja do PDF */
+    color: white;
+}
+
+.history-buttons button:nth-child(3) {
+    background: linear-gradient(to right, #d32f2f, #d32f2f); /* Vermelho para Apagar */
+    color: white;
+}
 
         /* Estilos dos Campos de Coordenadas, Data/Hora e Endereço */
         .field {
@@ -295,7 +311,9 @@ function shareLocation() {
     const description = document.getElementById("description").value || "Nenhuma descrição fornecida.";
 
     // Verificando se o nome e o ID estão corretos e preparando a mensagem
-  const message = `*Marcador de Presença*\n\nDeclaração de comparecimento: \n\nEu estive aqui,\nUsuário: ${userName} (ID: ${userID})\n${coordinates}\n${address}\nDescrição: ${description}\nData/hora local: ${timestamp}\n\nhttps://maps.google.com/?q=${currentLatitude},${currentLongitude}`; 
+
+    const additionalMessage = "A precisão da localização no Google Maps pode variar em um raio de 50 metros."; 
+const message = `*Marcador de Presença*\n\nDeclaração de comparecimento: \n\nEu estive aqui,\nUsuário: ${userName} (ID: ${userID})\n${coordinates}\n${address}\nDescrição: ${description}\nData/hora local: ${timestamp}\n\nhttps://maps.google.com/?q=${currentLatitude},${currentLongitude}\n\n${additionalMessage}`;
 
     const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
@@ -313,8 +331,20 @@ async function generatePDF() {
     const userID = localStorage.getItem("userID");  // ID único do usuário (fixo)
     const description = document.getElementById("description").value || "Nenhuma descrição fornecida.";
 
+
     const title = "Marcador de Presença";
-    const message = `Declaração de comparecimento: \n\nEu estive aqui,\nUsuário: ${userName} (ID: ${userID})\n${coordinates}\n${address}\nDescrição: ${description}\nData/hora local: ${timestamp}\n\nhttps://maps.google.com/?q=${currentLatitude},${currentLongitude}`;
+const additionalMessage = "A precisão da localização no Google Maps pode variar em um raio de 50 metros.";
+const message = `Declaração de comparecimento: \n\nEu estive aqui,\nUsuário: ${userName} (ID: ${userID})\n${coordinates}\n${address}\nDescrição: ${description}\nData/hora local: ${timestamp}\n\nhttps://maps.google.com/?q=${currentLatitude},${currentLongitude}`;
+
+// Ajusta o tamanho da fonte para a frase
+doc.setFontSize(12);  // Tamanho normal para o corpo do texto
+doc.text(message, 10, 30, { maxWidth: 180 });
+
+// Agora, coloca a frase adicional com um tamanho menor
+doc.setFontSize(8);  // Tamanho pequeno para a frase
+doc.setFont("helvetica", "normal");  // Fonte normal (pode ser em itálico também)
+doc.text(additionalMessage, 10, 115, { maxWidth: 180 });
+
 
     doc.setFont("helvetica", "bold");
     doc.setFontSize(16);
@@ -340,7 +370,7 @@ async function generatePDF() {
 
 
 
-   // Bloco= 1 inicio  Carregando mapa projeto perfeito
+   // Bloco= 1 inicio  Carregando mapa com atrazo projeto 42
               
    // Função para carregar a localização
 function trackLocation() {
@@ -375,10 +405,16 @@ function trackLocation() {
                 }).addTo(map);
 
                 // Adiciona o marcador e a popup
-                L.marker([currentLatitude, currentLongitude]).addTo(map)
-                    .bindPopup('Você está aqui!')
-                    .openPopup();
+                // Obter o nome do usuário do localStorage
+const userName = localStorage.getItem("userName") || "Usuário";
 
+// Adiciona o marcador e a popup com o nome do usuário
+L.marker([currentLatitude, currentLongitude]).addTo(map)
+    .bindPopup(`${userName}, você está aqui!`)  // Inclui o nome do usuário na mensagem
+    .openPopup();
+
+
+    
                 // Corrige o redimensionamento do mapa após a exibição
                 map.invalidateSize();
 
@@ -399,7 +435,24 @@ function trackLocation() {
         hideLoading(); // Garante que o GIF seja escondido em caso de erro
     }
 }
-    
+
+// Função para exibir o GIF de carregamento
+function showLoading() {
+    document.getElementById("loadingImage").style.display = 'block';
+}
+
+// Função para esconder o GIF de carregamento
+function hideLoading() {
+    document.getElementById("loadingImage").style.display = 'none';
+}
+
+// Chama a função trackLocation quando a página for carregada
+window.onload = function () {
+    trackLocation();
+};
+
+
+
 // Função para exibir o GIF de carregamento
 function showLoading() {
     document.getElementById("loadingImage").style.display = 'block'; // Exibe o GIF de carregamento
@@ -417,8 +470,6 @@ window.onload = function () {
 
  // Bloco= 1 fim
 // Bloco mapa na tela fim
-
-
 
 
     // Função para tocar um som
@@ -497,10 +548,14 @@ window.onload = function () {
         <button class="button" onclick="generatePDF()">Gerar PDF</button>
 
         <!-- Botão para Exibir o Histórico dentro do mesmo container -->
-        <button class="button" onclick="toggleHistory()">Ver Histórico de Presença</button>
+        <button class="button" onclick="toggleHistory()">Histórico de Presença</button>
 
         <!-- Alteração: Botão para abrir o local no Google Maps -->
-        <button class="button" onclick="openGoogleMaps()">Ver no Google Maps</button>
+        <button class="button" onclick="openGoogleMaps()">Google Maps</button>
+
+        <p class="copyright">
+            A precisão da localização no Google Maps pode variar em um raio de 50 metros.
+            </p> 
 
 
         <!-- Frase de Copyright -->
@@ -562,7 +617,6 @@ window.onload = function () {
 #history-container {
     margin-top: 10px; /* Adiciona um espaço acima do histórico */
     padding: 0 1px; /* Ajuste para garantir que o conteúdo não fique colado nas laterais */
-    } /* Aqui falta o fechamento da chave */
 
 </style>
 
@@ -599,10 +653,20 @@ records.forEach((record, index) => {
                     <p><strong>Descrição:</strong> ${record.description}</p>
                     <p><strong>Data/Hora:</strong> ${record.timestamp}</p>
                     <div class="history-buttons">
-                    <button onclick="shareLocationHistory(${index})">Compartilhar no WhatsApp</button>
-                    <button onclick="generatePDFHistory(${index})">Gerar PDF</button>
-                    <button onclick="deleteRecord(${index})">Apagar Registro</button>
-                    </div>
+
+
+                        <div class="history-buttons">
+    <button class="share-btn" onclick="shareLocationHistory(${index})">
+        <i class="fas fa-share"></i> Compartilhar
+    </button>
+    <button class="pdf-btn" onclick="generatePDFHistory(${index})">
+        <i class="fas fa-file-pdf"></i> Gerar PDF
+    </button>
+    <button class="delete-btn" onclick="deleteRecord(${index})">
+        <i class="fas fa-trash"></i> Apagar
+    </button>
+</div>
+
                        
                     `;
                     recordsList.appendChild(recordDiv);
@@ -626,13 +690,12 @@ function shareLocationHistory(index) {
     const userName = localStorage.getItem("userName") || "Usuário";  // Nome fixo
     const userID = localStorage.getItem("userID");  // ID fixo
 
-    const message = `*Marcador de Presença*\n\nDeclaração de comparecimento: \n\nEu estive aqui,\nUsuário: ${userName} (ID: ${userID})\n${record.coordinates}\n${record.address}\nDescrição: ${record.description}\nData/hora local: ${record.timestamp}\n\nhttps://maps.google.com/?q=${currentLatitude},${currentLongitude}`; 
+    const additionalMessage = "A precisão da localização no Google Maps pode variar em um raio de 50 metros.";
+const message = `*Marcador de Presença*\n\nDeclaração de comparecimento: \n\nEu estive aqui,\nUsuário: ${userName} (ID: ${userID})\n${record.coordinates}\n${record.address}\nDescrição: ${record.description}\nData/hora local: ${record.timestamp}\n\nhttps://maps.google.com/?q=${currentLatitude},${currentLongitude}\n\n${additionalMessage}`;
 
     const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
 }
-
-
 
  
            // Função para gerar PDF a partir do histórico
@@ -651,9 +714,21 @@ function shareLocationHistory(index) {
          const userName = localStorage.getItem("userName") || "Usuário";  // Nome fixo
          const userID = localStorage.getItem("userID");  // ID fixo
 
-         const title = "Marcador de Presença";
 
-         const message = `Declaração de comparecimento: \n\nEu estive aqui,\nUsuário: ${userName} (ID: ${userID})\n${record.coordinates}\n${record.address}\nDescrição: ${record.description}\nData/hora local: ${new Date().toLocaleString()}\n\nhttps://maps.google.com/?q=${currentLatitude},${currentLongitude}`;
+         const title = "Marcador de Presença";
+         const additionalMessage = "A precisão da localização no Google Maps pode variar em um raio de 50 metros.";
+const message = `Declaração de comparecimento: \n\nEu estive aqui,\nUsuário: ${userName} (ID: ${userID})\n${record.coordinates}\n${record.address}\nDescrição: ${record.description}\nData/hora local: ${new Date().toLocaleString()}\n\nhttps://maps.google.com/?q=${currentLatitude},${currentLongitude}`;
+
+// Ajusta o tamanho da fonte para o corpo do texto
+doc.setFontSize(12);  // Tamanho normal para o corpo do texto
+doc.text(message, 10, 30, { maxWidth: 180 });
+
+// Ajuste do espaçamento vertical para a frase adicional
+doc.setFontSize(8);  // Tamanho pequeno para a frase
+doc.setFont("helvetica", "normal");  // Fonte normal
+doc.text(additionalMessage, 10, 115, { maxWidth: 180 });  // Ajuste o valor de Y (130)
+
+
          doc.setFont("helvetica", "bold");
          doc.setFontSize(16);
          doc.text(title, 10, 20);
@@ -666,8 +741,6 @@ function shareLocationHistory(index) {
 
          doc.save(`${userName}_Marcador_de_Presença.pdf`);
 }
-
-
 
 
             // Função delete a partir do histórico
@@ -739,18 +812,19 @@ function shareLocationHistory(index) {
         border-radius: 15px; /* Bordas arredondadas */
     }
 
+      /* Cores botões principais*/
     .button {
-        background-color: #ccc;
+        background-color: #2196f3;
         color: white;
         border: none;
         font-size: 16px;
         cursor: pointer;
         border-radius: 15px; /* Bordas arredondadas para outros botões */
     }
-
     .button:hover {
         background-color: #2196f3;
     }
+    
 
     /* Estilos para os botões específicos Salvar e Editar */
     #save-name-button, #edit-name-button {
@@ -774,6 +848,35 @@ function shareLocationHistory(index) {
     #edit-name-button:hover {
         background-color: #e0a800;
     }
+
+
+/* Estilos para os botões do histórico */
+.history-buttons {
+    display: flex;
+    flex-direction: column;  /* Mantém os botões um abaixo do outro */
+    gap: 8px;  /* Espaçamento entre os botões */
+    margin-top: 10px;
+}
+
+.history-buttons button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 15px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.history-buttons button i {
+    margin-right: 8px;  /* Espaço entre o ícone e o texto */
+    font-size: 18px;
+}
+
 </style>
 
         
