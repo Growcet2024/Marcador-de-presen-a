@@ -380,6 +380,7 @@ function trackLocation() {
     // Esconde o mapa antes de começar
     document.getElementById("map").style.display = 'none';
 
+
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
             (position) => {
@@ -394,6 +395,7 @@ function trackLocation() {
 
                 getAddressFromCoordinates(currentLatitude, currentLongitude);
 
+
                 // Agora, exibe o mapa
                 document.getElementById("map").style.display = 'block';
 
@@ -403,6 +405,7 @@ function trackLocation() {
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 }).addTo(map);
+
 
                 // Adiciona o marcador e a popup
                 // Obter o nome do usuário do localStorage
@@ -468,6 +471,67 @@ window.onload = function () {
     trackLocation();
 };
 
+
+
+// Força atualização do GPS ao carregar a página
+window.addEventListener('load', () => {
+    if (navigator.geolocation) {
+        const watchID = navigator.geolocation.watchPosition(
+            (position) => {
+                console.log("GPS atualizado:");
+                console.log("Latitude:", position.coords.latitude);
+                console.log("Longitude:", position.coords.longitude);
+
+                // Para de assistir após a primeira atualização
+                navigator.geolocation.clearWatch(watchID);
+            },
+            (error) => {
+                console.error("Erro ao atualizar GPS:", error);
+            },
+            {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 0
+            }
+        );
+    } else {
+        console.error("Geolocalização não é suportada neste navegador.");
+    }
+});
+
+
+// Função para verificar se a localização está ativa
+function verificarLocalizacaoAtiva() {
+    if (navigator.geolocation) {
+        const watchID = navigator.geolocation.watchPosition(
+            (position) => {
+                console.log("Localização ativa");
+                document.getElementById("alerta-gps").style.display = "none"; // Esconde o alerta
+                navigator.geolocation.clearWatch(watchID); // Para de assistir
+            },
+            (error) => {
+                if (error.code === error.PERMISSION_DENIED || error.code === error.POSITION_UNAVAILABLE) {
+                    console.warn("Localização desativada ou indisponível.");
+                    document.getElementById("alerta-gps").style.display = "block"; // Mostra o alerta
+                }
+            },
+            {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 0
+            }
+        );
+    } else {
+        console.error("Geolocalização não é suportada neste navegador.");
+    }
+}
+
+// Chama a função ao carregar a página
+window.addEventListener('load', verificarLocalizacaoAtiva);
+
+
+
+
  // Bloco= 1 fim
 // Bloco mapa na tela fim
 
@@ -490,7 +554,7 @@ window.onload = function () {
 <body>
     <!-- Cabeçalho Tela principal-->
     <header>
-        <h1>Marcador de Presença</h1>
+        <h1><center>Marcador de Presença</h1>
     </header>
 
     <!-- Container Principal -->
@@ -507,7 +571,10 @@ window.onload = function () {
 
 <!-- Local do mapa OpenStreetMap -->
         <div id="map" style="width: 100%; height: 300px;"></div>
-
+        <div id="alerta-gps" style="display: none; background-color: #ffcc00; color: #000; padding: 10px; text-align: center; font-weight: bold;">
+            ⚠️ Ative a localização
+        </div>
+        
 
         <!-- Coordenadas -->
         <div class="field">
@@ -582,7 +649,7 @@ window.onload = function () {
 
 <!-- Container para Exibir o Histórico de Presença -->
 <div id="history-container" style="display: none;">
-    <h2>Histórico de Presença</h2>
+    <h2><center>Histórico de Presença</h2>
     <div id="records-list" style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); overflow-y: auto; padding: 10px;">
         <!-- Lista de registros será carregada aqui -->
     </div>
