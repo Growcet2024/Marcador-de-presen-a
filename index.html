@@ -526,27 +526,10 @@ function verificarLocalizacaoAtiva() {
     }
 }
 
-                    // Função para verificar a conexão com a Internet
-    function verificarConexaoInternet() {
-        if (!navigator.onLine) {
-            document.getElementById("alerta-internet").style.display = "block";
-        } else {
-            document.getElementById("alerta-internet").style.display = "none";
-        }
-    }
-
-    // Verifica a conexão ao carregar a página
-    verificarConexaoInternet();
-
-    // Monitora mudanças no status da conexão
-    window.addEventListener('online', verificarConexaoInternet);
-    window.addEventListener('offline', verificarConexaoInternet);
+    
 
 // Chama a função ao carregar a página
 window.addEventListener('load', verificarLocalizacaoAtiva);
-
-
-
 
  // Bloco= 1 fim
 // Bloco mapa na tela fim
@@ -591,10 +574,7 @@ window.addEventListener('load', verificarLocalizacaoAtiva);
             ⚠️ Ative a localização
         </div>
 
-           <!-- Alerta de conexão com a Internet -->
-<div id="alerta-internet" style="display: none; background-color: #ffcccc; color: #000; padding: 10px; text-align: center; font-weight: bold;">
-    🚫 Parece que você está sem internet
-</div>
+         
 
         <!-- Coordenadas -->
         <div class="field">
