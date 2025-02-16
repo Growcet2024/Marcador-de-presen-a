@@ -529,6 +529,9 @@ function verificarLocalizacaoAtiva() {
 // Chama a função ao carregar a página
 window.addEventListener('load', verificarLocalizacaoAtiva);
 
+
+
+
  // Bloco= 1 fim
 // Bloco mapa na tela fim
 
@@ -568,10 +571,11 @@ window.addEventListener('load', verificarLocalizacaoAtiva);
 
 <!-- Local do mapa OpenStreetMap -->
         <div id="map" style="width: 100%; height: 300px;"></div>
-        <div id="alerta-gps" style="display: none; background-color: #ffffff; color: #000; padding: 10px; text-align: center; font-weight: bold;">
+        <div id="alerta-gps" style="display: none; background-color: #ffcc00; color: #000; padding: 10px; text-align: center; font-weight: bold;">
             ⚠️ Ative a localização
         </div>
         
+
         <!-- Coordenadas -->
         <div class="field">
             <h2>Coordenadas</h2>
@@ -942,48 +946,8 @@ doc.text(additionalMessage, 10, 115, { maxWidth: 180 });  // Ajuste o valor de Y
 
 </style>
 
+        
 </body>
-
-<body>
-    <!-- Todo o conteúdo da página -->
-
-    <!-- Script de verificação de conexão -->
-    <script src="js/verificarConexao.js"></script>
-</body>
-
-
-</style>  <!-- Caso tenha fechado algum estilo antes -->
-
-<body>
-    <!-- Todo o conteúdo da página -->
-
-    <!-- Alerta de conexão com a Internet -->
-    <div id="alerta-internet" style="display: none; background-color: #ffcccc; color: #000; padding: 10px; text-align: center; font-weight: bold;">
-        🚫 Parece que você está sem internet
-    </div>
-
-    <!-- Script de verificação de conexão -->
-    <script src="js/verificarConexao.js"></script>
-
-    <script>
-        // Função para verificar a conexão com a Internet
-        function verificarConexaoInternet() {
-            if (!navigator.onLine) {
-                document.getElementById("alerta-internet").style.display = "block";
-            } else {
-                document.getElementById("alerta-internet").style.display = "none";
-            }
-        }
-
-        // Verifica a conexão ao carregar a página
-        verificarConexaoInternet();
-
-        // Monitora mudanças no status da conexão
-        window.addEventListener('online', verificarConexaoInternet);
-        window.addEventListener('offline', verificarConexaoInternet);
-    </script>
-</body>
-
 </html>
 
     
