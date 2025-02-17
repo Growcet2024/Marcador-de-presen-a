@@ -278,17 +278,27 @@ function saveRecord() {
     const address = document.getElementById("address").innerText;
     const timestamp = document.getElementById("timestamp").innerText;
 
-    // Agora recupera o nome do usuário salvo no localStorage
-    const userInput = localStorage.getItem("userName") || "Usuário";  // Pega o nome salvo ou usa um valor padrão
-    const description = document.getElementById("description").value || "Nenhuma descrição fornecida.";
 
-    const record = {
-        userName: userInput,
-        coordinates,
-        address,
-        description,
-        timestamp,
-    };
+
+
+    // Agora recupera o nome do usuário salvo no localStorage
+   // Agora recupera o nome e o ID do usuário salvo no localStorage
+const userInput = localStorage.getItem("userName") || "Usuário";  
+const userID = localStorage.getItem("userID") || "Sem ID";  // Recupera o ID ou usa um valor padrão
+const description = document.getElementById("description").value || "Nenhuma descrição fornecida.";
+
+const record = {
+    userName: userInput,
+    userID: userID,  // Aqui estamos incluindo o ID no registro
+    coordinates,
+    address,
+    description,
+    timestamp,
+};
+
+
+
+
 
     const records = JSON.parse(localStorage.getItem("presenceRecords")) || [];
     records.push(record);
@@ -621,7 +631,7 @@ window.addEventListener('load', verificarLocalizacaoAtiva);
         <button class="button" onclick="openGoogleMaps()">Google Maps</button>
 
         <p class="copyright">
-            A precisão da localização no Google Maps pode variar em um raio de 50 metros.
+            A precisão da localização no Google Maps ode variar em um raio de 50 metros.
             </p> 
 
 
@@ -637,7 +647,7 @@ window.addEventListener('load', verificarLocalizacaoAtiva);
         .copyright {
             font-size: 13px; /* Ajuste o tamanho da fonte aqui */
             color: #000000; /* Cor do texto */
-            text-align: center; /* Centralizar o texto */
+            text-align: left; /* Centralizar o texto */
             margin-top: 20px; /* Distância do conteúdo acima */
         }
     </style>
@@ -705,6 +715,8 @@ records.reverse();  // Aqui é onde você inverte a ordem dos registros
 
 
 
+
+
 // Adicionar os registros parte ver na tela do app
 records.forEach((record, index) => {
                     const recordDiv = document.createElement("div");
@@ -714,12 +726,16 @@ records.forEach((record, index) => {
                     
                     <p><strong>Declaração de comparecimento:</strong>
                     
-                    <p><strong>Usuário:</strong> ${record.userName}</p>
+                    <p><strong>Usuário:</strong> ${record.userName} (ID: ${record.userID})</p>
+
                     <p><strong>Coordenadas:</strong> ${record.coordinates}</p>
                     <p><strong>Endereço:</strong> ${record.address}</p>
                     <p><strong>Descrição:</strong> ${record.description}</p>
                     <p><strong>Data/Hora:</strong> ${record.timestamp}</p>
                     <div class="history-buttons">
+
+
+
 
 
                         <div class="history-buttons">
@@ -743,6 +759,7 @@ records.forEach((record, index) => {
             }
         }
     
+
        
 // Função para compartilhar no WhatsApp a partir do histórico
 function shareLocationHistory(index) {
@@ -949,5 +966,3 @@ doc.text(additionalMessage, 10, 115, { maxWidth: 180 });  // Ajuste o valor de Y
         
 </body>
 </html>
-
-    
