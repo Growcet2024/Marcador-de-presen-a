@@ -935,6 +935,10 @@ doc.text(additionalMessage, 10, 115, { maxWidth: 180 });  // Ajuste o valor de Y
 }
 
 
+
+    
+    
+
 /* Ícone do Menu Hambúrguer */
 .menu-hamburguer {
     font-size: 30px;
@@ -942,7 +946,7 @@ doc.text(additionalMessage, 10, 115, { maxWidth: 180 });  // Ajuste o valor de Y
     position: fixed;
     top: 20px;
     right: 20px;
-    z-index: 100;
+    z-index: 101; /* Aumentamos para ficar sobre o mapa */
     color: #000000; /* Os três traços */
     background: white;
     border-radius: 5px;
@@ -960,10 +964,16 @@ doc.text(additionalMessage, 10, 115, { maxWidth: 180 });  // Ajuste o valor de Y
     top: 0;
     right: -250px; /* Escondido inicialmente */
     transition: right 0.3s ease;
-    z-index: 99;
+    z-index: 102; /* Aumentamos para ficar sobre o mapa */
     padding-top: 60px;
 }
 
+
+    
+
+
+
+    
 /* Estilo da Lista do Menu */
 .menu-lateral ul {
     list-style: none;
