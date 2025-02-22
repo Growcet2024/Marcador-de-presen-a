@@ -969,9 +969,19 @@ doc.text(additionalMessage, 10, 115, { maxWidth: 180 });  // Ajuste o valor de Y
 }
 
 
+   .menu-lateral {
+    z-index: 2000; /* Certifique-se de que está acima do mapa */
+}
+
+#map {
+    position: relative;
+    z-index: 1; /* Mantém o mapa abaixo do menu */
+}
+ 
+
+
+
     
-
-
 
     
 /* Estilo da Lista do Menu */
