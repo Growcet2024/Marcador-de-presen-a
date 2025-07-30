@@ -196,9 +196,22 @@
 
 
 <!-- 🔓 ⚠️ 🛑 5- Proteção contra alteração de data - INÍCIO -->
+
+
+
+
+<!-- 🔓 ⚠️ 🛑 5- Proteção contra alteração de data - INÍCIO -->
 <script>
   (function() {
     const ultimaAberturaKey = 'ultimaAbertura';
+
+    function desbloquearTela() {
+      // Remove a tela de bloqueio caso exista
+      const alertBox = document.getElementById('alert-box');
+      if (alertBox) {
+        alertBox.remove();
+      }
+    }
 
     function bloquearPorDataInvalida() {
       document.body.innerHTML = `
@@ -241,9 +254,9 @@
 
       // Atualiza data de última abertura (normal)
       localStorage.setItem(ultimaAberturaKey, hoje.toISOString());
-
-      // Recarrega a página ao liberar
-      location.reload();
+      
+      // Apenas desbloqueia sem recarregar a página
+      desbloquearTela();
       return true;
     }
 
@@ -251,6 +264,12 @@
     document.addEventListener('DOMContentLoaded', verificarData);
   })();
 </script>
+<!-- 🔓 5- Proteção contra alteração de data - FIM -->
+
+
+
+
+
 <!-- 🔓 5- Proteção contra alteração de data - FIM -->
 
 
@@ -265,7 +284,7 @@
   <!-- ⚙️ 4 - BLOQUEIO: INÍCIO - SCRIPT FINAL -->
   <script>
     (function() {
-      const diasTeste = 5;  // duração do teste em dias
+      const diasTeste = 7;  // duração do teste em dias
 
       // Recupera ou seta a data de instalação no localStorage
       const getDataInstalacao = () => {
