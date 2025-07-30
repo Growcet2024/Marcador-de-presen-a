@@ -186,7 +186,13 @@
   <!-- 🔓 2 - BLOQUEIO: FIM - HTML DO OVERLAY -->
 
 
-<!-- 🔓 5- Proteção conta altera dada- INICIO-->
+
+
+
+
+
+
+<!-- 🔓 ⚠️ 🛑 5- Proteção contra alteração de data - INÍCIO -->
 <script>
   (function() {
     const ultimaAberturaKey = 'ultimaAbertura';
@@ -203,15 +209,17 @@
       if (ultimaAbertura) {
         const dataAnterior = new Date(ultimaAbertura);
 
-        // Se a data atual é menor que a última salva → manipulação detectada
+        // Detecta se a data atual foi alterada para trás
         if (hoje < dataAnterior) {
           bloquearPorDataInvalida();
-          return false;
+          return false; // não atualiza a data salva
         }
       }
 
-      // Atualiza data de última abertura (normal)
-      localStorage.setItem(ultimaAberturaKey, hoje.toISOString());
+      // Só atualiza se for maior ou igual à data salva
+      if (!ultimaAbertura || hoje >= new Date(ultimaAbertura)) {
+        localStorage.setItem(ultimaAberturaKey, hoje.toISOString());
+      }
       return true;
     }
 
@@ -219,7 +227,12 @@
     document.addEventListener('DOMContentLoaded', verificarData);
   })();
 </script>
-<!-- 🔓 5- Proteção conta altera dada- FIM-->
+
+<!-- 🔓 ⚠️ 🛑 5- Proteção conta altera data- FIM-->
+
+
+
+
 
 
 
@@ -304,7 +317,7 @@
 
 
 
-<!-- ⚠️ 🛑 Não mexer nos código abaixo — nem substitui ✅ -->
+<!-- ⚠️ 🛑 Não mexer nos códigos abaixo — nem substitui ✅ -->
 
 <script>
     // Substitui o fundo, se o usuário já tiver definido um
