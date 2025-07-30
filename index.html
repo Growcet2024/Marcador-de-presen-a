@@ -193,40 +193,42 @@
 
 
 <!-- 🔓 ⚠️ 🛑 5- Proteção contra alteração de data - INÍCIO -->
+
+
+<!-- Proteção contra alteração de data (corrigido) -->
 <script>
-  (function() {
-    const ultimaAberturaKey = 'ultimaAbertura';
+(function() {
+  const ultimaAberturaKey = 'ultimaAbertura';
 
-    function bloquearPorDataInvalida() {
-      alert('⚠️ A data do sistema parece estar incorreta.\nVerifique e tente novamente.');
-      document.body.innerHTML = '<h2 style="color:white;text-align:center;margin-top:40%;">Data do sistema inválida</h2>';
+  function bloquearPorDataInvalida() {
+    alert('⚠️ A data do sistema parece estar incorreta.\nVerifique e tente novamente.');
+    document.body.innerHTML = '<h2 style="color:white;text-align:center;margin-top:40%;">Data do sistema inválida</h2>';
+  }
+
+  function verificarData() {
+    const hoje = new Date();
+    const ultimaAbertura = localStorage.getItem(ultimaAberturaKey);
+
+    if (ultimaAbertura) {
+      const dataAnterior = new Date(ultimaAbertura);
+
+      // Só bloqueia se data atual está ANTES da anterior
+      if (hoje < dataAnterior) {
+        bloquearPorDataInvalida();
+        return;
+      }
     }
 
-    function verificarData() {
-      const hoje = new Date();
-      const ultimaAbertura = localStorage.getItem(ultimaAberturaKey);
+    // Atualiza a data sempre que a data atual é válida
+    localStorage.setItem(ultimaAberturaKey, hoje.toISOString());
+  }
 
-      if (ultimaAbertura) {
-        const dataAnterior = new Date(ultimaAbertura);
-
-        // Detecta se a data atual foi alterada para trás
-        if (hoje < dataAnterior) {
-          bloquearPorDataInvalida();
-          return false; // não atualiza a data salva
-        }
-      }
-
-      // Só atualiza se for maior ou igual à data salva
-      if (!ultimaAbertura || hoje >= new Date(ultimaAbertura)) {
-        localStorage.setItem(ultimaAberturaKey, hoje.toISOString());
-      }
-      return true;
-    }
-
-    // Executa na inicialização
-    document.addEventListener('DOMContentLoaded', verificarData);
-  })();
+  document.addEventListener('DOMContentLoaded', verificarData);
+})();
 </script>
+
+
+
 
 <!-- 🔓 ⚠️ 🛑 5- Proteção conta altera data- FIM-->
 
@@ -239,7 +241,7 @@
   <!-- ⚙️ 4 - BLOQUEIO: INÍCIO - SCRIPT FINAL -->
   <script>
     (function() {
-      const diasTeste = 3;  // duração do teste em dias
+      const diasTeste = 7;  // duração do teste em dias
 
       // Recupera ou seta a data de instalação no localStorage
       const getDataInstalacao = () => {
