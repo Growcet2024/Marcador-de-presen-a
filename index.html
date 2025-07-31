@@ -187,55 +187,95 @@
 
 
 
+<!-- 🆔 6 - FINGERPRINT (ID ÚNICO) - INÍCIO Código - Fingerprint -->
 
-
-
-
-
-
-
-
-<!-- 🔓 ⚠️ 🛑 5- Proteção contra alteração de data - INÍCIO -->
-
-
-
-
-<!-- 🔓 ⚠️ 🛑 5- Proteção contra alteração de data - INÍCIO -->
+<!-- 🔍 Fingerprint ID Único (Offline) -->
 <script>
-  (function() {
+  (function () {
+    function gerarFingerprint() {
+      const components = [
+        navigator.userAgent,
+        navigator.language,
+        screen.width,
+        screen.height,
+        screen.colorDepth,
+        new Date().getTimezoneOffset(),
+        navigator.hardwareConcurrency,
+        navigator.deviceMemory || 'unknown'
+      ];
+      const data = components.join('|');
+
+      // Função hash simples
+      let hash = 0;
+      for (let i = 0; i < data.length; i++) {
+        const chr = data.charCodeAt(i);
+        hash = ((hash << 5) - hash) + chr;
+        hash |= 0; // Converte para 32 bits
+      }
+
+      return 'FP-' + Math.abs(hash);
+    }
+
+    const fingerprint = gerarFingerprint();
+    console.log('🆔 Fingerprint gerado:', fingerprint);
+
+    // Exibir na tela para teste remover depois 🛑
+    document.addEventListener('DOMContentLoaded', function () {
+      const div = document.createElement('div');
+      div.style.position = 'fixed';
+      div.style.bottom = '10px';
+      div.style.right = '10px';
+      div.style.background = '#222';
+      div.style.color = '#fff';
+      div.style.padding = '8px';
+      div.style.borderRadius = '6px';
+      div.style.fontSize = '14px';
+      div.innerText = '🆔 Fingerprint: ' + fingerprint;
+      document.body.appendChild(div);
+    });
+
+    // Tornando disponível globalmente 🛑
+    window.APP_FINGERPRINT = fingerprint;
+  })();
+</script>
+
+<!-- 🆔 6 - FINGERPRINT (ID ÚNICO) - FIM Código - Fingerprint -->
+
+
+
+
+
+
+
+
+
+<!-- 🔓 ⚠️ 🛑 5- Proteção contra alteração de data - INÍCIO -->
+
+
+       <!-- 🔓 Proteção contra alteração de data (com Fingerprint) -->
+<script>
+  (function () {
+    const fingerprintKey = 'appFingerprint';
     const ultimaAberturaKey = 'ultimaAbertura';
 
-    function desbloquearTela() {
-      // Remove a tela de bloqueio caso exista
-      const alertBox = document.getElementById('alert-box');
-      if (alertBox) {
-        alertBox.remove();
+    // 🔹 Gera Fingerprint uma única vez (permanece mesmo limpando histórico)
+    function getFingerprint() {
+      let fp = localStorage.getItem(fingerprintKey);
+      if (!fp) {
+        fp = crypto.randomUUID(); // gera ID único
+        localStorage.setItem(fingerprintKey, fp);
       }
+      return fp;
     }
 
     function bloquearPorDataInvalida() {
+      alert('⚠️ A data do sistema está incorreta.\nAjuste para a data correta e tente novamente.');
       document.body.innerHTML = `
-        <div style="color:white;text-align:center;margin-top:40%;opacity:0;transition:opacity 0.8s ease;" id="alert-box">
-          <h2>⚠️ Data do sistema inválida</h2>
-          <p>A data do sistema parece estar incorreta.<br>Verifique e tente novamente.</p>
-          <button id="btn-tentar" 
-            style="padding:12px 24px;border:none;border-radius:8px;
-                   background:#02779e;color:white;font-size:16px;cursor:pointer;
-                   box-shadow:0px 2px 6px rgba(0,0,0,0.4);transition:transform 0.2s ease;">
-            Tentar novamente
-          </button>
+        <div style="color:white;text-align:center;margin-top:40%;">
+          <h2>Data do sistema inválida</h2>
+          <p>Ajuste a data/hora do seu dispositivo.</p>
         </div>
       `;
-
-      // Fade-in
-      setTimeout(() => document.getElementById('alert-box').style.opacity = 1, 50);
-
-      // Efeito hover no botão
-      const btn = document.getElementById('btn-tentar');
-      btn.addEventListener('mouseover', () => btn.style.transform = 'scale(1.05)');
-      btn.addEventListener('mouseout', () => btn.style.transform = 'scale(1)');
-
-      btn.addEventListener('click', verificarData);
     }
 
     function verificarData() {
@@ -252,21 +292,26 @@
         }
       }
 
-      // Atualiza data de última abertura (normal)
+      // Atualiza data de última abertura (sempre crescente)
       localStorage.setItem(ultimaAberturaKey, hoje.toISOString());
-      
-      // Apenas desbloqueia sem recarregar a página
-      desbloquearTela();
       return true;
     }
 
-    // Executa na inicialização
-    document.addEventListener('DOMContentLoaded', verificarData);
+    document.addEventListener('DOMContentLoaded', () => {
+      const fp = getFingerprint();
+      console.log("Fingerprint do dispositivo:", fp);
+
+      // Verifica a data ao abrir o app
+      verificarData();
+    });
   })();
 </script>
-<!-- 🔓 5- Proteção contra alteração de data - FIM -->
 
 
+        
+
+
+<!-- 🔓 Proteção contra alteração de data (com Fingerprint) -->
 
 
 
