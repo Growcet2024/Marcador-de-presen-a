@@ -11,7 +11,8 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
-   
+
+    <title>Marcador de Presença</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
@@ -85,7 +86,7 @@
         }
 
         button:hover {
-            background-color: #2196f3;
+            background-color: #95acee;
             transform: scale(1.02);
         }
 
@@ -99,7 +100,7 @@
         }
 
         button:nth-child(2) {
-            background: linear-gradient(to right, #2196F3, #64B5F6);
+            background: linear-gradient(to right, #0357cd, #2196f3); /* Gradiente de cor Salvar */
             color: white;
         }
 
@@ -109,7 +110,7 @@
         }
 
         button:nth-child(4) {
-            background: linear-gradient(to right, #2196F3, #64B5F6);
+            background: linear-gradient(to right, #e52633, #0357cd);
             color: white;
 
 
@@ -154,6 +155,26 @@
         footer p {
             font-size: 10px; /* Alterado para 40px conforme pedido */
         }
+
+
+/* 1 - Popup transparente com efeito vidro (recomendado) */
+/* Fundo da caixa da popup */
+.leaflet-popup-content-wrapper {
+    background: #FFFFFF40 !important;  /* branco com 25% de opacidade */
+    backdrop-filter: blur(6px);
+    color: #000000;
+    border-radius: 12px;
+}
+
+/* Triângulo apontando para o marcador */
+.leaflet-popup-tip {
+    background: #FFFFFF40 !important;  /* branco com 25% de opacidade */
+    backdrop-filter: blur(6px);
+}
+
+
+
+
     </style>
 
 <script>
@@ -252,8 +273,6 @@ function editUserName() {
             });
     }
 
-
-
 // Bloco=2 = Alteração feita: A função updateMap foi modificada para usar Leaflet com OpenStreetMap
 function updateMap(lat, lon) {
             // Inicializando o mapa com OpenStreetMap usando Leaflet
@@ -278,17 +297,21 @@ function saveRecord() {
     const address = document.getElementById("address").innerText;
     const timestamp = document.getElementById("timestamp").innerText;
 
-    // Agora recupera o nome do usuário salvo no localStorage
-    const userInput = localStorage.getItem("userName") || "Usuário";  // Pega o nome salvo ou usa um valor padrão
-    const description = document.getElementById("description").value || "Nenhuma descrição fornecida.";
 
-    const record = {
-        userName: userInput,
-        coordinates,
-        address,
-        description,
-        timestamp,
-    };
+   // Agora recupera o nome e o ID do usuário salvo no localStorage
+const userInput = localStorage.getItem("userName") || "Usuário";  
+const userID = localStorage.getItem("userID") || "Sem ID";  // Recupera o ID ou usa um valor padrão
+const description = document.getElementById("description").value || "Nenhuma descrição fornecida.";
+
+const record = {
+    userName: userInput,
+    userID: userID,  // Aqui estamos incluindo o ID no registro
+    coordinates,
+    address,
+    description,
+    timestamp,
+};
+
 
     const records = JSON.parse(localStorage.getItem("presenceRecords")) || [];
     records.push(record);
@@ -370,6 +393,9 @@ doc.text(additionalMessage, 10, 115, { maxWidth: 180 });
 
 
 
+
+
+
    // Bloco= 1 inicio  Carregando mapa com atrazo projeto 42
               
    // Função para carregar a localização
@@ -413,9 +439,28 @@ const userName = localStorage.getItem("userName") || "Usuário";
 
 // Adiciona o marcador e a popup com o nome do usuário
 L.marker([currentLatitude, currentLongitude]).addTo(map)
-    .bindPopup(`${userName}, você está aqui!`)  // Inclui o nome do usuário na mensagem
+ 
+    .bindPopup(`Eu estou aqui 😊<br>${userName}`) // Inclui o nome do usuário na mensagem
+
     .openPopup();
 
+
+
+// Círculo de precisão 50 metros
+// precisão real por GPS
+let gpsAccuracy = position.coords.accuracy;
+
+// limita o raio máximo
+if (gpsAccuracy > 80) gpsAccuracy = 80;
+
+// cria o círculo
+L.circle([currentLatitude, currentLongitude], {
+    color: '#007BFF',
+    fillColor: '#007BFF',
+    fillOpacity: 0.15,
+    radius: gpsAccuracy,
+    weight: 1
+}).addTo(map);
 
     
                 // Corrige o redimensionamento do mapa após a exibição
@@ -439,6 +484,8 @@ L.marker([currentLatitude, currentLongitude]).addTo(map)
     }
 }
 
+
+
 // Função para exibir o GIF de carregamento
 function showLoading() {
     document.getElementById("loadingImage").style.display = 'block';
@@ -455,7 +502,6 @@ window.onload = function () {
 };
 
 
-
 // Função para exibir o GIF de carregamento
 function showLoading() {
     document.getElementById("loadingImage").style.display = 'block'; // Exibe o GIF de carregamento
@@ -470,7 +516,6 @@ function hideLoading() {
 window.onload = function () {
     trackLocation();
 };
-
 
 
 // Força atualização do GPS ao carregar a página
@@ -526,13 +571,20 @@ function verificarLocalizacaoAtiva() {
     }
 }
 
-
-
 // Chama a função ao carregar a página
 window.addEventListener('load', verificarLocalizacaoAtiva);
 
  // Bloco= 1 fim
 // Bloco mapa na tela fim
+
+
+
+
+
+
+
+
+
 
 
     // Função para tocar um som
@@ -553,13 +605,17 @@ window.addEventListener('load', verificarLocalizacaoAtiva);
 <body>
     <!-- Cabeçalho Tela principal-->
     <header>
-        <h1><center>Marcador de Presença</h1>
+
+        <h1 style="text-align: center; font-size: 20px;">Checkin+</h1>
+<h2 style="text-align: center; font-size: 15px;">Marcador de Presença</h2>
+
     </header>
 
     <!-- Container Principal -->
     <div class="container">
         <!-- Nome da Rua -->
         <h2 id="road-name">Rua: Local Carregando!</h2>
+        
         
 
         <!-- Boco Mapa tipo iFrame -->
@@ -570,10 +626,14 @@ window.addEventListener('load', verificarLocalizacaoAtiva);
 
 <!-- Local do mapa OpenStreetMap -->
         <div id="map" style="width: 100%; height: 300px;"></div>
+
+        
+            <a href="principal.html" class="btn-voltar">Atualizar mapa 🔄</a>
+
         <div id="alerta-gps" style="display: none; background-color: #ffffff; color: #000; padding: 10px; text-align: center; font-weight: bold;">
             ⚠️ Ative a localização
         </div>
-      
+        
 
         <!-- Coordenadas -->
         <div class="field">
@@ -602,10 +662,8 @@ window.addEventListener('load', verificarLocalizacaoAtiva);
         <!-- Declaração de comparecimento na tela -->
 
         <p class="copyright">
-            Precisa provar ao seu chefe que foi ao médico? 
-            Comprove com um clique. 
-            Gere o registro ele é uma prova incontestável com nome e ID, e envie por WhatsApp ou em formato PDF.
-            </p> 
+            ✅ Para garantir a melhor precisão na sua localização, acesse a aba 'Informações Importantes' e confira as dicas essenciais! 📍
+            </p>  
 
         <!-- Compartilhar via WhatsApp -->
         <button class="button" onclick="shareLocation()">Compartilhar pelo WhatsApp</button>
@@ -619,11 +677,6 @@ window.addEventListener('load', verificarLocalizacaoAtiva);
         <!-- Alteração: Botão para abrir o local no Google Maps -->
         <button class="button" onclick="openGoogleMaps()">Google Maps</button>
 
-        <p class="copyright">
-            A precisão da localização no Google Maps pode variar em um raio de 50 metros.
-            </p> 
-
-
         <!-- Frase de Copyright -->
         <p class="copyright">Growcet © Desenvolvedor</p>
     </div>
@@ -636,7 +689,7 @@ window.addEventListener('load', verificarLocalizacaoAtiva);
         .copyright {
             font-size: 13px; /* Ajuste o tamanho da fonte aqui */
             color: #000000; /* Cor do texto */
-            text-align: center; /* Centralizar o texto */
+            text-align: left; /* Centralizar o texto */
             margin-top: 20px; /* Distância do conteúdo acima */
         }
     </style>
@@ -702,8 +755,6 @@ window.addEventListener('load', verificarLocalizacaoAtiva);
 // Ordenar os registros de forma decrescente (mais recente primeiro)
 records.reverse();  // Aqui é onde você inverte a ordem dos registros
 
-
-
 // Adicionar os registros parte ver na tela do app
 records.forEach((record, index) => {
                     const recordDiv = document.createElement("div");
@@ -713,13 +764,12 @@ records.forEach((record, index) => {
                     
                     <p><strong>Declaração de comparecimento:</strong>
                     
-                    <p><strong>Usuário:</strong> ${record.userName}</p>
+                    <p><strong>Usuário:</strong> ${record.userName} (ID: ${record.userID})</p>
                     <p><strong>Coordenadas:</strong> ${record.coordinates}</p>
                     <p><strong>Endereço:</strong> ${record.address}</p>
                     <p><strong>Descrição:</strong> ${record.description}</p>
                     <p><strong>Data/Hora:</strong> ${record.timestamp}</p>
                     <div class="history-buttons">
-
 
                         <div class="history-buttons">
     <button class="share-btn" onclick="shareLocationHistory(${index})">
@@ -742,6 +792,7 @@ records.forEach((record, index) => {
             }
         }
     
+
        
 // Função para compartilhar no WhatsApp a partir do histórico
 function shareLocationHistory(index) {
@@ -880,7 +931,7 @@ doc.text(additionalMessage, 10, 115, { maxWidth: 180 });  // Ajuste o valor de Y
 
       /* Cores botões principais*/
     .button {
-        background-color: #2196f3;
+        background: linear-gradient(to right, #0357cd, #2196f3);  /* Gradiente de cor de fundo */
         color: white;
         border: none;
         font-size: 16px;
@@ -891,7 +942,6 @@ doc.text(additionalMessage, 10, 115, { maxWidth: 180 });  // Ajuste o valor de Y
         background-color: #2196f3;
     }
     
-
     /* Estilos para os botões específicos Salvar e Editar */
     #save-name-button, #edit-name-button {
         border-radius: 15px; /* Botões arredondados */
@@ -914,7 +964,6 @@ doc.text(additionalMessage, 10, 115, { maxWidth: 180 });  // Ajuste o valor de Y
     #edit-name-button:hover {
         background-color: #e0a800;
     }
-
 
 /* Estilos para os botões do histórico */
 .history-buttons {
@@ -943,9 +992,88 @@ doc.text(additionalMessage, 10, 115, { maxWidth: 180 });  // Ajuste o valor de Y
     font-size: 18px;
 }
 
+
+/* Ícone do Menu Hambúrguer */
+.menu-hamburguer {
+    font-size: 30px;
+    cursor: pointer;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 100; /* Aumentamos para ficar sobre o mapa */
+    color: #000000; /* Os três traços */
+    background: white;
+    border-radius: 5px;
+    padding: 5px 10px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Menu Deslizante */
+.menu-lateral {
+    width: 250px;
+    height: 100%;
+    background: linear-gradient(to right, #0357cd, #2196f3);  /* Cor fundo lateral direita */
+    color: white;
+    position: fixed;
+    top: 0;
+    right: -250px; /* Escondido inicialmente */
+    transition: right 0.3s ease;
+    z-index: 99; /* Aumentamos para ficar sobre o mapa */
+    padding-top: 60px;
+}
+
+/* Estilo da Lista do Menu */
+.menu-lateral ul {
+    list-style: none;
+    padding: 0;
+}
+
+.menu-lateral ul li {
+    padding: 15px;
+    border-bottom: 1px solid #444;
+}
+
+.menu-lateral ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    display: block;
+}
+
+.menu-lateral ul li a:hover {
+    background: #444;
+}
+
+#map {
+    position: relative;
+    z-index: 1; /* Mantém o mapa abaixo do menu */
+
 </style>
 
-        
+<body>
+    <span class="menu-hamburguer">☰</span>
+    <div class="menu-lateral">
+        <ul>
+            <li><a href="index.html">Voltar à tela inicial</a></li>
+            <li><a href="sobre.html">Sobre</a></li>
+            <li><a href="informações.html">Informações importates</a></li>
+        </ul>
+    </div>
+
+    <script>
+        // Seleciona o ícone do menu e o menu lateral
+        const menuIcon = document.querySelector(".menu-hamburguer");
+        const menuLateral = document.querySelector(".menu-lateral");
+    
+        // Adiciona evento de clique para abrir/fechar o menu
+        menuIcon.addEventListener("click", () => {
+            if (menuLateral.style.right === "0px") {
+                menuLateral.style.right = "-250px"; // Fecha o menu
+            } else {
+                menuLateral.style.right = "0px"; // Abre o menu
+            }
+        });
+    </script>
+    
 </body>
 </html>
-
