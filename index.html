@@ -4,17 +4,18 @@
     <!-- Cabeçalho da Página -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Marcador de Presença</title>
+    <title>Registro de Presença</title>
 
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
-
+    <!-- Carregando o Font Awesome Carrega ícones lápis-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
-
-    <title>Marcador de Presença</title>
+    <title>Registro de Presença</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+    
 
     <style>
         /* Estilos Globais */
@@ -22,7 +23,7 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f9f9f9;
+            background-color: #02779e; /* cor fundo conteudo */
             color: #333;
         }
 
@@ -30,24 +31,33 @@
         header {
             text-align: left;
             padding: 10px;
-            background-color: #f9f9f9;
-            color: #000000;
+            background-color: #02779e; /* cor barra superior */
+            color: #fdfefe;
         }
 
         header h1 {
             margin: 0;
             font-size: 20px;
-        }
+        } 
+
 
         /* Estilos do Container Principal */
         .container {
             padding: 10px;
             max-width: 600px;
             margin: auto;
-            background-color: #ffffff;
+            background-color: #ffffff ;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             border-radius: 15px;
         }
+
+
+        /* CSS CONTEINE PRINCIPAL*/
+    .container {
+        background-color: #F0F4F8; /* Cor fundo conteúdo geral conteiner *conteudo da tela /
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 15px; /* Bordas arredondadas */
+    }  
 
         .container h2 {
             font-size: 18px;
@@ -59,77 +69,83 @@
             border-radius: 8px;
         }
 
-        /* Estilos da Área de Texto (Descrição) */
+
+
+        /* IMPUT - Área de Texto (Descrição) */
         textarea, input[type="text"] {
             width: 100%;
-            padding: 10px;
+            padding: 10px !important;  /* afastar o texto das bordas */
+            height: 40px;              /* ajuste a altura para manter o tamanho original */
             margin: 10px 0;
             border: 1px solid #ccc;
-            border-radius: 5px;
+            border-radius: 10px;
             resize: none;
             font-size: 14px;
             box-sizing: border-box;
+            background-color: #f0f7ff; /* 👈 Fundo secundário */
         }
 
-        /* Estilos dos Botões */
-        button {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: none;
-            border-radius: 25px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.2s;
-            box-sizing: border-box;
-        }
 
-        button:hover {
-            background-color: #95acee;
-            transform: scale(1.02);
-        }
-
-        button:active {
-            transform: scale(0.98);
-        }
-
-        button:nth-child(1) {
-            background: linear-gradient(to right, #4CAF50, #81C784);
-            color: white;
-        }
-
-        button:nth-child(2) {
-            background: linear-gradient(to right, #0357cd, #2196f3); /* Gradiente de cor Salvar */
-            color: white;
-        }
-
-        button:nth-child(3) {
-            background: linear-gradient(to right, #FFC107, #FFD54F);
-            color: #ffffff;
-        }
-
-        button:nth-child(4) {
-            background: linear-gradient(to right, #e52633, #0357cd);
-            color: white;
+/* =========================
+   Botões padronizados com efeito glossy e centralizados
+   ========================= */
+button {
+    width: 90%;                   /* Largura menor que 100% */
+    display: block;               /* Garante que margin auto funcione */
+    margin: 10px auto;            /* Centraliza horizontalmente + espaçamento vertical */
+    padding: 10px;                /* Mantém altura do botão */
+    border: 2px solid #5fa5b4;   /* Borda fina moderna */
+    border-radius: 25px;          /* Arredondado */
+    font-size: 16px;              /* Tamanho da fonte */
+    font-weight: bold;            /* Peso da fonte */
+    cursor: pointer;
+    position: relative;           /* Necessário para o efeito glossy */
+    overflow: hidden;             /* Brilho não vaza */
+    color: white;                 /* Cor do texto */
+    background: linear-gradient(to bottom, #02779e, #02779e); /* Gradiente base */
+    transition: background 0.3s, transform 0.2s;
+    box-sizing: border-box;
+}
 
 
-        }
+/* Brilho plástico no topo */
+button::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 50%;
+    background: linear-gradient(to bottom, #FFFFFF66, #FFFFFF00); /* Transparência para efeito glossy */
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    pointer-events: none;
+}
 
-        .history-buttons button:nth-child(1) {
-    background: linear-gradient(to right, #25D366, #66E592); /* Verde do WhatsApp */
-    color: white;
+/* Hover */
+button:hover {
+    background: linear-gradient(to bottom, #0393bb, #02779e); /* Gradiente mais claro ao passar o mouse */
+    transform: scale(1.02);
+}
+
+/* Clique */
+button:active {
+    transform: scale(0.98);
+}
+
+/* Histórico de botões (separados por cores para identificar ação) */
+.history-buttons button:nth-child(1) {
+    background: linear-gradient(to bottom, #02779e, #02779e); /* Verde WhatsApp */
 }
 
 .history-buttons button:nth-child(2) {
-    background: linear-gradient(to right, #ff9800, #ffb74d); /* Laranja do PDF */
-    color: white;
+    background: linear-gradient(to bottom, #02779e, #02779e); /* Laranja PDF */
 }
 
 .history-buttons button:nth-child(3) {
-    background: linear-gradient(to right, #d32f2f, #d32f2f); /* Vermelho para Apagar */
-    color: white;
+    background: linear-gradient(to bottom, #02779e, #02779e); /* Vermelho Apagar */
 }
+
 
         /* Estilos dos Campos de Coordenadas, Data/Hora e Endereço */
         .field {
@@ -174,8 +190,159 @@
 
 
 
+<!-- CSS HISTORICO-->
 
+#/* Estilos do Container do Histórico */
+#history-container {
+    padding: 10px;
+    margin: 10px auto 0 auto; /* topo, auto, baixo, auto */
+    max-width: 600px;
+    background-color: #f0f4f8;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+}
+
+/* Cada registro da lista */
+.record {
+    background-color: #f0f4f8;
+    border: 2px solid #ddd;
+    padding: 5px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Botões dentro do histórico */
+.history-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.history-buttons button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 90%;
+    padding: 10px;
+    border: none;
+    border-radius: 15px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+    margin: 0 auto;
+}
+
+.history-buttons button i {
+    margin-right: 8px;
+    font-size: 18px;
+}
+
+
+
+/* Input do Nome (caixa de digitação) */
+#user-name {
+    display: none;
+    width: 100%;
+    padding: 10px;
+    margin: 10px auto;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 14px;
+    background-color: #f0f7ff; /* azul bem suave */
+    box-sizing: border-box;
+    display: block;
+}
+
+
+/* CSS menu */
+/* Ícone do Menu Hambúrguer */
+.menu-hamburguer {
+    font-size: 30px;
+    cursor: pointer;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 100; /* Aumentamos para ficar sobre o mapa */
+    color: #000000; /* Os três traços */
+    background: white;
+    border-radius: 5px;
+    padding: 5px 10px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Menu Deslizante */
+.menu-lateral {
+    width: 250px;
+    height: 100%;
+    background: linear-gradient(to right, #02779ecc, #02779e33);  /* Cor fundo lateral direita */
+    color: white;
+    position: fixed;
+    top: 0;
+    right: -250px; /* Escondido inicialmente */
+    transition: right 0.3s ease;
+    z-index: 99; /* Aumentamos para ficar sobre o mapa */
+    padding-top: 60px;
+}
+
+/* Estilo da Lista do Menu */
+.menu-lateral ul {
+    list-style: none;
+    padding: 0;
+}
+
+.menu-lateral ul li {
+    padding: 15px;
+    border-bottom: 1px solid #444;
+}
+
+.menu-lateral ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    display: block;
+}
+
+.menu-lateral ul li a:hover {
+    background: #444;
+}
+
+#map {
+    position: relative;
+    z-index: 1; /* Mantém o mapa abaixo do menu */
+
+
+
+
+<!-- Estilos CSS -->
+
+    
     </style>
+
+
+<span class="menu-hamburguer">☰</span>
+<div class="menu-lateral">
+    <ul>
+        <li><a href="sobre.html">Sobre</a></li>
+        <li><a href="informações.html">Informações importates</a></li>
+    </ul>
+</div>
+
+<script>
+    const menuIcon = document.querySelector(".menu-hamburguer");
+    const menuLateral = document.querySelector(".menu-lateral");
+
+    menuIcon.addEventListener("click", () => {
+        if (menuLateral.style.right === "0px") {
+            menuLateral.style.right = "-250px";
+        } else {
+            menuLateral.style.right = "0px";
+        }
+    });
+</script>
+
 
 <script>
     /* Variáveis Globais */
@@ -186,7 +353,13 @@
     /* Funções JavaScript */
 
 
-    // Função para gerar um ID único de 8 caracteres aleatórios (números e letras)
+
+
+    // fUNÇÃO percistencia
+    
+
+    // BLOCO- 1 Função para gerar um ID único de 8 caracteres aleatórios (números e letras)
+
 function generateRandomID() {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let randomID = '';
@@ -196,7 +369,12 @@ function generateRandomID() {
     return randomID;
 }
 
-// Função para verificar se o nome e ID já foram salvos
+
+
+
+
+
+// BLOCO- 2 Função para verificar se o nome e ID já foram salvos
 function checkUserName() {
     const savedUserName = localStorage.getItem("userName");
     const savedUserID = localStorage.getItem("userID");
@@ -215,7 +393,8 @@ function checkUserName() {
 }
 
 
-// Função para salvar o nome do usuário e gerar um ID único
+
+// BLOCO- 3 Função para salvar o nome do usuário e gerar um ID único
 
 function saveUserName() {
     const userName = document.getElementById("user-name").value.trim();
@@ -236,6 +415,14 @@ function saveUserName() {
         alert("Por favor, digite um nome.");
     }
 }
+
+
+
+
+
+
+
+
 
 
 // Função para permitir editar o nome do usuário
@@ -272,6 +459,7 @@ function editUserName() {
                 document.getElementById("address").innerText = "Erro ao obter endereço.";
             });
     }
+
 
 // Bloco=2 = Alteração feita: A função updateMap foi modificada para usar Leaflet com OpenStreetMap
 function updateMap(lat, lon) {
@@ -324,6 +512,7 @@ const record = {
     }, 2000);
 }
 
+
     // Função para compartilhar a localização via WhatsApp
 function shareLocation() {
     const coordinates = document.getElementById("coordinates").innerText;
@@ -335,52 +524,77 @@ function shareLocation() {
 
     // Verificando se o nome e o ID estão corretos e preparando a mensagem
 
-    const additionalMessage = "A precisão da localização no Google Maps pode variar em um raio de 50 metros."; 
-const message = `*Marcador de Presença*\n\nDeclaração de comparecimento: \n\nEu estive aqui,\nUsuário: ${userName} (ID: ${userID})\n${coordinates}\n${address}\nDescrição: ${description}\nData/hora local: ${timestamp}\n\nhttps://maps.google.com/?q=${currentLatitude},${currentLongitude}\n\n${additionalMessage}`;
+
+    // Mensagem=1 zap ajustada com Checkin+ 
+
+const additionalMessage = "A precisão da localização no Google Maps pode variar em um raio de 50 metros."; 
+const message = `*Checkin+*\nRegistro de Presença,\n\nDeclaração de comparecimento: \n\nEu estou aqui,\nUsuário: ${userName} (ID: ${userID})\n${coordinates}\n${address}\nDescrição: ${description}\nData/hora local: ${timestamp}\n\nhttps://maps.google.com/?q=${currentLatitude},${currentLongitude}\n\n${additionalMessage}\n\nAplicativo disponível no Google Play`;
+
 
     const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
 }
 
-   // Função para gerar o PDF
+
+  // Função para gerar o PDF
 async function generatePDF() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
 
+    // Definir as margens
+    const margin = 20;  // 20mm = 2cm
+    const pageWidth = doc.internal.pageSize.width;
+    const pageHeight = doc.internal.pageSize.height;
+
+    // Ajustando a área útil do documento (sem contar as margens)
+    const contentWidth = pageWidth - 2 * margin;
+    const contentHeight = pageHeight - 2 * margin;
+
+    // Dados para o PDF
     const coordinates = document.getElementById("coordinates").innerText;
     const address = document.getElementById("address").innerText;
     const timestamp = document.getElementById("timestamp").innerText;
-    const userName = localStorage.getItem("userName") || "Usuário";  // Usando o nome salvo no localStorage
+    const userName = localStorage.getItem("userName") || "Usuário";  // Nome salvo no localStorage
     const userID = localStorage.getItem("userID");  // ID único do usuário (fixo)
     const description = document.getElementById("description").value || "Nenhuma descrição fornecida.";
 
 
-    const title = "Marcador de Presença";
-const additionalMessage = "A precisão da localização no Google Maps pode variar em um raio de 50 metros.";
-const message = `Declaração de comparecimento: \n\nEu estive aqui,\nUsuário: ${userName} (ID: ${userID})\n${coordinates}\n${address}\nDescrição: ${description}\nData/hora local: ${timestamp}\n\nhttps://maps.google.com/?q=${currentLatitude},${currentLongitude}`;
 
-// Ajusta o tamanho da fonte para a frase
-doc.setFontSize(12);  // Tamanho normal para o corpo do texto
-doc.text(message, 10, 30, { maxWidth: 180 });
-
-// Agora, coloca a frase adicional com um tamanho menor
-doc.setFontSize(8);  // Tamanho pequeno para a frase
-doc.setFont("helvetica", "normal");  // Fonte normal (pode ser em itálico também)
-doc.text(additionalMessage, 10, 115, { maxWidth: 180 });
+    // Declaração- 1 PDF Checkin+
+    const title = "Checkin+";
+    const additionalMessage = "A precisão da localização no Google Maps pode variar em um raio de 50 metros.";
+    const message = `Registro de presença\n\Declaração de comparecimento: \n\nEu estou aqui,\nUsuário: ${userName} (ID: ${userID})\n${coordinates}\n${address}\nDescrição: ${description}\nData/hora local: ${timestamp}\n\nhttps://maps.google.com/?q=${currentLatitude},${currentLongitude}\n\n\nAplicativo disponível no Google Play`;
 
 
+
+
+    // Desenhando as margens
+    doc.rect(margin, margin, contentWidth, contentHeight);  // Adicionando a margem de 2cm em todos os lados
+
+    // Afastamento da margem esquerda (5mm de distância)
+    const textX = margin + 5;  // Ajuste do afastamento da margem esquerda (5mm)
+
+    // Título do PDF
     doc.setFont("helvetica", "bold");
     doc.setFontSize(16);
-    doc.text(title, 10, 20);
+    doc.text(title, textX, margin + 10);  // Usando textX para o afastamento
 
+    // Corpo do texto (mensagem principal)
     doc.setFont("helvetica", "normal");
     doc.setFontSize(12);
-    const textStartY = 30;
-    const textWidth = 180;
-    doc.text(message, 10, textStartY, { maxWidth: textWidth });
+    doc.text(message, textX, margin + 20, { maxWidth: contentWidth });
 
+
+// Mensagem adicional (em tamanho menor)
+doc.setFontSize(8);  // Tamanho pequeno para a frase
+doc.setFont("helvetica", "normal");
+doc.text(additionalMessage, textX, margin + 110, { maxWidth: contentWidth }); // Ajuste afastar a frase: Aprecisão da localização...
+
+
+    // Salvar o PDF gerado
     doc.save("Marcador_de_Presença.pdf");
 }
+
 
 
        // Bloco= 3 =
@@ -390,9 +604,6 @@ doc.text(additionalMessage, 10, 115, { maxWidth: 180 });
     window.open(googleMapsUrl, '_blank');
 }
      // Bloco= 3 = fim
-
-
-
 
 
 
@@ -580,13 +791,6 @@ window.addEventListener('load', verificarLocalizacaoAtiva);
 
 
 
-
-
-
-
-
-
-
     // Função para tocar um som
     function playSound(soundFile) {
         const audio = new Audio(soundFile);
@@ -600,23 +804,33 @@ window.addEventListener('load', verificarLocalizacaoAtiva);
     };
 </script>
 
-</head>
 
+</head>
 <body>
+
+
     <!-- Cabeçalho Tela principal-->
     <header>
 
-        <h1 style="text-align: center; font-size: 20px;">Checkin+</h1>
-<h2 style="text-align: center; font-size: 15px;">Marcador de Presença</h2>
+  <h1 style="text-align: center; font-size: 22px; margin-top: 20px; margin-bottom: 10px;">
+    Checkin+
+  </h1>
 
     </header>
 
+    <!-- Inicio conteiner=1 principal -->
     <!-- Container Principal -->
     <div class="container">
+
+
+        <h2 style="width: 90%; margin: 10px auto; text-align: left; font-size: 15px; color: #000;">
+        Registro de Presença 📍
+        </h2>
+
         <!-- Nome da Rua -->
-        <h2 id="road-name">Rua: Local Carregando!</h2>
-        
-        
+        <h2 id="road-name" style="width: 90%; margin: 10px auto; text-align: left; font-size: 15px; color: #000;">
+        Rua: Local Carregando!
+        </h2>
 
         <!-- Boco Mapa tipo iFrame -->
           <!-- Exibindo o GIF de carregamento antes de carregar o mapa -->
@@ -627,120 +841,109 @@ window.addEventListener('load', verificarLocalizacaoAtiva);
 <!-- Local do mapa OpenStreetMap -->
         <div id="map" style="width: 100%; height: 300px;"></div>
 
-        
-            <a href="principal.html" class="btn-voltar">Atualizar mapa 🔄</a>
 
-        <div id="alerta-gps" style="display: none; background-color: #ffffff; color: #000; padding: 10px; text-align: center; font-weight: bold;">
-            ⚠️ Ative a localização
-        </div>
-        
 
-        <!-- Coordenadas -->
-        <div class="field">
-            <h2>Coordenadas</h2>
-            <p id="coordinates">Latitude: -, Longitude: -</p>
-        </div>
 
-        <!-- Data e Hora -->
-        <div class="field">
-            <h2>Data e Hora</h2>
-            <p id="timestamp">Local</p>
-        </div>
 
-        <!-- Endereço -->
-        <div class="field">
-            <h2>Endereço</h2>
-            <p id="address">Local</p>
-        </div>
+           <div class="info-container" style="border: 1px solid #ccc; padding: 15px; border-radius: 8px; margin-top: 20px; margin-bottom: 20px;">
 
-        <!-- Movendo o campo de descrição e o botão "Salvar Registro" acima do botão Compartilhar -->
+    <a href="index.html" class="btn-voltar">Atualizar mapa 🔄</a>
+
+    <div id="alerta-gps" style="display: none; background-color: #ffffff; color: #000; padding: 10px; text-align: center; font-weight: bold;">
+        ⚠️ Ative a localização
+    </div>
+
+    <!-- Coordenadas -->
+    <div class="field">
+        <h2>Coordenadas</h2>
+        <p id="coordinates">Latitude: -, Longitude: -</p>
+    </div>
+
+    <!-- Data e Hora -->
+    <div class="field">
+        <h2>Data e Hora</h2>
+        <p id="timestamp">Local</p>
+    </div>
+
+    <!-- Endereço -->
+   <div class="field" style="margin-bottom: 0;">
+    <h2>Endereço</h2>
+   <p id="address" style="margin-bottom: 0;">Local</p>
+     </div>
+</div>
+
+
+  <!-- Movendo o campo de descrição e o botão "Salvar Registro" acima do botão Compartilhar -->
         <div class="description-container">
             <textarea id="description" placeholder="Adicione uma descrição (opcional)"></textarea>
             <button class="button" onclick="saveRecord()">Salvar Registro</button>
         </div>
+        
+
 
         <!-- Declaração de comparecimento na tela -->
 
-        <p class="copyright">
-            ✅ Para garantir a melhor precisão na sua localização, acesse a aba 'Informações Importantes' e confira as dicas essenciais! 📍
-            </p>  
-
-        <!-- Compartilhar via WhatsApp -->
-        <button class="button" onclick="shareLocation()">Compartilhar pelo WhatsApp</button>
-
-        <!-- Gerar PDF -->
-        <button class="button" onclick="generatePDF()">Gerar PDF</button>
-
-        <!-- Botão para Exibir o Histórico dentro do mesmo container -->
-        <button class="button" onclick="toggleHistory()">Histórico de Presença</button>
+     <p class="copyright" style="width: 91%; margin: 10px auto; text-align: left; font-size: 13px; color: #000;">
+       Já precisou provar ao chefe que foi ao médico? Ou confirmar que esteve no trabalho, na escola ou em qualquer outro lugar? Com o <strong>Checkin+</strong>, você registra sua presença com um clique! O app gera uma declaração de comparecimento com nome, ID, data, hora e localização — uma prova incontestável, pronto para enviar por WhatsApp ou em PDF.
+     </p>
+ 
 
         <!-- Alteração: Botão para abrir o local no Google Maps -->
         <button class="button" onclick="openGoogleMaps()">Google Maps</button>
 
-        <!-- Frase de Copyright -->
-        <p class="copyright">Growcet © Desenvolvedor</p>
-    </div>
+        <!-- Compartilhar via WhatsApp -->
+        <button class="button" onclick="shareLocation()">Enviar texto WhatsApp</button>
 
-    <!-- Rodapé -->
-    <!-- Não é mais necessário, já que movemos a frase para dentro do container -->
+        <!-- Gerar PDF -->
+        <button class="button" onclick="generatePDF()">PDF - Enviar / baixar</button>
 
-    <!-- CSS para estilizar a frase de copyright -->
-    <style>
-        .copyright {
-            font-size: 13px; /* Ajuste o tamanho da fonte aqui */
-            color: #000000; /* Cor do texto */
-            text-align: left; /* Centralizar o texto */
-            margin-top: 20px; /* Distância do conteúdo acima */
-        }
-    </style>
-</body>
+        <!-- Botão para Exibir o Histórico dentro do mesmo container -->
+        <button class="button" onclick="toggleHistory()">Histórico de Presença</button>
 
 
-
-  <!-- PARTE DO HISTÓRICO -->
-
+<!-- PARTE DO HISTÓRICO -->
+<!-- Inicio conteine=2 histórico -->
 <!-- Container para Exibir o Histórico de Presença -->
 <div id="history-container" style="display: none;">
-    <h2><center>Histórico de Presença</h2>
+    <h3><center>Meu histórico</h3>
     <div id="records-list" style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); overflow-y: auto; padding: 10px;">
         <!-- Lista de registros será carregada aqui -->
     </div>
 </div>
+<!-- Fim conteine=2 histórico -->
 
-<!-- Estilos CSS -->
-<style>
 
-/* Estilos do Container do Histórico */
 
-#history-container {
-    padding: 10px;
-    max-width: 600px; /* Tamanho igual ao do container principal */
-    margin-left: auto; /* Centraliza o conteúdo horizontalmente */
-    margin-right: auto; /* Centraliza o conteúdo horizontalmente */
-    background-color: #ffffff;  fundo
-    box-shadow: 0 4px 8px  rgba(0, 0, 0, 0.1)
-    border-radius: 15px; /* Bordas arredondadas */
-}
+  <!-- BLOCO Imput NOME USUÁRIO -->
+<div style="padding: 10px; max-width: 600px; margin: auto; margin-top: 20px;">
 
-.record {
-        background-color: #ffffff;
-        border: 2px solid #ddd; /* Borda do contorno do registro */
-        padding: 5px;
-        margin-bottom: 10px; /* Espaçamento entre os registros */
-        border-radius: 8px;  /* Arredondamento nas bordas */
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Sombra leve para destacar o registro */
-    }
-   
 
-/* Estilos para o histórico */
-#history-container {
-    margin-top: 10px; /* Adiciona um espaço acima do histórico */
-    padding: 0 1px; /* Ajuste para garantir que o conteúdo não fique colado nas laterais */
+  <!-- Input do Nome -->
+   <input type="text" id="user-name" placeholder="Digite seu nome">
 
-</style>
+    <!-- Nome exibido + ícone -->
+    <div style="display: flex; align-items: center; justify-content: space-between; width: 95%; margin: 10px auto; margin-top: 0px; margin-bottom: 0px;">
 
+        <span id="user-name-display" style="font-weight: bold; display: none;"></span>
+        <i id="edit-name-button" onclick="editUserName()" 
+           class="fas fa-pencil-alt" 
+           style="font-size: 24px; color: #02779e; cursor: pointer;"></i>
+    </div>
+
+    <!-- Botão Salvar -->
+    <button id="save-name-button" onclick="saveUserName()" class="button" 
+            style="width: 95%; padding: 10px; margin: 10px; border-radius: 15px; background-color: #28a749;">
+        Salvar
+    </button>
+
+</div>
+
+      <!-- Fim conteúdo conteiner principal -->
+
+      <!-- Início conteúdo conteiner histórico -->
 
 <script>
+    <!-- Inicio conteúdo histórico -->
     // Função para alternar a visibilidade do histórico
 
     function toggleHistory() {
@@ -771,15 +974,17 @@ records.forEach((record, index) => {
                     <p><strong>Data/Hora:</strong> ${record.timestamp}</p>
                     <div class="history-buttons">
 
+
+
                         <div class="history-buttons">
     <button class="share-btn" onclick="shareLocationHistory(${index})">
-        <i class="fas fa-share"></i> Compartilhar
+      Enviar texto WhatsApp
     </button>
     <button class="pdf-btn" onclick="generatePDFHistory(${index})">
-        <i class="fas fa-file-pdf"></i> Gerar PDF
+       PDF - Enviar / baixar
     </button>
     <button class="delete-btn" onclick="deleteRecord(${index})">
-        <i class="fas fa-trash"></i> Apagar
+        Apagar
     </button>
 </div>
 
@@ -792,6 +997,21 @@ records.forEach((record, index) => {
             }
         }
     
+
+
+// Função delelar registros com confirmação
+window.deleteRecord = function(index) {
+    const confirmar = confirm("Tem certeza que deseja apagar este registro?");
+    if (!confirmar) return;
+
+    let records = JSON.parse(localStorage.getItem("presenceRecords")) || [];
+    records.splice(index, 1);
+    localStorage.setItem("presenceRecords", JSON.stringify(records));
+    alert("Registro apagado com sucesso!");
+    location.reload();
+};
+
+
 
        
 // Função para compartilhar no WhatsApp a partir do histórico
@@ -807,56 +1027,80 @@ function shareLocationHistory(index) {
     const userName = localStorage.getItem("userName") || "Usuário";  // Nome fixo
     const userID = localStorage.getItem("userID");  // ID fixo
 
-    const additionalMessage = "A precisão da localização no Google Maps pode variar em um raio de 50 metros.";
-const message = `*Marcador de Presença*\n\nDeclaração de comparecimento: \n\nEu estive aqui,\nUsuário: ${userName} (ID: ${userID})\n${record.coordinates}\n${record.address}\nDescrição: ${record.description}\nData/hora local: ${record.timestamp}\n\nhttps://maps.google.com/?q=${currentLatitude},${currentLongitude}\n\n${additionalMessage}`;
+
+   // Mensagem=2 zap ajustada com Checkin+ 
+
+const additionalMessage = "A precisão da localização no Google Maps pode variar em um raio de 50 metros.";
+const message = `*Checkin+*\nRegistro de Presença,\n\nDeclaração de comparecimento: \n\nEu estou aqui,\nUsuário: ${userName} (ID: ${userID})\n${record.coordinates}\n${record.address}\nDescrição: ${record.description}\nData/hora local: ${record.timestamp}\n\nhttps://maps.google.com/?q=${currentLatitude},${currentLongitude}\n\n${additionalMessage}\n\nAplicativo disponível no Google Play`;
+
 
     const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
 }
 
- 
-           // Função para gerar PDF a partir do histórico
-         async function generatePDFHistory(index) {
-         const records = JSON.parse(localStorage.getItem("presenceRecords")) || [];
 
-         // Ordenar os registros de forma decrescente (mais recente primeiro)
-         records.reverse();
+// Função para gerar PDF a partir do histórico (2ª parte)
+async function generatePDFHistory(index) {
+    const records = JSON.parse(localStorage.getItem("presenceRecords")) || [];
 
-         const record = records[index];
+    // Ordenar os registros de forma decrescente (mais recente primeiro)
+    records.reverse();
 
-         const { jsPDF } = window.jspdf;
-         const doc = new jsPDF();
+    const record = records[index];
 
-         // Obtenção do nome e ID fixos
-         const userName = localStorage.getItem("userName") || "Usuário";  // Nome fixo
-         const userID = localStorage.getItem("userID");  // ID fixo
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    // Definir as margens
+    const margin = 20;  // 20mm = 2cm
+    const textX = margin + 5;  // Afastamento de 5mm da margem esquerda
+    const pageWidth = doc.internal.pageSize.width;
+    const pageHeight = doc.internal.pageSize.height;
+
+    // Ajustando a área útil do documento (sem contar as margens)
+    const contentWidth = pageWidth - 2 * margin;
+    const contentHeight = pageHeight - 2 * margin;
+
+    // Desenhando a margem (borda de 2cm ao redor)
+    doc.rect(margin, margin, contentWidth, contentHeight); 
+
+    // Obtenção do nome e ID fixos
+    const userName = localStorage.getItem("userName") || "Usuário";  // Nome fixo
+    const userID = localStorage.getItem("userID");  // ID fixo
+
+    // Declaração- 2 pdf Checkin+
+    const title = "Checkin+";
+    const additionalMessage = "A precisão da localização no Google Maps pode variar em um raio de 50 metros."; 
+    const message = `Registro de presença\n\Declaração de comparecimento: \n\nEu estou aqui,\nUsuário: ${userName} (ID: ${userID})\n${record.coordinates}\n${record.address}\nDescrição: ${record.description}\nData/hora local: ${new Date().toLocaleString()}\n\nhttps://maps.google.com/?q=${currentLatitude},${currentLongitude}\n\n\nAplicativo disponível no Google Play`;
+
+    // Título do PDF
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(16);
+    doc.text(title, textX, margin + 10);  // Afastamento de 5mm da margem esquerda
+
+    // Corpo do texto (mensagem principal)
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(12);
+    doc.text(message, textX, margin + 20, { maxWidth: contentWidth });
 
 
-         const title = "Marcador de Presença";
-         const additionalMessage = "A precisão da localização no Google Maps pode variar em um raio de 50 metros.";
-const message = `Declaração de comparecimento: \n\nEu estive aqui,\nUsuário: ${userName} (ID: ${userID})\n${record.coordinates}\n${record.address}\nDescrição: ${record.description}\nData/hora local: ${new Date().toLocaleString()}\n\nhttps://maps.google.com/?q=${currentLatitude},${currentLongitude}`;
 
-// Ajusta o tamanho da fonte para o corpo do texto
-doc.setFontSize(12);  // Tamanho normal para o corpo do texto
-doc.text(message, 10, 30, { maxWidth: 180 });
+  // Mensagem adicional (em menor tamanho)
+// Calculando a posição vertical do link
+const linkYPosition = margin + 100;  // Aqui é onde o link do Google Maps está sendo colocado
 
-// Ajuste do espaçamento vertical para a frase adicional
+// Mensagem adicional (em menor tamanho)
 doc.setFontSize(8);  // Tamanho pequeno para a frase
 doc.setFont("helvetica", "normal");  // Fonte normal
-doc.text(additionalMessage, 10, 115, { maxWidth: 180 });  // Ajuste o valor de Y (130)
+
+// Ajuste da posição Y para a frase ficar abaixo do link
+const additionalMessageY = linkYPosition + 10;  // Adicionando 10mm de espaçamento entre o link e a frase: Aprecisão da localização....
+
+doc.text(additionalMessage, textX, additionalMessageY, { maxWidth: contentWidth });
 
 
-         doc.setFont("helvetica", "bold");
-         doc.setFontSize(16);
-         doc.text(title, 10, 20);
-
-         doc.setFont("helvetica", "normal");
-         doc.setFontSize(12);
-         const textStartY = 30;
-         const textWidth = 180;
-         doc.text(message, 10, textStartY, { maxWidth: textWidth });
-
-         doc.save(`${userName}_Marcador_de_Presença.pdf`);
+    // Salvar o PDF gerado
+    doc.save(`${userName}_Marcador_de_Presença.pdf`);
 }
 
 
@@ -877,203 +1121,8 @@ doc.text(additionalMessage, 10, 115, { maxWidth: 180 });  // Ajuste o valor de Y
             // Recarregar o histórico com a lista atualizada
             toggleHistory();
 }
-    </script>
-</head>
-<body>
 
-
-  <!-- Campo para o Nome do Usuário -->
+  </script>
  
-  <!-- Carregando o Font Awesome -->
-<head>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-</head>
-
-<!-- Carregando o Font Awesome -->
-<head>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-</head>
-
-
-<!-- Campo para o Nome do Usuário -->
-<div class="container">
-    <div class="container" style="margin-bottom: 2px;"> <!-- Linha adicionada para o espaçamento -->
-    <div style="padding: 10px; max-width: 600px; margin: auto;">
-        <!-- Input do Nome -->
-        <input type="text" id="user-name" placeholder="Digite seu nome" style="display: none; width: 100%; padding: 8px; margin-bottom: 10px;">
-        
-        <!-- Nome do Usuário exibido e Ícone de Lápis para Editar -->
-        <div style="display: flex; align-items: center; justify-content: space-between;">
-            <span id="user-name-display" style="font-weight: bold; display: none;"></span>
-            <!-- Ícone de Lápis (apenas o ícone, sem botão) -->
-            <i id="edit-name-button" onclick="editUserName()" class="fas fa-pencil-alt" style="font-size: 24px; color: #ffc107; cursor: pointer; background: none; border: none;"></i>
-        </div>
-
-        <!-- Botão Salvar -->
-        <button id="save-name-button" onclick="saveUserName()" class="button" style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 15px; background-color: #28a745;">
-            Salvar
-        </button>
-    </div>
-</div>
-
-
-<!-- Estilos CSS -->
-<style>
-    /* Estilos para os campos de nome de usuário e botões dentro do container */
-    .container {
-        padding: 10px;
-        max-width: 600px; /* Limite de largura */
-        margin-top: 5px; /* Margem superior de 30px */
-        background-color: #fff;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        border-radius: 15px; /* Bordas arredondadas */
-    }
-
-      /* Cores botões principais*/
-    .button {
-        background: linear-gradient(to right, #0357cd, #2196f3);  /* Gradiente de cor de fundo */
-        color: white;
-        border: none;
-        font-size: 16px;
-        cursor: pointer;
-        border-radius: 15px; /* Bordas arredondadas para outros botões */
-    }
-    .button:hover {
-        background-color: #2196f3;
-    }
-    
-    /* Estilos para os botões específicos Salvar e Editar */
-    #save-name-button, #edit-name-button {
-        border-radius: 15px; /* Botões arredondados */
-        font-weight: bold;
-        text-transform: uppercase;
-    }
-
-    #save-name-button {
-        background-color: #28a745; /* Verde para Salvar */
-    }
-
-    #save-name-button:hover {
-        background-color: #218838;
-    }
-
-    #edit-name-button {
-        background-color: #ffc107; /* Amarelo para Editar */
-    }
-
-    #edit-name-button:hover {
-        background-color: #e0a800;
-    }
-
-/* Estilos para os botões do histórico */
-.history-buttons {
-    display: flex;
-    flex-direction: column;  /* Mantém os botões um abaixo do outro */
-    gap: 8px;  /* Espaçamento entre os botões */
-    margin-top: 10px;
-}
-
-.history-buttons button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    padding: 10px;
-    border: none;
-    border-radius: 15px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background 0.3s, transform 0.2s;
-}
-
-.history-buttons button i {
-    margin-right: 8px;  /* Espaço entre o ícone e o texto */
-    font-size: 18px;
-}
-
-
-/* Ícone do Menu Hambúrguer */
-.menu-hamburguer {
-    font-size: 30px;
-    cursor: pointer;
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 100; /* Aumentamos para ficar sobre o mapa */
-    color: #000000; /* Os três traços */
-    background: white;
-    border-radius: 5px;
-    padding: 5px 10px;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-}
-
-/* Menu Deslizante */
-.menu-lateral {
-    width: 250px;
-    height: 100%;
-    background: linear-gradient(to right, #0357cd, #2196f3);  /* Cor fundo lateral direita */
-    color: white;
-    position: fixed;
-    top: 0;
-    right: -250px; /* Escondido inicialmente */
-    transition: right 0.3s ease;
-    z-index: 99; /* Aumentamos para ficar sobre o mapa */
-    padding-top: 60px;
-}
-
-/* Estilo da Lista do Menu */
-.menu-lateral ul {
-    list-style: none;
-    padding: 0;
-}
-
-.menu-lateral ul li {
-    padding: 15px;
-    border-bottom: 1px solid #444;
-}
-
-.menu-lateral ul li a {
-    color: white;
-    text-decoration: none;
-    font-size: 18px;
-    display: block;
-}
-
-.menu-lateral ul li a:hover {
-    background: #444;
-}
-
-#map {
-    position: relative;
-    z-index: 1; /* Mantém o mapa abaixo do menu */
-
-</style>
-
-<body>
-    <span class="menu-hamburguer">☰</span>
-    <div class="menu-lateral">
-        <ul>
-            <li><a href="index.html">Voltar à tela inicial</a></li>
-            <li><a href="sobre.html">Sobre</a></li>
-            <li><a href="informações.html">Informações importates</a></li>
-        </ul>
-    </div>
-
-    <script>
-        // Seleciona o ícone do menu e o menu lateral
-        const menuIcon = document.querySelector(".menu-hamburguer");
-        const menuLateral = document.querySelector(".menu-lateral");
-    
-        // Adiciona evento de clique para abrir/fechar o menu
-        menuIcon.addEventListener("click", () => {
-            if (menuLateral.style.right === "0px") {
-                menuLateral.style.right = "-250px"; // Fecha o menu
-            } else {
-                menuLateral.style.right = "0px"; // Abre o menu
-            }
-        });
-    </script>
-    
 </body>
 </html>
