@@ -1,395 +1,55 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Monitory</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f0f0f0;
-        }
-
-        header {
-            text-align: center;
-            background-color: #ffffff;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #e0e0e0;
-        }
-
-        header h1 {
-            margin: 0;
-            font-size: 24px;
-            color: #333333;
-        }
-
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .button {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        .button.blue {
-            background-color: #007bff;
-            color: white;
-        }
-
-        .button.green {
-            background-color: #4caf50;
-            color: white;
-        }
-
-        .field {
-            margin: 10px 0;
-        }
-
-        .field input[type="text"],
-        .field input[type="number"],
-        .field p {
-            width: 100%;
-            padding: 10px;
-            border-radius: 5px;
-            box-sizing: border-box;
-            background-color: #ffffff;
-        }
-
-        .field input[type="text"],
-        .field input[type="number"] {
-            border: 1px solid #cccccc;
-        }
-
-        .field p {
-            border: 1px solid #cccccc;
-            min-height: 50px;
-            font-size: 14px;
-            line-height: 1.5;
-            white-space: pre-line;
-        }
-
-        .title {
-            font-size: 16px;
-            font-weight: bold;
-            margin-bottom: 5px;
-            color: #333;
-        }
-
-        .row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .row .button {
-            flex: 1;
-            margin: 5px;
-        }
-
-        #checkbox-container {
-            display: flex;
-            align-items: center;
-            margin-top: 20px;
-        }
-
-        #checkbox-container label {
-            margin-left: 10px;
-            font-size: 16px;
-            color: #333333;
-        }
-
-        footer {
-            text-align: center;
-            padding: 20px;
-            margin-top: 20px;
-            font-size: 14px;
-            background-color: #ffffff;
-            border-top: 2px solid #e0e0e0;
-        }
-
-        /* Estilo específico para a frase "Buscar Endereço por CEP" */
-        .small-title {
-            font-size: 14px; /* Menor que os outros títulos */
-            font-weight: normal;
-            margin-bottom: 10px;
-            color: #333;
-        }
-    </style>
-    <script>
-        let currentLatitude = "-";
-        let currentLongitude = "-";
-
-        function trackLocation() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        currentLatitude = position.coords.latitude;
-                        currentLongitude = position.coords.longitude;
-
-                        document.getElementById("coordinates").innerText =
-                            `Latitude: ${currentLatitude}\nLongitude: ${currentLongitude}`;
-                        getAddressFromCoordinates(currentLatitude, currentLongitude);
-                    },
-                    (error) => {
-                        console.error("Erro ao obter localização:", error);
-                        document.getElementById("coordinates").innerText =
-                            "Erro ao obter localização.";
-                    }
-                );
-            } else {
-                alert("Geolocalização não é suportada neste navegador.");
-            }
-        }
-
-
-
-
-<!-- Função coordenada  em HTML -->
-
-        function getAddressFromCoordinates(latitude, longitude) {
-    const apiUrl = `https://us1.locationiq.com/v1/reverse?key=pk.73c7ec951f7e0c38e842f740a1a63917&lat=${latitude}&lon=${longitude}&format=json`;
-
-    fetch(apiUrl)
-        .then(response => response.json())
-        .then(data => {
-            const rua = data.address.road || "N/A";
-            const bairro = data.address.suburb || data.address.residential || "N/A";
-            const cidade = data.address.city || data.address.town || "N/A";
-            const uf = data.address.state || "N/A";
-            const cep = data.address.postcode || "N/A";
-            const pais = data.address.country || "Brasil";
-
-            const address = `Rua: ${rua},
-Bairro: ${bairro},
-Cidade: ${cidade},
-Estado: ${uf},
-CEP: ${cep},
-País: ${pais}`;
-
-            document.getElementById("address").innerText = address;
-        })
-        .catch(error => {
-            console.error("Erro ao obter endereço:", error);
-            document.getElementById("address").innerText = "Erro ao obter endereço.";
-        });
-}
-
-<!-- Função coordenada  em HTML -->
-
-
-
-
-
-        // Apenas a função compartilhar está sem uso/ Não apagar importante
-        function shareLocation() {
-            const address = document.getElementById("address").innerText || "Endereço não disponível";
-            const googleMapsUrl = currentLatitude !== "-" && currentLongitude !== "-" 
-                ? `https://www.google.com/maps?q=${currentLatitude},${currentLongitude}` 
-                : "Localização não disponível";
-
-
-            const dateTime = new Date().toLocaleString(); // Obtém a data e hora atual
-
-            // Corrigindo o acesso às partes do endereço
-            const addressParts = address.split("\n").map(part => part.split(":")[1]?.trim() || "N/A");
-
-            const message = `*Coordenadas:*
-Latitude: ${currentLatitude}
-Longitude: ${currentLongitude}
-
-*Endereço:*
-Rua: ${addressParts[0] || "N/A"}
-Bairro: ${addressParts[1] || "N/A"}
-Cidade: ${addressParts[2] || "N/A"}
-Estado: ${addressParts[3] || "N/A"}
-CEP: ${addressParts[4] || "N/A"}
-País: ${addressParts[5] || "N/A"}
-
-*Link Google Mapas:*
-${googleMapsUrl}
-
-*Data/Hora:*
-${dateTime}`;
-
-}
-
-
-        function openGoogleMaps() {
-            if (currentLatitude !== "-" && currentLongitude !== "-") {
-                const googleMapsUrl = `https://www.google.com/maps?q=${currentLatitude},${currentLongitude}`;
-                window.open(googleMapsUrl, "_blank");
-            } else {
-                alert("Localização não disponível.");
-            }
-        }
-
-
-
-
-<!-- Função  Buscar CEP por Endereço -->
-function searchCepByAddress() {
-    const rua = document.getElementById("ruaInput").value.trim();
-    const bairro = document.getElementById("bairroInput").value.trim();
-    const cidade = document.getElementById("cidadeInput").value.trim();
-    const uf = document.getElementById("ufInput").value.trim();
-
-    if (!rua || !cidade || !uf) {
-        alert("Por favor, preencha UF, Cidade e Rua.");
-        return;
-    }
-
-    const apiUrl = `https://viacep.com.br/ws/${uf}/${cidade}/${rua}/json/`;
-
-    fetch(apiUrl)
-        .then(response => response.json())
-        .then(data => {
-            if (!Array.isArray(data) || data.length === 0) {
-                document.getElementById("addressResult").innerText =
-                    "Nenhum CEP encontrado para este endereço.";
-                return;
-            }
-
-            // Filtrar pelo bairro, se informado
-            let filteredData = data;
-            if (bairro) {
-                filteredData = data.filter(item => item.bairro.toLowerCase() === bairro.toLowerCase());
-            }
-
-            if (filteredData.length === 0) {
-                document.getElementById("addressResult").innerText =
-                    "Nenhum CEP encontrado para este endereço e bairro.";
-                return;
-            }
-
-            let result = "";
-            filteredData.forEach(item => {
-                result += `Rua: ${item.logradouro || "N/A"}
-Bairro: ${item.bairro || "N/A"}
-Cidade: ${item.localidade || "N/A"}
-Estado: ${item.uf || "N/A"}
-CEP: ${item.cep || "N/A"}
-
-`;
-            });
-
-            document.getElementById("addressResult").innerText = result.trim();
-        })
-        .catch(error => {
-            console.error("Erro ao buscar CEP pelo endereço:", error);
-            document.getElementById("addressResult").innerText =
-                "Erro ao buscar CEP.";
-        });
-}
-
-<!-- Função  Buscar CEP porEndereço -->
-
-
-
-
-
-
-        window.onload = function () {
-            trackLocation();
-        };
-    </script>
+<meta charset="UTF-8">
+<title>Teste Real de Velocidade</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 40px;
+  }
+  button {
+    font-size: 18px;
+    padding: 10px 20px;
+  }
+  #resultado {
+    margin-top: 20px;
+    font-size: 20px;
+  }
+</style>
 </head>
 <body>
-    <header>
-        <h1>Monitory</h1>
-    </header>
 
-    <div class="container">
-        <button class="button blue" onclick="openGoogleMaps()">Ver no Google Mapas</button>
+<h2>Teste de Velocidade no Dispositivo</h2>
+<button onclick="testar()">Iniciar Teste</button>
 
+<div id="resultado"></div>
 
+<script>
+async function testar() {
+  const resultado = document.getElementById("resultado");
+  resultado.innerHTML = "Testando...";
 
-<!-- Função  Buscar CEP por Endereço -->
+  const url = "https://speed.hetzner.de/10MB.bin"; // arquivo de teste
+  const inicio = performance.now();
 
-<h3 class="small-title">Buscar CEP por Endereço</h3>
+  const resposta = await fetch(url + "?cache=" + Math.random());
+  const dados = await resposta.blob();
 
-<div class="field">
-    <input type="text" id="ruaInput" placeholder="Digite o nome da rua" />
-</div>
+  const fim = performance.now();
+  const tempoSegundos = (fim - inicio) / 1000;
+  const tamanhoMB = dados.size / (1024 * 1024);
 
-<div class="field">
-    <input type="text" id="bairroInput" placeholder="Digite o nome do bairro" />
-</div>
+  const velocidade = (tamanhoMB / tempoSegundos).toFixed(2);
 
-<div class="field">
-    <input type="text" id="cidadeInput" placeholder="Digite o nome da cidade" />
-</div>
+  resultado.innerHTML = `
+    Velocidade aproximada no dispositivo:<br>
+    <strong>${velocidade} MB/s</strong>
+  `;
+}
+</script>
 
-<div class="field">
-    <input type="text" id="ufInput" placeholder="Digite o estado (UF)" />
-</div>
-
-<button class="button green" onclick="searchCepByAddress()">Buscar CEP pelo Endereço</button>
-
-<div class="field">
-    <p id="addressResult">Resultado do endereço aparecerá aqui.</p>
-</div>
-
-<!-- Função  Buscar CEP por Endereço --> 
-
-
-
-
-
-
-        <div class="field">
-            <div class="title">Coordenadas</div>
-            <p id="coordinates">Latitude: -, Longitude: -</p>
-        </div>
-
-        <div class="field">
-            <div class="title">Endereço</div>
-            <p id="address">Endereço: -</p>
-        </div>
-
-        <h3 class="small-title">Buscar Endereço por CEP</h3>
-
-        <div class="field">
-            <input type="number" id="cepInput" placeholder="Digite o CEP" />
-        </div>
-
-        <div class="row">
-
-            <button class="button green" onclick="searchByCep()">Buscar CEP</button>
-
-       
-        </div>
-
-        <div class="field">
-            <p id="cepResult">Resultado do CEP aparecerá aqui.</p>
-        </div>
-
-        <div id="checkbox-container">
-            <input type="checkbox" id="locationCheckbox" />
-            <label for="locationCheckbox">Localização</label>
-        </div>
-    </div>
-
-
-
-
-
-
-    <footer>
-        <p>© 2024 Growcet. Todos os direitos reservados.</p>
-    </footer>
 </body>
 </html>
+
