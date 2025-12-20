@@ -2,54 +2,35 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Teste Real de Velocidade</title>
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    text-align: center;
-    padding: 40px;
-  }
-  button {
-    font-size: 18px;
-    padding: 10px 20px;
-  }
-  #resultado {
-    margin-top: 20px;
-    font-size: 20px;
-  }
-</style>
+<title>Teste simples de velocidade</title>
 </head>
 <body>
 
-<h2>Teste de Velocidade no Dispositivo</h2>
-<button onclick="testar()">Iniciar Teste</button>
-
-<div id="resultado"></div>
+<h2 id="status">Parado</h2>
+<button onclick="iniciarTeste()">Iniciar teste</button>
 
 <script>
-async function testar() {
-  const resultado = document.getElementById("resultado");
-  resultado.innerHTML = "Testando...";
+function iniciarTeste() {
+  const status = document.getElementById("status");
+  status.innerText = "Testando...";
 
-  const url = "https://speed.hetzner.de/10MB.bin"; // arquivo de teste
   const inicio = performance.now();
 
-  const resposta = await fetch(url + "?cache=" + Math.random());
-  const dados = await resposta.blob();
-
-  const fim = performance.now();
-  const tempoSegundos = (fim - inicio) / 1000;
-  const tamanhoMB = dados.size / (1024 * 1024);
-
-  const velocidade = (tamanhoMB / tempoSegundos).toFixed(2);
-
-  resultado.innerHTML = `
-    Velocidade aproximada no dispositivo:<br>
-    <strong>${velocidade} MB/s</strong>
-  `;
+  fetch("https://speed.cloudflare.com/__down?bytes=5000000")
+    .then(response => response.blob())
+    .then(() => {
+      const fim = performance.now();
+      const tempo = (fim - inicio) / 1000;
+      const velocidadeMbps = (5 * 8) / tempo;
+      status.innerText = "Velocidade aproximada: " + velocidadeMbps.toFixed(2) + " Mbps";
+    })
+    .catch(() => {
+      status.innerText = "Erro no teste";
+    });
 }
 </script>
 
 </body>
 </html>
+
 
