@@ -1,36 +1,94 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<title>Teste simples de velocidade</title>
+  <meta charset="UTF-8">
+  <title>Teste de Velocidade</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .box {
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 12px;
+      text-align: center;
+      width: 320px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      font-size: 22px;
+      margin-bottom: 20px;
+    }
+
+    button {
+      padding: 12px 25px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      background: #007bff;
+      color: white;
+    }
+
+    button:disabled {
+      background: #999;
+      cursor: not-allowed;
+    }
+
+    #resultado {
+      margin-top: 25px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
 
-<h2 id="status">Parado</h2>
-<button onclick="iniciarTeste()">Iniciar teste</button>
+  <div class="box">
+    <h1>Teste de Velocidade</h1>
+    <button id="btn" onclick="iniciarTeste()">Iniciar teste</button>
+    <div id="resultado"></div>
+  </div>
 
-<script>
-function iniciarTeste() {
-  const status = document.getElementById("status");
-  status.innerText = "Testando...";
+  <script>
+    function iniciarTeste() {
+      const resultado = document.getElementById("resultado");
+      const botao = document.getElementById("btn");
 
-  const inicio = performance.now();
+      resultado.innerText = "Testando...";
+      botao.disabled = true;
 
-  fetch("https://speed.cloudflare.com/__down?bytes=5000000")
-    .then(response => response.blob())
-    .then(() => {
-      const fim = performance.now();
-      const tempo = (fim - inicio) / 1000;
-      const velocidadeMbps = (5 * 8) / tempo;
-      status.innerText = "Velocidade aproximada: " + velocidadeMbps.toFixed(2) + " Mbps";
-    })
-    .catch(() => {
-      status.innerText = "Erro no teste";
-    });
-}
-</script>
+      // Arquivo de teste (leve, funciona bem em celular)
+      const url = "https://speed.cloudflare.com/__down?bytes=5000000";
+      const inicio = performance.now();
+
+      fetch(url + "&cache=" + Math.random())
+        .then(res => res.arrayBuffer())
+        .then(buffer => {
+          const fim = performance.now();
+          const tempoSegundos = (fim - inicio) / 1000;
+
+          const bytes = buffer.byteLength;
+          const bits = bytes * 8;
+          const mbps = (bits / tempoSegundos / 1024 / 1024).toFixed(2);
+
+          resultado.innerText = mbps + " Mbps (aprox)";
+          botao.disabled = false;
+        })
+        .catch(() => {
+          resultado.innerText = "Erro no teste";
+          botao.disabled = false;
+        });
+    }
+  </script>
 
 </body>
 </html>
-
-
