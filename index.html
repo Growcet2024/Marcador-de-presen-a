@@ -1,101 +1,88 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Teste de Velocidade</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bolha Animada</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Para evitar rolagem quando a bolha se mover */
+        }
 
+        #bubble-container {
+            position: relative;
+            width: 100%;
+            height: 100vh; /* Garantir que a bolha ocupe a tela inteira */
+        }
 
-
-  <style>
-  body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #f2f2f2;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-  }
-
-  .box {
-    background: #ffffff;
-    padding: 40px;
-    border-radius: 16px;
-    text-align: center;
-    width: 90%;
-    max-width: 400px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-  }
-
-  h1 {
-    font-size: 26px;
-    margin-bottom: 30px;
-  }
-
-  button {
-    padding: 18px 35px;
-    font-size: 20px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    background: #007bff;
-    color: white;
-    width: 100%;
-  }
-
-  button:disabled {
-    background: #999;
-    cursor: not-allowed;
-  }
-
-  #resultado {
-    margin-top: 30px;
-    font-size: 22px;
-    font-weight: bold;
-  }
-</style>
-
-
+        .bubble {
+            position: absolute;
+            background-color: rgba(0, 123, 255, 0.6);
+            border-radius: 50%;
+        }
+    </style>
 </head>
 <body>
 
-  <div class="box">
-    <h1>Teste de Velocidade</h1>
-    <button id="btn" onclick="iniciarTeste()">Iniciar teste</button>
-    <div id="resultado"></div>
-  </div>
 
-  <script>
-    function iniciarTeste() {
-      const resultado = document.getElementById("resultado");
-      const botao = document.getElementById("btn");
+    <!-- Contêiner onde a bolha vai aparecer -->
+    <div id="bubble-container"></div>
+    
 
-      resultado.innerText = "Testando...";
-      botao.disabled = true;
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const container = document.getElementById('bubble-container');
 
-      // Arquivo de teste (leve, funciona bem em celular)
-      const url = "https://speed.cloudflare.com/__down?bytes=5000000";
-      const inicio = performance.now();
+            class Bubble {
+                constructor() {
+                    this.size = 60; // Tamanho da bolha
+                    this.x = Math.random() * (window.innerWidth - this.size); // Posição inicial aleatória
+                    this.y = Math.random() * (window.innerHeight - this.size); 
+                    this.vx = (Math.random() - 0.5) * 2; // Velocidade aleatória horizontal
+                    this.vy = (Math.random() - 0.5) * 2; // Velocidade aleatória vertical
 
-      fetch(url + "&cache=" + Math.random())
-        .then(res => res.arrayBuffer())
-        .then(buffer => {
-          const fim = performance.now();
-          const tempoSegundos = (fim - inicio) / 1000;
+                    // Criando a bolha
+                    this.el = document.createElement('div');
+                    this.el.className = 'bubble';
+                    this.el.style.width = `${this.size}px`;
+                    this.el.style.height = `${this.size}px`;
 
-          const bytes = buffer.byteLength;
-          const bits = bytes * 8;
-          const mbps = (bits / tempoSegundos / 1024 / 1024).toFixed(2);
+                    container.appendChild(this.el); // Adiciona a bolha ao container
+                    this.update();
+                }
 
-          resultado.innerText = mbps + " Mbps (aprox)";
-          botao.disabled = false;
-        })
-        .catch(() => {
-          resultado.innerText = "Erro no teste";
-          botao.disabled = false;
+                update() {
+                    // Atualiza a posição da bolha
+                    this.el.style.transform = `translate(${this.x}px, ${this.y}px)`;
+                }
+
+                step() {
+                    // Atualiza a posição da bolha com base na velocidade
+                    this.x += this.vx;
+                    this.y += this.vy;
+
+                    // Colisão com as bordas da tela
+                    if (this.x <= 0 || this.x >= window.innerWidth - this.size) this.vx *= -1;
+                    if (this.y <= 0 || this.y >= window.innerHeight - this.size) this.vy *= -1;
+
+                    this.update();
+                }
+            }
+
+            // Criando a bolha
+            const bubble = new Bubble();
+
+            // Função de animação
+            function animate() {
+                bubble.step();
+                requestAnimationFrame(animate); // Continua o movimento
+            }
+
+            animate(); // Inicia a animação
         });
-    }
-  </script>
+    </script>
 
 </body>
 </html>
