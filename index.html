@@ -1,102 +1,260 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bolha Lupa – Fundo Jeans</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitory</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            position: relative; /* Necessário para a bolha ser posicionada de forma absoluta */
+            overflow: hidden; /* Impede a rolagem */
+        }
 
-<style>
-    body {
-        margin: 0;
-        overflow: hidden;
-        height: 100vh;
+        header {
+            text-align: center;
+            background-color: #ffffff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+        }
 
-        /* Fundo azul tipo jeans */
-        background-color: #3b5998; /* azul jeans médio */
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+            color: #333333;
+        }
 
-        /* Textura de fios diagonais simulando tecido */
-        background-image:
-            linear-gradient(45deg, rgba(255,255,255,0.05) 25%, transparent 25%),
-            linear-gradient(-45deg, rgba(255,255,255,0.05) 25%, transparent 25%),
-            linear-gradient(45deg, transparent 75%, rgba(255,255,255,0.05) 75%),
-            linear-gradient(-45deg, transparent 75%, rgba(255,255,255,0.05) 75%);
-        background-size: 10px 10px; /* espaçamento mais fino dos fios */
-    }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
 
-    .bubble {
-        position: absolute;
-        width: 80px;
-        height: 80px;
-        border-radius: 50%;
-        pointer-events: none;
+        .button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
 
-        /* Lente */
-        border: 2px solid rgba(255,255,255,0.75);
+        .button.blue {
+            background-color: #007bff;
+            color: white;
+        }
 
-        box-shadow:
-            inset 0 0 5px rgba(255,255,255,0.6),
-            0 0 5px rgba(255,255,255,0.35);
+        .button.green {
+            background-color: #4caf50;
+            color: white;
+        }
 
-        /* Zoom perceptível */
-        backdrop-filter: zoom(2.9);
-    }
-</style>
+        .field {
+            margin: 10px 0;
+        }
+
+        .field input[type="text"],
+        .field input[type="tel"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #cccccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            background-color: #ffffff;
+        }
+
+        .field p {
+            margin: 5px 0;
+            padding: 10px;
+            border: 1px solid #cccccc;
+            border-radius: 5px;
+            background-color: #ffffff;
+        }
+
+        .row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .row .button {
+            flex: 1;
+            margin: 5px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 20px;
+            font-size: 14px;
+            background-color: #ffffff;
+            border-top: 2px solid #e0e0e0;
+        }
+
+        .coordinates {
+            margin-top: 20px;
+        }
+
+        .coordinates h3 {
+            margin-bottom: 10px;
+            font-size: 20px;
+            color: #333333;
+        }
+
+        .coordinates p {
+            margin: 5px 0;
+            padding: 10px;
+            border: 1px solid #cccccc;
+            border-radius: 5px;
+            background-color: #ffffff;
+        }
+
+        /* Estilo da bolha-lupa */
+        .bubble {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            background-color: rgba(0, 123, 255, 0.5); /* Cor de fundo azul com transparência */
+            border-radius: 50%;
+            border: 2px solid rgba(0, 123, 255, 1); /* Borda mais visível */
+            pointer-events: none;
+            backdrop-filter: zoom(2); /* Efeito de zoom */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s ease-in-out;
+        }
+
+    </style>
+    <script>
+        let currentLatitude = "-";
+        let currentLongitude = "-";
+
+        function trackLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        currentLatitude = position.coords.latitude;
+                        currentLongitude = position.coords.longitude;
+
+                        document.getElementById("coordinates").innerText =
+                            `Latitude: ${currentLatitude}, Longitude: ${currentLongitude}`;
+                        getAddressFromCoordinates(currentLatitude, currentLongitude);
+                    },
+                    (error) => {
+                        console.error("Erro ao obter localização:", error);
+                        document.getElementById("coordinates").innerText =
+                            "Erro ao obter localização.";
+                    }
+                );
+            } else {
+                alert("Geolocalização não é suportada neste navegador.");
+            }
+        }
+
+        function getAddressFromCoordinates(latitude, longitude) {
+            const apiUrl = `https://us1.locationiq.com/v1/reverse?key=pk.73c7ec951f7e0c38e842f740a1a63917&lat=${latitude}&lon=${longitude}&format=json`;
+
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    const address = `Rua: ${data.address.road || "N/A"},
+                                     Bairro: ${data.address.residential || "N/A"},
+                                     Cidade: ${data.address.city || "N/A"},
+                                     Estado: ${data.address.state || "N/A"},
+                                     CEP: ${data.address.postcode || "N/A"},
+                                     País: ${data.address.country || "N/A"}`;
+
+                    document.getElementById("address").innerText = address;
+                })
+                .catch(error => {
+                    console.error("Erro ao obter endereço:", error);
+                    document.getElementById("address").innerText =
+                        "Erro ao obter endereço.";
+                });
+        }
+
+        function shareLocation() {
+            const address = document.getElementById("address").innerText || "Endereço não disponível";
+            const googleMapsUrl = currentLatitude !== "-" && currentLongitude !== "-"
+                ? `https://www.google.com/maps?q=${currentLatitude},${currentLongitude}`
+                : "Localização não disponível";
+
+            const message = `
+                Coordenadas:
+                Latitude: ${currentLatitude}, Longitude: ${currentLongitude}
+
+                Endereço:
+                ${address}
+
+                Link para o Google Mapas:
+                ${googleMapsUrl}
+            `;
+
+            const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, "_blank");
+        }
+
+        // Função para criar e mover a bolha
+        function createBubble() {
+            const bubble = document.createElement('div');
+            bubble.classList.add('bubble');
+            document.body.appendChild(bubble);
+
+            // Posição inicial da bolha
+            let x = Math.random() * (window.innerWidth - 120);
+            let y = Math.random() * (window.innerHeight - 120);
+
+            // Função para mover a bolha
+            function moveBubble() {
+                x += (Math.random() - 0.5) * 4; // Movimento aleatório
+                y += (Math.random() - 0.5) * 4;
+
+                // Garante que a bolha não ultrapasse os limites da tela
+                if (x < 0 || x > window.innerWidth - 120) x = Math.random() * (window.innerWidth - 120);
+                if (y < 0 || y > window.innerHeight - 120) y = Math.random() * (window.innerHeight - 120);
+
+                bubble.style.transform = `translate(${x}px, ${y}px)`; // Atualiza a posição
+                requestAnimationFrame(moveBubble); // Repeats the animation
+            }
+
+            moveBubble(); // Inicia o movimento
+        }
+
+        window.onload = function () {
+            createBubble(); // Cria e move a bolha
+            trackLocation(); // Inicia a geolocalização
+        };
+    </script>
 </head>
-
 <body>
+    <header>
+        <h1>Monitory</h1>
+    </header>
 
-    
+    <div class="container">
+        <div class="coordinates">
+            <h3>Coordenadas</h3>
+            <p id="coordinates">Latitude: -, Longitude: -</p>
+        </div>
 
-<div class="bubble"></div>
+        <div class="field">
+            <p id="address">Endereço: -</p>
+        </div>
 
+        <div class="row">
+            <button class="button green" onclick="shareLocation()">Compartilhar</button>
+        </div>
+    </div>
 
-
-<script>
-const bubble = document.querySelector(".bubble");
-
-
-const size = 40; // Reduzindo o tamanho da bolha
-
-
-let x = Math.random() * (window.innerWidth - size);
-let y = Math.random() * (window.innerHeight - size);
-
-
-let vx = 1.5; // Velocidade horizontal (controle da velocidade de movimento no eixo X)
-let vy = 1.2; // Velocidade vertical (controle da velocidade de movimento no eixo Y)
-
-
-
-function animate() {
-    // Atualiza a posição da bolha
-    x += vx;
-    y += vy;
-
-    // Verifica colisão com bordas
-    if (x <= 0) {
-        x = 0;
-        vx = Math.abs(vx);
-    } else if (x >= window.innerWidth - size) {
-        x = window.innerWidth - size;
-        vx = -Math.abs(vx);
-    }
-
-    if (y <= 0) {
-        y = 0;
-        vy = Math.abs(vy);
-    } else if (y >= window.innerHeight - size) {
-        y = window.innerHeight - size;
-        vy = -Math.abs(vy);
-    }
-
-    bubble.style.transform = `translate(${x}px, ${y}px)`;
-
-    requestAnimationFrame(animate);
-}
-
-animate();
-</script>
-
+    <footer>
+        <p>© 2024 Growcet. Todos os direitos reservados.</p>
+    </footer>
 </body>
 </html>
-
