@@ -1,220 +1,130 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Monitory</title>
+    <title>Marcador de presença</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f0f0f0;
+            background-color: #02779eE6;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
         }
 
         header {
-            text-align: center;
-            background-color: #ffffff;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #e0e0e0;
-        }
-
-        header h1 {
-            margin: 0;
-            font-size: 24px;
-            color: #333333;
+            text-align: left;
+            padding: 5px 10px 50px 10px;
+            background-color: #02779e;
+            color: #fdfefe;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1;
+            box-shadow: 0 8px 8px #0000001A;
+            border-bottom: 20px solid #99c2ec;
         }
 
         .container {
             max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .button {
-            width: 100%;
+            width: calc(100% - 10px);
+            margin-left: 5px;
+            margin-right: 5px;
             padding: 10px;
-            margin: 10px 0;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        .button.blue {
-            background-color: #007bff;
-            color: white;
-        }
-
-        .button.green {
-            background-color: #4caf50;
-            color: white;
-        }
-
-        .field {
-            margin: 10px 0;
-        }
-
-        .field input[type="text"],
-        .field input[type="tel"] {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #cccccc;
-            border-radius: 5px;
+            background-color: #f0f4f8;
+            box-shadow: 0 4px 8px #0000001A;
+            border-radius: 15px;
+            position: relative; /* Faz o container ser o ponto de referência para a bolha */
+            z-index: 2;
+            display: block;
             box-sizing: border-box;
-            background-color: #ffffff;
+            padding-top: 70px; /* Para evitar que o conteúdo fique escondido pelo cabeçalho fixo */
         }
 
-        .field p {
-            margin: 5px 0;
-            padding: 10px;
-            border: 1px solid #cccccc;
-            border-radius: 5px;
-            background-color: #ffffff;
-        }
-
-        .row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .row .button {
-            flex: 1;
-            margin: 5px;
-        }
-
-        footer {
-            text-align: center;
-            padding: 20px;
-            margin-top: 20px;
-            font-size: 14px;
-            background-color: #ffffff;
-            border-top: 2px solid #e0e0e0;
-        }
-
-        .coordinates {
-            margin-top: 20px;
-        }
-
-        .coordinates h3 {
-            margin-bottom: 10px;
-            font-size: 20px;
-            color: #333333;
-        }
-
-        .coordinates p {
-            margin: 5px 0;
-            padding: 10px;
-            border: 1px solid #cccccc;
-            border-radius: 5px;
-            background-color: #ffffff;
-        }
-
-
-
-        /* Adicionando o CSS da bolha */
-        .bubble { 
-            position: absolute;
-            width: 40px; /* Tamanho da bolinha (largura) */
-            height: 40px; /* Tamanho da bolinha (altura) */
-            border-radius: 50%; /* Para manter a bolinha redonda */
+        /* CSS para a bolha */
+        .bubble {
+            position: absolute; /* A bolha será posicionada dentro do container */
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
             pointer-events: none;
-
-           /* Lente */
-           border: 2px solid #000000BF; /* Branco com 75% de opacidade */
-           box-shadow:
-           inset 0 0 5px #ffffff99,   /* Branco com 60% de opacidade */
-           0 0 5px #ffffff59;        /* Branco com 35% de opacidade */
-
-            /* Zoom perceptível */
+            border: 2px solid #ffffffBF;
+            box-shadow:
+                inset 0 0 5px #ffffff99,
+                0 0 5px #ffffff59;
             backdrop-filter: zoom(3.5);
+            z-index: 1000; /* Garante que a bolha fique sobre os outros elementos do container */
         }
-
-
     </style>
+    
 </head>
 <body>
 
     <header>
-        <h1>Monitory</h1>
+        <h1 style="text-align: left; font-size: 22px; margin-top: 20px; margin-bottom: 10px;">Checkin+</h1>
     </header>
-    
 
- <!-- Div da bolha -->
+    <!-- Container Principal -->
+    <div class="container">
+        <h2 style="width: 90%; margin: 15px auto; text-align: left; font-size: 15px; color: #000;">Marcador de presença 📍</h2>
+        <h2 id="road-name" style="width: 90%; margin: 10px auto; text-align: left; font-size: 15px; color: #000;">Rua: Local Carregando!</h2>
+        
+        <div id="loadingImage" style="text-align: center;">
+            <img src="https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif" alt="Carregando..." style="width: 100px; height: 100px;">
+        </div>
+
+        <div id="map" style="width: 100%; height: 300px;"></div>
+
+        <div class="info-container" style="border: 1px solid #ccc; padding: 15px; border-radius: 8px; margin-top: 20px; margin-bottom: 20px;">
+            <a href="index.html" class="btn-voltar">Atualizar mapa 🔄</a>
+        </div>
+    </div>
+
+
+    <!-- Div da bolha, posicionada dentro do container -->
     <div class="bubble"></div>
 
 
 
-    <div class="container">
-        <div class="coordinates">
-            <h3>Coordenadas</h3>
-            <p id="coordinates">Latitude: -, Longitude: -</p>
-        </div>
-
-        <div class="field">
-            <p id="address">Endereço: -</p>
-        </div>
-
-        <div class="row">
-            <button class="button green">Compartilhar</button>
-        </div>
-    </div>
-
-    
-
-
-  
-   
-
-
-
-    <!-- BOLHA parte 3 = Código JavaScript da bolha -->
-
-   <script>
-        // Script da bolha
+    <script>
         document.addEventListener("DOMContentLoaded", function () {
             const bubble = document.querySelector('.bubble');
+            const container = document.querySelector('.container');
+            
+            let x = Math.random() * (container.offsetWidth - 40); // Posição aleatória horizontal, dentro do container
+            let y = Math.random() * (container.offsetHeight - 40); // Posição aleatória vertical, dentro do container
 
-            // Posição inicial
-            let x = Math.random() * (window.innerWidth - 40); // Posição aleatória horizontal, ajustada para o tamanho da bolha (80px)
-            let y = Math.random() * (window.innerHeight - 40); // Posição aleatória vertical, ajustada para o tamanho da bolha (80px)
+            let vx = (Math.random() - 0.5) * 2; 
+            let vy = (Math.random() - 0.5) * 2;
 
-            // Velocidade da bolha (VX e VY)
-            let vx = (Math.random() - 0.5) * 2; // Velocidade horizontal (ajuste o valor 2 para controlar a velocidade)
-            let vy = (Math.random() - 0.5) * 2; // Velocidade vertical (ajuste o valor 2 para controlar a velocidade)
-
-
-            // Função para atualizar a posição da bolha
             function updateBubblePosition() {
-                x += vx; // Atualiza a posição X com a velocidade VX
-                y += vy; // Atualiza a posição Y com a velocidade VY
+                x += vx; 
+                y += vy;
 
-                // Verifica as colisões com as bordas
-                  // Se a bolha encostar na borda esquerda ou direita, inverte a direção horizontal (VX)
-                if (x <= 0 || x >= window.innerWidth - 40) vx *= -1; // Ajuste o 80 para o tamanho da bolha
-                  // Se a bolha encostar na borda superior ou inferior, inverte a direção vertical (VY)
-                if (y <= 0 || y >= window.innerHeight - 40) vy *= -1; // Ajuste o 80 para o tamanho da bolha
+                // Impede a bolha de sair do container
+                if (x <= 0 || x >= container.offsetWidth - 40) vx *= -1;
+                if (y <= 0 || y >= container.offsetHeight - 40) vy *= -1;
 
-
-                // Atualiza a posição da bolha no DOM
-                bubble.style.transform = `translate(${x}px, ${y}px)`; // Aplica a nova posição X e Y da bolha
+                bubble.style.transform = `translate(${x}px, ${y}px)`; // Atualiza a posição da bolha
             }
 
-            // Animação contínua
             function animate() {
-                updateBubblePosition();         // Atualiza a posição da bolha a cada frame
-                requestAnimationFrame(animate); // Chama novamente a função de animação no próximo frame
+                updateBubblePosition();         
+                requestAnimationFrame(animate); 
             }
 
             animate();
         });
     </script>
-
 </body>
 </html>
