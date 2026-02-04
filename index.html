@@ -4,14 +4,117 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Monitory</title>
+
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #02779e;
+            background-color: #f0f0f0;
         }
 
+        header {
+            text-align: center;
+            background-color: #ffffff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+            color: #333333;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .button.blue {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .button.green {
+            background-color: #4caf50;
+            color: white;
+        }
+
+        .field {
+            margin: 10px 0;
+        }
+
+        .field input[type="text"],
+        .field input[type="tel"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #cccccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            background-color: #ffffff;
+        }
+
+        .field p {
+            margin: 5px 0;
+            padding: 10px;
+            border: 1px solid #cccccc;
+            border-radius: 5px;
+            background-color: #ffffff;
+        }
+
+        .row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .row .button {
+            flex: 1;
+            margin: 5px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 20px;
+            font-size: 14px;
+            background-color: #ffffff;
+            border-top: 2px solid #e0e0e0;
+        }
+
+        .coordinates {
+            margin-top: 20px;
+        }
+
+        .coordinates h3 {
+            margin-bottom: 10px;
+            font-size: 20px;
+            color: #333333;
+        }
+
+        .coordinates p {
+            margin: 5px 0;
+            padding: 10px;
+            border: 1px solid #cccccc;
+            border-radius: 5px;
+            background-color: #ffffff;
+        }
 
 
 
@@ -24,35 +127,56 @@
             pointer-events: none;
 
            /* Lente */
-           border: 2px solid #ffffffBF; /* Branco com 75% de opacidade */
+           border: 2px solid #000000BF; /* Branco com 75% de opacidade */
            box-shadow:
            inset 0 0 5px #ffffff99,   /* Branco com 60% de opacidade */
            0 0 5px #ffffff59;        /* Branco com 35% de opacidade */
-
-
 
             /* Zoom perceptível */
             backdrop-filter: zoom(3.5);
         }
 
 
-
-
-
     </style>
 </head>
 <body>
 
+    <header>
+        <h1>Monitory</h1>
+    </header>
+    
 
-
-    <!-- Conteúdo do seu app aqui -->
-
-    <!-- Div da bolha -->
+ <!-- Div da bolha -->
     <div class="bubble"></div>
+
+
+
+    <div class="container">
+        <div class="coordinates">
+            <h3>Coordenadas</h3>
+            <p id="coordinates">Latitude: -, Longitude: -</p>
+        </div>
+
+        <div class="field">
+            <p id="address">Endereço: -</p>
+        </div>
+
+        <div class="row">
+            <button class="button green">Compartilhar</button>
+        </div>
+    </div>
 
     
 
-    <script>
+
+  
+   
+
+
+
+    <!-- BOLHA parte 3 = Código JavaScript da bolha -->
+
+   <script>
         // Script da bolha
         document.addEventListener("DOMContentLoaded", function () {
             const bubble = document.querySelector('.bubble');
