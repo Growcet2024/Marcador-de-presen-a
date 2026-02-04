@@ -10,251 +10,79 @@
             margin: 0;
             padding: 0;
             background-color: #f0f0f0;
-            position: relative; /* Necessário para a bolha ser posicionada de forma absoluta */
-            overflow: hidden; /* Impede a rolagem */
         }
 
-        header {
-            text-align: center;
-            background-color: #ffffff;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #e0e0e0;
-        }
 
-        header h1 {
-            margin: 0;
-            font-size: 24px;
-            color: #333333;
-        }
 
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
 
-        .button {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        .button.blue {
-            background-color: #007bff;
-            color: white;
-        }
-
-        .button.green {
-            background-color: #4caf50;
-            color: white;
-        }
-
-        .field {
-            margin: 10px 0;
-        }
-
-        .field input[type="text"],
-        .field input[type="tel"] {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #cccccc;
-            border-radius: 5px;
-            box-sizing: border-box;
-            background-color: #ffffff;
-        }
-
-        .field p {
-            margin: 5px 0;
-            padding: 10px;
-            border: 1px solid #cccccc;
-            border-radius: 5px;
-            background-color: #ffffff;
-        }
-
-        .row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .row .button {
-            flex: 1;
-            margin: 5px;
-        }
-
-        footer {
-            text-align: center;
-            padding: 20px;
-            margin-top: 20px;
-            font-size: 14px;
-            background-color: #ffffff;
-            border-top: 2px solid #e0e0e0;
-        }
-
-        .coordinates {
-            margin-top: 20px;
-        }
-
-        .coordinates h3 {
-            margin-bottom: 10px;
-            font-size: 20px;
-            color: #333333;
-        }
-
-        .coordinates p {
-            margin: 5px 0;
-            padding: 10px;
-            border: 1px solid #cccccc;
-            border-radius: 5px;
-            background-color: #ffffff;
-        }
-
-        /* Estilo da bolha-lupa */
-        .bubble {
+        /* Adicionando o CSS da bolha */
+        .bubble { 
             position: absolute;
-            width: 120px;
-            height: 120px;
-            background-color: rgba(0, 123, 255, 0.5); /* Cor de fundo azul com transparência */
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
-            border: 2px solid rgba(0, 123, 255, 1); /* Borda mais visível */
             pointer-events: none;
-            backdrop-filter: zoom(2); /* Efeito de zoom */
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-            transition: transform 0.2s ease-in-out;
+
+            /* Lente */
+            border: 2px solid rgba(255,255,255,0.75);
+
+            box-shadow:
+                inset 0 0 5px rgba(255,255,255,0.6),
+                0 0 5px rgba(255,255,255,0.35);
+
+            /* Zoom perceptível */
+            backdrop-filter: zoom(2.9);
         }
+
+
+
+
 
     </style>
-    <script>
-        let currentLatitude = "-";
-        let currentLongitude = "-";
-
-        function trackLocation() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        currentLatitude = position.coords.latitude;
-                        currentLongitude = position.coords.longitude;
-
-                        document.getElementById("coordinates").innerText =
-                            `Latitude: ${currentLatitude}, Longitude: ${currentLongitude}`;
-                        getAddressFromCoordinates(currentLatitude, currentLongitude);
-                    },
-                    (error) => {
-                        console.error("Erro ao obter localização:", error);
-                        document.getElementById("coordinates").innerText =
-                            "Erro ao obter localização.";
-                    }
-                );
-            } else {
-                alert("Geolocalização não é suportada neste navegador.");
-            }
-        }
-
-        function getAddressFromCoordinates(latitude, longitude) {
-            const apiUrl = `https://us1.locationiq.com/v1/reverse?key=pk.73c7ec951f7e0c38e842f740a1a63917&lat=${latitude}&lon=${longitude}&format=json`;
-
-            fetch(apiUrl)
-                .then(response => response.json())
-                .then(data => {
-                    const address = `Rua: ${data.address.road || "N/A"},
-                                     Bairro: ${data.address.residential || "N/A"},
-                                     Cidade: ${data.address.city || "N/A"},
-                                     Estado: ${data.address.state || "N/A"},
-                                     CEP: ${data.address.postcode || "N/A"},
-                                     País: ${data.address.country || "N/A"}`;
-
-                    document.getElementById("address").innerText = address;
-                })
-                .catch(error => {
-                    console.error("Erro ao obter endereço:", error);
-                    document.getElementById("address").innerText =
-                        "Erro ao obter endereço.";
-                });
-        }
-
-        function shareLocation() {
-            const address = document.getElementById("address").innerText || "Endereço não disponível";
-            const googleMapsUrl = currentLatitude !== "-" && currentLongitude !== "-"
-                ? `https://www.google.com/maps?q=${currentLatitude},${currentLongitude}`
-                : "Localização não disponível";
-
-            const message = `
-                Coordenadas:
-                Latitude: ${currentLatitude}, Longitude: ${currentLongitude}
-
-                Endereço:
-                ${address}
-
-                Link para o Google Mapas:
-                ${googleMapsUrl}
-            `;
-
-            const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
-            window.open(whatsappUrl, "_blank");
-        }
-
-        // Função para criar e mover a bolha
-        function createBubble() {
-            const bubble = document.createElement('div');
-            bubble.classList.add('bubble');
-            document.body.appendChild(bubble);
-
-            // Posição inicial da bolha
-            let x = Math.random() * (window.innerWidth - 120);
-            let y = Math.random() * (window.innerHeight - 120);
-
-            // Função para mover a bolha
-            function moveBubble() {
-                x += (Math.random() - 0.5) * 4; // Movimento aleatório
-                y += (Math.random() - 0.5) * 4;
-
-                // Garante que a bolha não ultrapasse os limites da tela
-                if (x < 0 || x > window.innerWidth - 120) x = Math.random() * (window.innerWidth - 120);
-                if (y < 0 || y > window.innerHeight - 120) y = Math.random() * (window.innerHeight - 120);
-
-                bubble.style.transform = `translate(${x}px, ${y}px)`; // Atualiza a posição
-                requestAnimationFrame(moveBubble); // Repeats the animation
-            }
-
-            moveBubble(); // Inicia o movimento
-        }
-
-        window.onload = function () {
-            createBubble(); // Cria e move a bolha
-            trackLocation(); // Inicia a geolocalização
-        };
-    </script>
 </head>
 <body>
-    <header>
-        <h1>Monitory</h1>
-    </header>
 
-    <div class="container">
-        <div class="coordinates">
-            <h3>Coordenadas</h3>
-            <p id="coordinates">Latitude: -, Longitude: -</p>
-        </div>
 
-        <div class="field">
-            <p id="address">Endereço: -</p>
-        </div>
 
-        <div class="row">
-            <button class="button green" onclick="shareLocation()">Compartilhar</button>
-        </div>
-    </div>
+    <!-- Conteúdo do seu app aqui -->
 
-    <footer>
-        <p>© 2024 Growcet. Todos os direitos reservados.</p>
-    </footer>
+    <!-- Div da bolha -->
+    <div class="bubble"></div>
+
+    
+
+    <script>
+        // Script da bolha
+        document.addEventListener("DOMContentLoaded", function () {
+            const bubble = document.querySelector('.bubble');
+
+            // Posição inicial
+            let x = Math.random() * (window.innerWidth - 80);
+            let y = Math.random() * (window.innerHeight - 80);
+            let vx = (Math.random() - 0.5) * 2;
+            let vy = (Math.random() - 0.5) * 2;
+
+            function updateBubblePosition() {
+                x += vx;
+                y += vy;
+
+                // Verifica as colisões com as bordas
+                if (x <= 0 || x >= window.innerWidth - 80) vx *= -1;
+                if (y <= 0 || y >= window.innerHeight - 80) vy *= -1;
+
+                // Atualiza a posição da bolha
+                bubble.style.transform = `translate(${x}px, ${y}px)`;
+            }
+
+            // Animação contínua
+            function animate() {
+                updateBubblePosition();
+                requestAnimationFrame(animate);
+            }
+
+            animate();
+        });
+    </script>
+
 </body>
 </html>
