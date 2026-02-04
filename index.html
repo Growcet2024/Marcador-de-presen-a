@@ -1,89 +1,93 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bolha Animada</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            overflow: hidden; /* Para evitar rolagem quando a bolha se mover */
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bolha Lupa – Comportamento Corrigido</title>
 
-        #bubble-container {
-            position: relative;
-            width: 100%;
-            height: 100vh; /* Garantir que a bolha ocupe a tela inteira */
-        }
+<style>
+    body {
+        margin: 0;
+        overflow: hidden;
+        height: 100vh;
 
-        .bubble {
-            position: absolute;
-            background-color: rgba(0, 123, 255, 0.6);
-            border-radius: 50%;
-        }
-    </style>
+        /* Fundo xadrez fino */
+        background-color: #f0f0f0;
+        background-image:
+            linear-gradient(45deg, #ccc 25%, transparent 25%),
+            linear-gradient(-45deg, #ccc 25%, transparent 25%),
+            linear-gradient(45deg, transparent 75%, #ccc 75%),
+            linear-gradient(-45deg, transparent 75%, #ccc 75%);
+        background-size: 20px 20px;
+        background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+    }
+
+    .bubble {
+        position: absolute;
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        pointer-events: none;
+
+        /* Lente */
+        border: 2px solid rgba(255,255,255,0.75);
+        box-shadow:
+            inset 0 0 10px rgba(255,255,255,0.6),
+            0 0 14px rgba(255,255,255,0.35);
+
+        /* Zoom MAIS perceptível */
+        backdrop-filter: zoom(1.7);
+    }
+</style>
 </head>
+
 <body>
 
+<div class="bubble"></div>
 
-    <!-- Contêiner onde a bolha vai aparecer -->
-    <div id="bubble-container"></div>
-    
+<script>
+const bubble = document.querySelector(".bubble");
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const container = document.getElementById('bubble-container');
+const size = 80;
 
-            class Bubble {
-                constructor() {
-                    this.size = 30; // Tamanho da bolha
-                    this.x = Math.random() * (window.innerWidth - this.size); // Posição inicial aleatória
-                    this.y = Math.random() * (window.innerHeight - this.size); 
-                    this.vx = (Math.random() - 0.5) * 2; // Velocidade aleatória horizontal
-                    this.vy = (Math.random() - 0.5) * 2; // Velocidade aleatória vertical
+let x = Math.random() * (window.innerWidth - size);
+let y = Math.random() * (window.innerHeight - size);
 
-                    // Criando a bolha
-                    this.el = document.createElement('div');
-                    this.el.className = 'bubble';
-                    this.el.style.width = `${this.size}px`;
-                    this.el.style.height = `${this.size}px`;
+let vx = 2.2;
+let vy = 1.9;
 
-                    container.appendChild(this.el); // Adiciona a bolha ao container
-                    this.update();
-                }
+function animate() {
+    // Atualiza a posição da bolha
+    x += vx;
+    y += vy;
 
-                update() {
-                    // Atualiza a posição da bolha
-                    this.el.style.transform = `translate(${this.x}px, ${this.y}px)`;
-                }
+    // Verifica se a bolha tocou nas bordas e faz ela quicar
+    if (x <= 0) {
+        x = 0;  // Força a bolha para o limite esquerdo
+        vx = Math.abs(vx);  // Inverte a direção horizontal (vai para a direita)
+    } else if (x >= window.innerWidth - size) {
+        x = window.innerWidth - size;  // Força a bolha para o limite direito
+        vx = -Math.abs(vx);  // Inverte a direção horizontal (vai para a esquerda)
+    }
 
-                step() {
-                    // Atualiza a posição da bolha com base na velocidade
-                    this.x += this.vx;
-                    this.y += this.vy;
+    if (y <= 0) {
+        y = 0;  // Força a bolha para o limite superior
+        vy = Math.abs(vy);  // Inverte a direção vertical (vai para baixo)
+    } else if (y >= window.innerHeight - size) {
+        y = window.innerHeight - size;  // Força a bolha para o limite inferior
+        vy = -Math.abs(vy);  // Inverte a direção vertical (vai para cima)
+    }
 
-                    // Colisão com as bordas da tela
-                    if (this.x <= 0 || this.x >= window.innerWidth - this.size) this.vx *= -1;
-                    if (this.y <= 0 || this.y >= window.innerHeight - this.size) this.vy *= -1;
+    // Aplica a posição atual da bolha
+    bubble.style.transform = `translate(${x}px, ${y}px)`;
 
-                    this.update();
-                }
-            }
+    // Chama a função recursivamente para continuar o movimento
+    requestAnimationFrame(animate);
+}
 
-            // Criando a bolha
-            const bubble = new Bubble();
-
-            // Função de animação
-            function animate() {
-                bubble.step();
-                requestAnimationFrame(animate); // Continua o movimento
-            }
-
-            animate(); // Inicia a animação
-        });
-    </script>
+// Inicia a animação
+animate();
+</script>
 
 </body>
 </html>
-
