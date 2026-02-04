@@ -17,7 +17,7 @@
             color: #333;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start; /* Ajusta o alinhamento para o topo da tela */
             min-height: 100vh;
         }
 
@@ -48,7 +48,8 @@
             z-index: 2;
             display: block;
             box-sizing: border-box;
-            padding-top: 70px; /* Para evitar que o conteúdo fique escondido pelo cabeçalho fixo */
+            margin-top: 80px; /* Para que o container não fique escondido pelo cabeçalho */
+            padding-top: 10px; /* Ajuste para o padding, sem gerar espaços adicionais */
         }
 
         /* CSS para a bolha */
@@ -66,7 +67,6 @@
             z-index: 1000; /* Garante que a bolha fique sobre os outros elementos do container */
         }
     </style>
-    
 </head>
 <body>
 
@@ -90,11 +90,8 @@
         </div>
     </div>
 
-
     <!-- Div da bolha, posicionada dentro do container -->
     <div class="bubble"></div>
-
-
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
@@ -128,3 +125,4 @@
     </script>
 </body>
 </html>
+
