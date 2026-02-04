@@ -1,104 +1,593 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+    <!-- Cabeçalho da Página -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Marcador de presença</title>
 
+    <!-- Mapa na tela -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #02779eE6;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            overflow: hidden; /* Impede barras de rolagem */
-        }
 
-        /* Cabeçalho */
-        header {
-            text-align: left;
-            padding: 5px 10px 50px 10px;
-            background-color: #02779e;
-            color: #fdfefe;
-            position: fixed;
-            top: 0;
-            left: 0;
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #02779eE6; /* cor do fundo fora do container */
+    color: #333;
+}
+
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+
+        /* Estilos do Cabeçalho */
+header {
+    text-align: left;
+    padding: 5px 10px 50px 10px; /* padding-top: 5px; padding-right:10px; padding-bottom:50px; padding-left:10px */
+    background-color: #02779e; /* Cor do heder barra topo*/
+    color: #fdfefe; /* Cor titulo Checkin+*/
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1;
+    box-shadow: 0 8px 8px #0000001A;
+
+     border-bottom: 20px solid #99c2ec; /* Linha inferior para separar o cabeçalho */
+}
+
+
+ /* CSS COR CONTEIN PRINCIPAL*/
+.container {
+    max-width: 600px;          /* Limita a largura máxima da container para 600px */
+    width: calc(100% - 10px);  /* Subtrai 10px (5px à esquerda + 5px à direita) */
+    margin-left: 5px;          /* Margem de 5px à esquerda */
+    margin-right: 5px;         /* Margem de 5px à direita */
+    padding: 10px;
+    background-color: #f0f4f8;
+    box-shadow: 0 4px 8px #0000001A;
+    border-radius: 15px;
+    position: relative;
+    z-index: 2;
+    display: block;
+    box-sizing: border-box;
+}
+
+/* Centralização */
+
+        /* IMPUT - Área de Texto (Descrição) */
+        textarea, input[type="text"] {
             width: 100%;
-            z-index: 1;
-            box-shadow: 0 8px 8px #0000001A;
-            border-bottom: 20px solid #99c2ec;
-        }
-
-        /* Container */
-        .container {
-            max-width: 600px;
-            width: calc(100% - 10px);
-            margin-left: 5px;
-            margin-right: 5px;
-            padding: 10px;
-            background-color: #f0f4f8;
-            box-shadow: 0 4px 8px #0000001A;
-            border-radius: 15px;
-            position: relative;
-            z-index: 2;
-            display: block;
+            padding: 10px !important;  /* afastar o texto das bordas */
+            height: 40px;              /* ajuste a altura para manter o tamanho original */
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            resize: none;
+            font-size: 14px;
             box-sizing: border-box;
-            margin-top: 80px;
-            height: 400px; /* Tamanho do container */
+            background-color: #f0f7ff; /* 👈 Fundo secundário */
         }
 
-        /* Bolha */
-        .bubble {
+/* =========================
+   Botões padronizados com efeito glossy e centralizados
+   ========================= */
+button {
+    width: 90%;                   /* Largura menor que 100% */
+    display: block;               /* Garante que margin auto funcione */
+    margin: 15px auto;            /* Centraliza horizontalmente + espaçamento vertical */
+    padding: 10px;                /* Mantém altura do botão */
+    border: 2px solid #5fa5b4;   /* Borda fina moderna */
+    border-radius: 25px;          /* Arredondado */
+    font-size: 16px;              /* Tamanho da fonte */
+    font-weight: bold;            /* Peso da fonte */
+    cursor: pointer;
+    position: relative;           /* Necessário para o efeito glossy */
+    overflow: hidden;             /* Brilho não vaza */
+    color: white;                 /* Cor do texto */
+    background: linear-gradient(to bottom, #02779e, #02779e); /* Gradiente base */
+    transition: background 0.3s, transform 0.2s;
+    box-sizing: border-box;
+}
+
+
+
+ /* Adicionando o CSS da bolha */
+        .bubble { 
             position: absolute;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
+            width: 80px; /* Tamanho da bolinha (largura) */
+            height: 80px; /* Tamanho da bolinha (altura) */
+            border-radius: 50%; /* Para manter a bolinha redonda */
             pointer-events: none;
-            border: 2px solid #ffffffBF;
-            box-shadow: inset 0 0 5px #ffffff99, 0 0 5px #ffffff59;
+
+           /* Lente */
+           border: 2px solid #000000BF; /* Branco com 75% de opacidade */
+           box-shadow:
+           inset 0 0 5px #ffffff99,   /* Branco com 60% de opacidade */
+           0 0 5px #ffffff59;        /* Branco com 35% de opacidade */
+
+            /* Zoom perceptível */
             backdrop-filter: zoom(3.5);
-            z-index: 1000;
         }
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Estilos CSS -->
     </style>
+
+    
+
+    <!-- seu conteúdo HTML aqui -->
+
+
+<script>
+
+window.addEventListener('load', function() {
+    const header = document.querySelector('header');
+    const container = document.querySelector('.container');
+
+    const ajuste = -35; // valor negativo faz o container subir sobre o header
+    container.style.marginTop = (header.offsetHeight + ajuste) + 'px';
+});
+
+</script>
+
+
+
+
+
+<script>
+    /* Variáveis Globais */
+    let currentLatitude = "-";
+    let currentLongitude = "-";
+    let userName = "Usuário Logado";
+
+    /* Funções JavaScript */
+
+
+// BLOCO-2
+function checkUserName() {
+    const savedUserName = localStorage.getItem("userName");
+    const savedUserID = localStorage.getItem("userID");
+
+    if (savedUserName && savedUserID) {
+
+        // Mostra dados do usuário
+        document.getElementById("user-name").style.display = "none";
+        document.getElementById("user-name-display").style.display = "inline";
+        document.getElementById("user-name-display").innerText =
+            `Usuário: ${savedUserName} (ID: ${savedUserID})`;
+
+        // Botões
+        document.getElementById("save-name-button").style.display = "none";
+        document.getElementById("edit-name-button").style.display = "inline";
+
+        // 🔒 ID NÃO É EDITÁVEL (garantia de segurança)
+        const editIdBtn = document.getElementById("edit-id-button");
+        if (editIdBtn) editIdBtn.style.display = "none";
+
+    } else {
+
+        // Primeiro acesso (sem nome salvo)
+        document.getElementById("user-name").style.display = "inline";
+        document.getElementById("save-name-button").style.display = "inline";
+        document.getElementById("edit-name-button").style.display = "none";
+
+        const editIdBtn = document.getElementById("edit-id-button");
+        if (editIdBtn) editIdBtn.style.display = "none";
+    }
+}
+
+
+    // Função para obter o endereço a partir das coordenadas
+    function getAddressFromCoordinates(latitude, longitude) {
+        const apiUrl = `https://us1.locationiq.com/v1/reverse?key=pk.73c7ec951f7e0c38e842f740a1a63917&lat=${latitude}&lon=${longitude}&format=json`;
+
+        fetch(apiUrl)
+            .then(response => response.json())
+            .then(data => {
+                const roadName = data.address.road || "N/A";
+                const address = `Local: ${roadName},
+                                 Bairro: ${data.address.residential || "N/A"},
+                                 Região: ${data.address.suburb || "N/A"},
+                                 Cidade: ${data.address.city || "N/A"},
+                                 Estado: ${data.address.state || "N/A"},
+                                 CEP: ${data.address.postcode ? data.address.postcode.substring(0, 5) : "N/A"},
+                                 País: ${data.address.country || "N/A"}`;
+
+                document.getElementById("road-name").innerText = `Local: ${roadName}`;
+                document.getElementById("address").innerText = address;
+            })
+            .catch(error => {
+                console.error("Erro ao obter endereço:", error);
+                document.getElementById("road-name").innerText = "Erro ao obter nome da rua.";
+                document.getElementById("address").innerText = "Erro ao obter endereço.";
+            });
+    }
+
+
+
+function initDB() {
+    return new Promise((resolve, reject) => {
+        const request = indexedDB.open(DB_NAME, DB_VERSION);
+
+        request.onupgradeneeded = (event) => {
+            const database = event.target.result;
+
+
+            if (!database.objectStoreNames.contains(STORE_NAME)) {
+                database.createObjectStore(STORE_NAME, {
+                    keyPath: "id",
+                    autoIncrement: true
+                });
+            }
+        };
+
+
+        request.onsuccess = (event) => {
+            db = event.target.result;
+            resolve(db);
+        };
+
+// ===== Notificação armazenamento cheio =====
+        request.onerror = (event) => {
+    const err = event.target.error;
+
+    if (err && err.name === "QuotaExceededError") {
+        const msg = document.getElementById("saveMessage");
+        if (msg) msg.innerText = "Armazenamento cheio. Limpe os dados do site.";
+        msg.style.textAlign = "center";
+        msg.style.color = "red";
+    }
+    // Cor da mensagem 👈
+
+    reject(err);
+};
+});
+}
+
+
+// Função para salvar o registro 👈
+    async function saveRecord() {
+
+    
+//  ===== SALVAR TAMBÉM NO INDEXEDDB  =====
+
+    const saveButton = document.querySelector("button[onclick='saveRecord()']");
+    saveButton.innerText = "Registro salvo com sucesso!";
+    setTimeout(() => {
+        saveButton.innerText = "Salvar Registro";
+    }, 2000);
+}
+
+
+   // Bloco= 1 inicio  Carregando mapa com atrazo projeto 42
+              
+   // Função para carregar a localização
+function trackLocation() {
+    // Exibe o GIF de carregamento assim que começamos a buscar a localização
+    showLoading();
+
+    // Esconde o mapa antes de começar
+    document.getElementById("map").style.display = 'none';
+
+
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                currentLatitude = position.coords.latitude;
+                currentLongitude = position.coords.longitude;
+
+                const timestamp = new Date().toLocaleString();
+
+                document.getElementById("coordinates").innerText =
+                    `Latitude: ${currentLatitude}\nLongitude: ${currentLongitude}`;
+                document.getElementById("timestamp").innerText = timestamp;
+
+                getAddressFromCoordinates(currentLatitude, currentLongitude);
+
+
+                // Agora, exibe o mapa
+                document.getElementById("map").style.display = 'block';
+
+                // Inicializa o mapa com as coordenadas obtidas
+                map = L.map('map').setView([currentLatitude, currentLongitude], 15);
+
+
+
+              
+                // Ajuste para o mapa abrir no firebase
+
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    crossOrigin: true
+}).addTo(map);
+
+
+
+// Adiciona o marcador e a popup Mapa
+            
+const userName = localStorage.getItem("userName") || "Usuário";
+
+// Função para converter metros em pixels baseado no zoom do mapa
+function metersToPixels(meters, lat, map) {
+    const pointC = map.latLngToContainerPoint([lat, 0]);
+    const pointX = map.latLngToContainerPoint([lat, meters / 111320]); // 1 grau ~ 111.32 km
+    return Math.abs(pointX.x - pointC.x);
+}
+
+// Obtem a posição do usuário
+navigator.geolocation.getCurrentPosition((position) => {
+    const currentLatitude = position.coords.latitude;
+    const currentLongitude = position.coords.longitude;
+    let gpsAccuracy = position.coords.accuracy;
+
+    // Limita o raio do círculo para não ficar muito grande- tamanho
+    if (gpsAccuracy > 19) gpsAccuracy = 19; // Tamanho do circulo
+
+    // --- Pin HTML tamanho ---
+    const htmlPin = L.divIcon({
+        html: `<div style="
+            width: 5px;
+            height: 5px;
+            background: #007BFF;
+            border-radius: 50%;
+            border: 2px solid #0056b3;
+        "></div>`,
+        className: '',
+        iconSize: [12, 12],
+        iconAnchor: [6, 6]
+    });
+
+
+    // --- Círculo de precisão HTML ---
+    function addAccuracyCircle() {
+        const pixelRadius = metersToPixels(gpsAccuracy, currentLatitude, map);
+
+
+        // Remove círculo antigo se houver
+        if (window.accuracyMarker) map.removeLayer(window.accuracyMarker);
+
+        window.accuracyMarker = L.marker([currentLatitude, currentLongitude], { icon: htmlCircle }).addTo(map);
+    }
+
+    // Centraliza o mapa na posição do usuário
+    map.setView([currentLatitude, currentLongitude], 16);
+});
+
+
+
+                // Corrige o redimensionamento do mapa após a exibição
+                map.invalidateSize();
+
+                // Esconde o GIF de carregamento após o mapa ser exibido
+                hideLoading();
+            },
+            (error) => {
+                console.error("Erro ao obter localização:", error);
+                document.getElementById("coordinates").innerText = "Erro ao obter localização.";
+                playSound("error-sound.mp3");
+
+                // Esconde o GIF de carregamento em caso de erro
+                hideLoading();
+            }
+        );
+    } else {
+        alert("Geolocalização não é suportada neste navegador.");
+        hideLoading(); // Garante que o GIF seja escondido em caso de erro
+    }
+}
+
+// Chama a função trackLocation quando a página for carregada
+window.onload = function () {
+    trackLocation();
+};
+
+
+// Função para exibir o GIF de carregamento
+function showLoading() {
+    document.getElementById("loadingImage").style.display = 'block'; // Exibe o GIF de carregamento
+}
+
+// Função para esconder o GIF de carregamento
+function hideLoading() {
+    document.getElementById("loadingImage").style.display = 'none'; // Esconde o GIF de carregamento
+}
+
+</script>
 </head>
 <body>
 
+
+
+
+    <!-- Cabeçalho Tela principal-->
     <header>
-        <h1 style="text-align: left; font-size: 22px; margin-top: 20px; margin-bottom: 10px;">
-            Checkin+
-        </h1>
+
+  <h1 style="text-align: left; font-size: 22px; margin-top: 20px; margin-bottom: 10px;">
+    Checkin+
+  </h1>
+
     </header>
 
-    <!-- Container principal -->
-    <div class="container" id="container">
-        <h2>Marcador de presença 📍</h2>
-        <h2 id="road-name">Rua: Local Carregando!</h2>
-        <div id="loadingImage" style="text-align: center;">
-            <img src="https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif" alt="Carregando..." style="width: 100px; height: 100px;">
-        </div>
-        <div id="map" style="width: 100%; height: 300px;"></div>
-    </div>
+    <!-- Inicio conteiner=1 principal -->
+    <!-- Container Principal -->
+    <div class="container">
 
-    <!-- Bolha dentro do container -->
+
+   <!-- Div da bolha dentro do container -->
     <div class="bubble"></div>
 
-     
 
-    <script>
-        // Script da bolha não alterar permanecer mesma estrutura
+
+
+
+
+        <h2 style="width: 90%; margin: 15px auto; text-align: left; font-size: 15px; color: #000;">
+        Marcador de presença 📍
+        </h2>
+
+        <!-- Nome da Rua -->
+        <h2 id="road-name" style="width: 90%; margin: 10px auto; text-align: left; font-size: 15px; color: #000;">
+        Rua: Local Carregando!
+        </h2>
+
+        <!-- Boco Mapa tipo iFrame -->
+          <!-- Exibindo o GIF de carregamento antes de carregar o mapa -->
+ <div id="loadingImage" style="text-align: center;">
+    <img src="https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif" alt="Carregando..." style="width: 100px; height: 100px;">
+</div>
+
+  
+
+  <!-- Local do mapa OpenStreetMap -->
+        <div id="map" style="width: 100%; height: 300px;"></div>
+
+
+   
+
+
+    <!-- Borda em volta conteudo -->
+           <div class="info-container" style="border: 1px solid #ccc; padding: 15px; border-radius: 8px; margin-top: 20px; margin-bottom: 20px;">
+
+    <!-- Atualizar página -->
+    <a href="index.html" class="btn-voltar">Atualizar mapa 🔄</a>
+
+     <!-- Alerta ativar localização -->
+    <div id="alerta-gps" style="display: none; background-color: #ffffff; color: #000; padding: 10px; text-align: center; font-weight: bold;">
+        ⚠️ Ative a localização
+    </div>
+
+    <!-- Coordenadas -->
+    <div class="field">
+        <h2>Coordenadas</h2>
+        <p id="coordinates">Latitude: -, Longitude: -</p>
+    </div>
+
+    <!-- Data e Hora -->
+    <div class="field">
+        <h2>Data e Hora</h2>
+        <p id="timestamp">Local</p>
+    </div>
+
+    <!-- Endereço -->
+   <div class="field" style="margin-bottom: 0;">
+    <h2>Endereço</h2>
+   <p id="address" style="margin-bottom: 0;">Local</p>
+     </div>
+</div>
+
+
+  <!-- Movendo o campo de descrição e o botão "Salvar Registro" acima do botão Compartilhar -->
+        <div class="description-container">
+            <textarea id="description" placeholder="Adicione uma descrição (opcional)"></textarea>
+            <button class="button" onclick="saveRecord()">Salvar Registro</button>
+        </div>
+        
+        <!--Notificação armazenamento cheio-->
+        <div id="saveMessage" style="margin-top:8px; font-size:14px;"></div>
+
+
+        <!-- Declaração de comparecimento na tela -->
+
+    <p class="copyright" style="width: 91%; margin: 10px auto; text-align: left; font-size: 14px; color: #000;">
+  Já precisou provar ao chefe que foi ao médico?<br>
+  Precisa provar sua presença e permanência em um local?<br>
+  Vai precisar provar aos pais que está na escola?<br>
+
+<hr style="width: 75%; margin: 10px auto; border: 1px solid #ccc;">
+
+<p class="copyright" style="width: 91%; margin: 10px auto; text-align: left; font-size: 14px; color: #000;">
+  Com o <strong>Checkin+</strong>, você registra sua presença com apenas um clique.  
+  O app gera um comprovante de chegada e saída, e uma declaração de comparecimento com nome, ID, data, hora e localização — uma prova incontestável, em texto ou PDF, pronta para enviar, baixar ou imprimir.
+</p>
+
+
+        <!-- Chegada / Saida -->
+        <button class="button" onclick="openArrivalDeparture()">Chegada / Saída</button>
+
+        <!-- Botão para Exibir o Histórico dentro do mesmo container -->
+        <button class="button" onclick="toggleHistory()">Histórico de Presença</button>
+
+
+
+
+
+<!-- PARTE DO HISTÓRICO -->
+<!-- Inicio conteine=2 histórico -->
+<!-- Container para Exibir o Histórico de Presença -->
+<div id="history-container" style="display: none;">
+    <h3><center>Meu histórico</h3>
+    <div id="records-list" style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); overflow-y: auto; padding: 10px;">
+        <!-- Lista de registros será carregada aqui -->
+    </div>
+</div>
+
+<!-- Fim conteine=2 histórico -->
+
+
+<!-- BLOCO Input NOME USUÁRIO -->
+<div style="padding: 10px; max-width: 600px; margin: auto; margin-top: 20px;">
+
+    <!-- Input do Nome (usado só quando NÃO existe nome salvo ou ao editar) -->
+    <input type="text" id="user-name" placeholder="Digite seu nome">
+
+    <!-- Nome exibido + ícone editar -->
+    <div style="display: flex; align-items: center; justify-content: space-between; width: 95%; margin: 10px auto 0;">
+
+        <!-- Nome + ID exibidos -->
+        <span id="user-name-display" style="font-weight: bold; display: none;"></span>
+
+        <!-- Ícone editar nome -->
+        <i id="edit-name-button"
+           onclick="editUserName()"
+           class="fas fa-pencil-alt"
+           style="font-size: 18px; color: #02779e; cursor: pointer; display: none;">
+        </i>
+
+    </div>
+
+    <!-- Botão Salvar Nome -->
+    <button id="save-name-button"
+            onclick="saveUserName()"
+            class="button"
+            style="width: 95%; padding: 10px; margin: 10px; border-radius: 15px; background-color: #28a749;">
+        Salvar
+    </button>
+
+</div>
+      <!-- Fim conteúdo conteiner principal -->
+
+
+
+
+
+
+<script>
+        // Script da bolha
         document.addEventListener("DOMContentLoaded", function () {
             const bubble = document.querySelector('.bubble');
 
             // Posição inicial
-            let x = Math.random() * (window.innerWidth - 40); // Posição aleatória horizontal, ajustada para o tamanho da bolha (80px)
-            let y = Math.random() * (window.innerHeight - 40); // Posição aleatória vertical, ajustada para o tamanho da bolha (80px)
+            let x = Math.random() * (window.innerWidth - 80); // Posição aleatória horizontal, ajustada para o tamanho da bolha (80px)
+            let y = Math.random() * (window.innerHeight - 80); // Posição aleatória vertical, ajustada para o tamanho da bolha (80px)
 
             // Velocidade da bolha (VX e VY)
             let vx = (Math.random() - 0.5) * 2; // Velocidade horizontal (ajuste o valor 2 para controlar a velocidade)
@@ -112,9 +601,9 @@
 
                 // Verifica as colisões com as bordas
                   // Se a bolha encostar na borda esquerda ou direita, inverte a direção horizontal (VX)
-                if (x <= 0 || x >= window.innerWidth - 40) vx *= -1; // Ajuste o 80 para o tamanho da bolha
+                if (x <= 0 || x >= window.innerWidth - 80) vx *= -1; // Ajuste o 80 para o tamanho da bolha
                   // Se a bolha encostar na borda superior ou inferior, inverte a direção vertical (VY)
-                if (y <= 0 || y >= window.innerHeight - 40) vy *= -1; // Ajuste o 80 para o tamanho da bolha
+                if (y <= 0 || y >= window.innerHeight - 80) vy *= -1; // Ajuste o 80 para o tamanho da bolha
 
 
                 // Atualiza a posição da bolha no DOM
@@ -133,3 +622,5 @@
 
 </body>
 </html>
+
+
