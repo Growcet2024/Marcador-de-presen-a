@@ -32,30 +32,40 @@
 
         /* Lente */
         border: 2px solid rgba(255,255,255,0.75);
+
         box-shadow:
-            inset 0 0 10px rgba(255,255,255,0.6),
-            0 0 14px rgba(255,255,255,0.35);
+            inset 0 0 5px rgba(255,255,255,0.6),
+            0 0 5px rgba(255,255,255,0.35);
 
         /* Zoom perceptível */
-        backdrop-filter: zoom(1.7);
+        backdrop-filter: zoom(2.5);
     }
 </style>
 </head>
 
 <body>
 
+    
+
 <div class="bubble"></div>
+
+
 
 <script>
 const bubble = document.querySelector(".bubble");
 
-const size = 80;
+
+const size = 60; // Reduzindo o tamanho da bolha
+
 
 let x = Math.random() * (window.innerWidth - size);
 let y = Math.random() * (window.innerHeight - size);
 
-let vx = 2.2;
-let vy = 1.9;
+
+let vx = 2.2; // Velocidade horizontal (controle da velocidade de movimento no eixo X)
+let vy = 1.9; // Velocidade vertical (controle da velocidade de movimento no eixo Y)
+
+
 
 function animate() {
     // Atualiza a posição da bolha
