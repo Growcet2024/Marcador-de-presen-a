@@ -1,12 +1,10 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <!-- Cabeçalho da Página -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Marcador de presença</title>
 
-    <!-- Mapa na tela -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
@@ -15,20 +13,19 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #02779eE6; /* cor do fundo fora do container */
-            color: #333;
+            background-color: #02779eE6;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            overflow: hidden; /* Remove barras de rolagem */
+            overflow: hidden; /* Impede barras de rolagem */
         }
 
-        /* Estilos do Cabeçalho */
+        /* Cabeçalho */
         header {
             text-align: left;
-            padding: 5px 10px 50px 10px; 
-            background-color: #02779e; 
+            padding: 5px 10px 50px 10px;
+            background-color: #02779e;
             color: #fdfefe;
             position: fixed;
             top: 0;
@@ -36,15 +33,15 @@
             width: 100%;
             z-index: 1;
             box-shadow: 0 8px 8px #0000001A;
-            border-bottom: 20px solid #99c2ec; 
+            border-bottom: 20px solid #99c2ec;
         }
 
-        /* Estilo do Container */
+        /* Container */
         .container {
-            max-width: 600px; 
+            max-width: 600px;
             width: calc(100% - 10px);
-            margin-left: 5px; 
-            margin-right: 5px; 
+            margin-left: 5px;
+            margin-right: 5px;
             padding: 10px;
             background-color: #f0f4f8;
             box-shadow: 0 4px 8px #0000001A;
@@ -53,22 +50,19 @@
             z-index: 2;
             display: block;
             box-sizing: border-box;
-            margin-top: 80px; /* Para dar espaçamento com o header */
-            padding-top: 10px;
-            height: 400px; /* Altura do container */
+            margin-top: 80px;
+            height: 400px; /* Tamanho do container */
         }
 
-        /* Estilo da bolha */
-        .bubble { 
+        /* Bolha */
+        .bubble {
             position: absolute;
             width: 40px;
             height: 40px;
             border-radius: 50%;
             pointer-events: none;
             border: 2px solid #ffffffBF;
-            box-shadow:
-                inset 0 0 5px #ffffff99,
-                0 0 5px #ffffff59;
+            box-shadow: inset 0 0 5px #ffffff99, 0 0 5px #ffffff59;
             backdrop-filter: zoom(3.5);
             z-index: 1000;
         }
@@ -76,68 +70,60 @@
 </head>
 <body>
 
-    <!-- Cabeçalho Tela principal-->
     <header>
         <h1 style="text-align: left; font-size: 22px; margin-top: 20px; margin-bottom: 10px;">
             Checkin+
         </h1>
     </header>
 
-    <!-- Início do container principal -->
-    <div class="container">
-
-        <h2 style="width: 90%; margin: 15px auto; text-align: left; font-size: 15px; color: #000;">
-            Marcador de presença 📍
-        </h2>
-
-        <h2 id="road-name" style="width: 90%; margin: 10px auto; text-align: left; font-size: 15px; color: #000;">
-            Rua: Local Carregando!
-        </h2>
-
+    <!-- Container principal -->
+    <div class="container" id="container">
+        <h2>Marcador de presença 📍</h2>
+        <h2 id="road-name">Rua: Local Carregando!</h2>
         <div id="loadingImage" style="text-align: center;">
             <img src="https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif" alt="Carregando..." style="width: 100px; height: 100px;">
         </div>
-
         <div id="map" style="width: 100%; height: 300px;"></div>
-
-        <div class="info-container" style="border: 1px solid #ccc; padding: 15px; border-radius: 8px; margin-top: 20px; margin-bottom: 20px;">
-            <a href="index.html" class="btn-voltar">Atualizar mapa 🔄</a>
-        </div>
     </div>
 
     <!-- Bolha dentro do container -->
     <div class="bubble"></div>
 
+     
+
     <script>
-        // Script da bolha
+        // Script da bolha não alterar permanecer mesma estrutura
         document.addEventListener("DOMContentLoaded", function () {
             const bubble = document.querySelector('.bubble');
-            const container = document.querySelector('.container');
 
-            // Posição inicial da bolha, dentro do container
-            let x = Math.random() * (container.offsetWidth - 40); // Posição aleatória dentro da largura do container
-            let y = Math.random() * (container.offsetHeight - 40); // Posição aleatória dentro da altura do container
+            // Posição inicial
+            let x = Math.random() * (window.innerWidth - 40); // Posição aleatória horizontal, ajustada para o tamanho da bolha (80px)
+            let y = Math.random() * (window.innerHeight - 40); // Posição aleatória vertical, ajustada para o tamanho da bolha (80px)
 
             // Velocidade da bolha (VX e VY)
-            let vx = (Math.random() - 0.5) * 2; // Velocidade horizontal
-            let vy = (Math.random() - 0.5) * 2; // Velocidade vertical
+            let vx = (Math.random() - 0.5) * 2; // Velocidade horizontal (ajuste o valor 2 para controlar a velocidade)
+            let vy = (Math.random() - 0.5) * 2; // Velocidade vertical (ajuste o valor 2 para controlar a velocidade)
+
 
             // Função para atualizar a posição da bolha
             function updateBubblePosition() {
                 x += vx; // Atualiza a posição X com a velocidade VX
                 y += vy; // Atualiza a posição Y com a velocidade VY
 
-                // Verifica as colisões com as bordas do container
-                if (x <= 0 || x >= container.offsetWidth - 40) vx *= -1; // Colisões nas bordas laterais
-                if (y <= 0 || y >= container.offsetHeight - 40) vy *= -1; // Colisões nas bordas superior e inferior
+                // Verifica as colisões com as bordas
+                  // Se a bolha encostar na borda esquerda ou direita, inverte a direção horizontal (VX)
+                if (x <= 0 || x >= window.innerWidth - 40) vx *= -1; // Ajuste o 80 para o tamanho da bolha
+                  // Se a bolha encostar na borda superior ou inferior, inverte a direção vertical (VY)
+                if (y <= 0 || y >= window.innerHeight - 40) vy *= -1; // Ajuste o 80 para o tamanho da bolha
+
 
                 // Atualiza a posição da bolha no DOM
-                bubble.style.transform = `translate(${x}px, ${y}px)`; // Aplica a nova posição
+                bubble.style.transform = `translate(${x}px, ${y}px)`; // Aplica a nova posição X e Y da bolha
             }
 
             // Animação contínua
             function animate() {
-                updateBubblePosition();
+                updateBubblePosition();         // Atualiza a posição da bolha a cada frame
                 requestAnimationFrame(animate); // Chama novamente a função de animação no próximo frame
             }
 
@@ -147,5 +133,3 @@
 
 </body>
 </html>
-
-
