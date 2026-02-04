@@ -6,27 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Marcador de presença</title>
 
-<link rel="stylesheet" href="styles.css">
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
-    <!-- Carregando o Font Awesome Carrega ícones lápis-->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-
-<!-- Gerar Mapa local PDF-->
-    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-
-     <!-- Biblioteca QRCode (uma vez no projeto) -->
-
-<!-- Biblioteca QRCode MAPA -->
-<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
-
-
-    <title>Marcador de presença</title>
+    <!-- Mapa na tela -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
     <style>
-
 
 body {
     font-family: Arial, sans-serif;
@@ -34,6 +18,13 @@ body {
     padding: 0;
     background-color: #02779eE6; /* cor do fundo fora do container */
     color: #333;
+}
+
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
 }
 
 
@@ -54,13 +45,7 @@ header {
 }
 
 
-header h1 {
-    margin: 0;
-    font-size: 20px;
-}
-
-
-/* CSS COR CONTEIN PRINCIPAL*/
+ /* CSS COR CONTEIN PRINCIPAL*/
 .container {
     max-width: 600px;          /* Limita a largura máxima da container para 600px */
     width: calc(100% - 10px);  /* Subtrai 10px (5px à esquerda + 5px à direita) */
@@ -77,152 +62,6 @@ header h1 {
 }
 
 /* Centralização */
-body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-}
-
-
-/* CSS container fim */
-
-.container h2 {
-    font-size: 18px;
-    color: #000000;
-}
-
-   /*Controlar a distancio no topo*/
-.container {
-
-    /* margin-top: 150px;  Remover valor fixo */
-    position: relative;
-    z-index: 2;
-    padding: 10px;
-    max-width: 600px;
-    margin: auto;
-    background-color: #f0f4f8;
-    box-shadow: 0 4px 8px #0000001A;
-    border-radius: 15px;
-    margin-bottom: 20px;
-}
-
-.container {
-    position: relative;
-    z-index: 2;
-}
-
-
-/* ABINHA SUPERIOR topo*/
-.container::before {
-    content: "";
-    position: absolute;
-    top: -20px;                 /* Quanto sobe no header */
-    left: 50%;
-    transform: translateX(-50%);
-    width: 200px;               /* Largura da meia-lua */
-    height: 19px;               /* Altura */
-    background:
-        linear-gradient(to bottom,
-            rgba(255,255,255,0.9),
-            rgba(255,255,255,0.4)
-        ),
-        #f0f4f8;
-    clip-path: ellipse(50% 100% at 50% 100%);
-    box-shadow:
-        0 2px 3px rgba(0,0,0,0.15),        /* Encaixe */
-        0 6px 10px rgba(0,0,0,0.25),       /* Profundidade */
-        inset 0 1px 1px rgba(255,255,255,0.8); /* Luz interna */
-    z-index: 3;
-    animation: moveAba 10s ease-in-out infinite alternate;
-}
-
-/* Animação para mover a aba (superior) */
-@keyframes moveAba {
-    0% {
-        transform: translateX(-50%) translateX(-30%); /* Começa na esquerda */
-    }
-    50% {
-        transform: translateX(-50%) translateX(30%);  /* Vai para a direita */
-    }
-    100% {
-        transform: translateX(-50%) translateX(-30%); /* Volta para a esquerda */
-    }
-}
-
-
-
-/* ABINHA INFERIOR topo*/
-.container::after {
-    content: "";
-    position: absolute;
-    top: 1px;                 /* Coloca a aba inferior logo abaixo da superior */
-    left: 50%;
-    transform: translateX(-50%);
-    width: 200px;              /* Mesma largura que a superior */
-    height: 19px;              /* Mesma altura que a superior */
-
-    clip-path: ellipse(50% 100% at 50% 0%); /* Formato espelhado */
-    box-shadow:
-        0 2px 3px rgba(0,0,0,0.15), 
-        0 6px 10px rgba(0,0,0,0.25), 
-        inset 0 1px 1px rgba(255,255,255,0.8); /* Mesma sombra da superior */
-
-    z-index: 2; /* Aba inferior abaixo da superior */
-    background-color: rgba(0, 0, 255, 0.3); /* Cor de fundo temporária para ajudar na visualização */
-    animation: moveAba 10s ease-in-out infinite alternate;
-}
-
-/* Animação para mover a aba (superior e inferior) */
-@keyframes moveAba {
-    0% {
-        transform: translateX(-50%) translateX(-30%); /* Começa na esquerda */
-    }
-    50% {
-        transform: translateX(-50%) translateX(30%);  /* Vai para a direita */
-    }
-    100% {
-        transform: translateX(-50%) translateX(-30%); /* Volta para a esquerda */
-    }
-}
-
-/* ABINHA INFERIOR COR*/
-.container::after {
-   
-    /* efeito material / relevo invertido */
-    background:
-        linear-gradient(to top,
-            rgba(255,255,255,0.85),
-            rgba(255,255,255,0.3)
-        ),
-        #f0f4f8;
-    z-index: 1;
-}
-
-
-
-/* ABINHA final */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        /* Estilos do Mapa */
-        #map {
-            border-radius: 8px;
-        }
-
 
         /* IMPUT - Área de Texto (Descrição) */
         textarea, input[type="text"] {
@@ -237,7 +76,6 @@ body {
             box-sizing: border-box;
             background-color: #f0f7ff; /* 👈 Fundo secundário */
         }
-
 
 /* =========================
    Botões padronizados com efeito glossy e centralizados
@@ -261,305 +99,44 @@ button {
 }
 
 
-/* Brilho plástico no topo */
-button::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 50%;
-    background: linear-gradient(to bottom, #FFFFFF66, #FFFFFF00); /* Transparência para efeito glossy */
-    border-top-left-radius: 25px;
-    border-top-right-radius: 25px;
-    pointer-events: none;
-}
 
-/* Hover */
-button:hover {
-    background: linear-gradient(to bottom, #0393bb, #02779e); /* Gradiente mais claro ao passar o mouse */
-    transform: scale(1.02);
-}
+ /* Adicionando o CSS da bolha */
+        .bubble { 
+            position: absolute;
+            width: 80px; /* Tamanho da bolinha (largura) */
+            height: 80px; /* Tamanho da bolinha (altura) */
+            border-radius: 50%; /* Para manter a bolinha redonda */
+            pointer-events: none;
 
-/* Clique */
-button:active {
-    transform: scale(0.98);
-}
+           /* Lente */
+           border: 2px solid #000000BF; /* Branco com 75% de opacidade */
+           box-shadow:
+           inset 0 0 5px #ffffff99,   /* Branco com 60% de opacidade */
+           0 0 5px #ffffff59;        /* Branco com 35% de opacidade */
 
-/* Histórico de botões (separados por cores para identificar ação) */
-.history-buttons button:nth-child(1) {
-    background: linear-gradient(to bottom, #02779e, #02779e); /* Verde WhatsApp */
-}
-
-.history-buttons button:nth-child(2) {
-    background: linear-gradient(to bottom, #02779e, #02779e); /* Laranja PDF */
-}
-
-.history-buttons button:nth-child(3) {
-    background: linear-gradient(to bottom, #02779e, #02779e); /* Vermelho Apagar */
-}
-
-
-        /* Estilos dos Campos de Coordenadas, Data/Hora e Endereço */
-        .field {
-            margin: 10px 0;
+            /* Zoom perceptível */
+            backdrop-filter: zoom(3.5);
         }
 
-        .field h2 {
-            font-size: 16px;
-            color: #333;
-        }
-
-       
-
-/* 1 - Mapa Popup transparente com efeito vidro (recomendado) Eu estou aqui */
-
-/* Fundo da caixa da popup */
-/* Caixa da popup */
-.leaflet-popup-content-wrapper {
-    background: #FFFFFF99 !important;
-    backdrop-filter: blur(6px);
-    color: #000000;
-    border-radius: 6px;
-    max-width: 160px;
-    padding: 2px 2px; /* isso sozinho não resolve */
-}
-
-/* Conteúdo da popup */
-.leaflet-popup-content {
-    margin: 0;      /* remove margens extras */
-    padding: 4px;   /* reduz o espaço interno do texto */
-    font-size: 14px;
-}
-
-
-/* Triângulo apontando para o marcador */
-.leaflet-popup-tip {
-    background: #FFFFFF99 !important;  /* branco com 25% de opacidade */
-    backdrop-filter: blur(6px);
-}
-
-
-
-<!-- CSS HISTORICO-->
-
-#/* Estilos do Container do Histórico */
-#history-container {
-    padding: 10px;
-    margin: 10px auto 0 auto; /* topo, auto, baixo, auto */
-    max-width: 600px;
-    background-color: #f0f4f8;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 15px;
-}
-
-/* Cada registro da lista */
-.record {
-    background-color: #f0f4f8;
-    border: 2px solid #ddd;
-    padding: 25px;
-    margin-bottom: 10px;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* Botões dentro do histórico */
-.history-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    margin-top: 10px;
-}
-
-.history-buttons button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 90%;
-    padding: 10px;
-    border: none;
-    border-radius: 15px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background 0.3s, transform 0.2s;
-    margin: 0 auto;
-}
-
-.history-buttons button i {
-    margin-right: 8px;
-    font-size: 18px;
-}
-
-
-
-/* Input do Nome (caixa de digitação) */
-#user-name {
-    display: none;
-    width: 100%;
-    padding: 10px;
-    margin: 10px auto;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    font-size: 14px;
-    background-color: #f0f7ff; /* azul bem suave */
-    box-sizing: border-box;
-    display: block;
-}
-
-
-
-/* Toggle switch BOOLEANO*/
-.switch {
-    position: relative;
-    display: inline-block;
-    width: 46px;
-    height: 24px;
-}
-
-.switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
-
-.slider {
-    position: absolute;
-    cursor: pointer;
-    inset: 0;
-    background-color: #ccc;
-    transition: .3s;
-    border-radius: 24px;
-}
-
-.slider:before {
-    position: absolute;
-    content: "";
-    height: 18px;
-    width: 18px;
-    left: 3px;
-    bottom: 3px;
-    background-color: white;
-    transition: .3s;
-    border-radius: 50%;
-}
-
-input:checked + .slider {
-    background-color: #99c2ec;
-}
-
-input:checked + .slider:before {
-    transform: translateX(22px);
-}
-
-.toggle-container {
-    display: flex;
-    align-items: center; /* alinha verticalmente */
-    gap: 10px;           /* espaço entre botão e texto */
-    margin-bottom: 20px; /* espaço abaixo do toggle */
-}
-
-
-/* Toggle switch BOOLEANO*/
-
-
-/* CSS menu */
-/* Ícone do Menu Hambúrguer */
-.menu-hamburguer {
-    font-size: 30px;
-    cursor: pointer;
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 100; /* Aumentamos para ficar sobre o mapa */
-    color: #f0f4f8; /* Os três traços */
-    background: #ffffff00  ; /* Cor fundo 3 tracinhos menu f0f4f8 */
-    border-radius: 5px;
-    padding: 5px 10px;
-   // box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); //
-}
-
-/* Menu Deslizante */
-.menu-lateral {
-    width: 250px;
-    height: 100%;
-    background: linear-gradient(to right, #00000066, #00000033);  /* Cor fundo lateral direita */
-    color: white;
-    position: fixed;
-    top: 0;
-    right: -250px; /* Escondido inicialmente */
-    transition: right 0.3s ease;
-    z-index: 99; /* Aumentamos para ficar sobre o mapa */
-    padding-top: 60px;
-}
-
-/* Estilo da Lista do Menu */
-.menu-lateral ul {
-    list-style: none;
-    padding: 0;
-}
-
-.menu-lateral ul li {
-    padding: 15px;
-    border-bottom: 1px solid #444;
-}
-
-.menu-lateral ul li a {
-    color: white;
-    text-decoration: none;
-    font-size: 18px;
-    display: block;
-}
-
-.menu-lateral ul li a:hover {
-    background: #444;
-}
-
-#map {
-    position: relative;
-    z-index: 1; /* Mantém o mapa abaixo do menu */
 
 
 
 
 
-    
-        <style>
-    /* Estilo da bolha */
-    .bubble { 
-        position: absolute;
-        width: 80px; /* Tamanho da bolinha (largura) */
-        height: 80px; /* Tamanho da bolinha (altura) */
-        border-radius: 50%; /* Para manter a bolinha redonda */
-        pointer-events: none;
-        z-index: 9999; /* Garantindo que a bolha fique sempre acima do mapa e do conteúdo */
 
-        /* Lente */
-        border: 2px solid #000000BF; /* Branco com 75% de opacidade */
-        box-shadow:
-            inset 0 0 5px #ffffff99,   /* Branco com 60% de opacidade */
-            0 0 5px #ffffff59;        /* Branco com 35% de opacidade */
 
-        /* Zoom perceptível */
-        backdrop-filter: zoom(3.5);
-    }
-
-    
-</style>
 
 
 
 
 <!-- Estilos CSS -->
-
+    </style>
 
     
-    </style>
 
     <!-- seu conteúdo HTML aqui -->
 
 
-    <!-- Controlar a distancio no topo -->
 <script>
 
 window.addEventListener('load', function() {
@@ -574,44 +151,6 @@ window.addEventListener('load', function() {
 
 
 
-<span class="menu-hamburguer">•••</span>
-<div class="menu-lateral">
-    <ul>
-        <li><a href="sobre.html">Sobre</a></li>
-        <li><a href="informações.html">Informações importates</a></li>
-    </ul>
-</div>
-
-<script>
-const menuIcon = document.querySelector(".menu-hamburguer");
-const menuLateral = document.querySelector(".menu-lateral");
-
-let touchStartX = 0;
-
-// Clique no ícone abre/fecha
-menuIcon.addEventListener("click", () => {
-    if (menuLateral.style.right === "0px") {
-        menuLateral.style.right = "-250px";
-    } else {
-        menuLateral.style.right = "0px";
-    }
-});
-
-// Detectar toque para arrastar
-menuLateral.addEventListener("touchstart", (e) => {
-    touchStartX = e.touches[0].clientX;
-});
-
-menuLateral.addEventListener("touchend", (e) => {
-    let touchEndX = e.changedTouches[0].clientX;
-    let diffX = touchEndX - touchStartX;
-
-    if (diffX > 50) { // arrastou mais de 50px para a direita
-        menuLateral.style.right = "-250px"; // fecha
-    }
-});
-</script>
-
 
 
 <script>
@@ -621,35 +160,6 @@ menuLateral.addEventListener("touchend", (e) => {
     let userName = "Usuário Logado";
 
     /* Funções JavaScript */
-
-
-
-    // fUNÇÃO USUÁRIO ID
-    
- // BLOCO- 1
-// Função para gerar um ID único com data de criação + parte aleatória
-// Formato: YYYYMMDD-XXXXXX  (ex: 20250324-K8F9A2)
-
-function generateRandomID() {
-    const now = new Date();
-
-    const year  = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, '0');
-    const day   = String(now.getDate()).padStart(2, '0');
-
-    const datePart = `${year}${month}${day}`;
-
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    let randomPart = '';
-    for (let i = 0; i < 6; i++) {
-        randomPart += characters.charAt(
-            Math.floor(Math.random() * characters.length)
-        );
-    }
-
-    return `${datePart}-${randomPart}`;
-}
-
 
 
 // BLOCO-2
@@ -686,64 +196,6 @@ function checkUserName() {
 }
 
 
-
-// BLOCO- 3
-// Função para salvar o nome do usuário e gerar um ID único FIXO (com data)
-
-function saveUserName() {
-    const userName = document.getElementById("user-name").value.trim();
-
-    if (!userName) {
-        alert("Por favor, digite um nome.");
-        return;
-    }
-
-    // Verifica se já existe um ID salvo
-    let userID = localStorage.getItem("userID");
-
-    if (!userID) {
-        // Gera data no formato YYYYMMDD
-        const now = new Date();
-        const yyyy = now.getFullYear();
-        const mm = String(now.getMonth() + 1).padStart(2, "0");
-        const dd = String(now.getDate()).padStart(2, "0");
-        const datePart = `${yyyy}${mm}${dd}`;
-
-        // Gera sufixo aleatório de 5 caracteres
-        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        let suffix = "";
-        for (let i = 0; i < 5; i++) {
-            suffix += chars.charAt(Math.floor(Math.random() * chars.length));
-        }
-
-        userID = `${datePart}-${suffix}`;
-
-
-        // 🔒 Salva o ID UMA ÚNICA VEZ
-        localStorage.setItem("userID", userID);
-    }
-
-    // Atualiza apenas o nome (ID permanece intacto)
-    localStorage.setItem("userName", userName);
-
-    // Atualiza a interface
-    checkUserName();
-}
-
-
-// BLOCO- 4 Função para permitir editar o nome do usuário
-function editUserName() {
-    document.getElementById("user-name").style.display = "inline";
-    document.getElementById("save-name-button").style.display = "inline";
-    document.getElementById("user-name-display").style.display = "none";
-    document.getElementById("edit-name-button").style.display = "none";
-    document.getElementById("user-name").value = localStorage.getItem("userName");
-}
-
-  // fim Função usuário
-
-
-
     // Função para obter o endereço a partir das coordenadas
     function getAddressFromCoordinates(latitude, longitude) {
         const apiUrl = `https://us1.locationiq.com/v1/reverse?key=pk.73c7ec951f7e0c38e842f740a1a63917&lat=${latitude}&lon=${longitude}&format=json`;
@@ -771,49 +223,6 @@ function editUserName() {
     }
 
 
-// Bloco=2 = Alteração feita: A função updateMap foi modificada para usar Leaflet com OpenStreetMap
-function updateMap(lat, lon) {
-            // Inicializando o mapa com OpenStreetMap usando Leaflet
-            const map = L.map('map').setView([lat, lon], 15); // Alteração: agora usa o Leaflet
-
-            // Camada de OpenStreetMap
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            }).addTo(map);
-
-            // Adicionando marcador no mapa
-            L.marker([lat, lon]).addTo(map)
-                .bindPopup('Você está aqui!')
-                .openPopup();
-        }
-             // Bloco= 2 fim
-
-
-
-
-
-
-
-
-// 1 ===== BLOCO BASE — INDEXEDDB (INFRA) =====
-const DB_NAME = "CheckinDB";
-const DB_VERSION = 1;
-const STORE_NAME = "presenceRecords";
-
-let db = null;
-
-
-// 2 ===== 🔒 proteção =====
-
-async function ensureDB() {
-    if (db && db.objectStoreNames.contains(STORE_NAME)) {
-        return db;
-    }
-    db = null;
-    return await initDB();
-}
-
-
 
 function initDB() {
     return new Promise((resolve, reject) => {
@@ -837,20 +246,6 @@ function initDB() {
             resolve(db);
         };
 
-
-
-    // 1 🔒 proteção para evitar DB "morto" após erro ou reload
-db.onclose = () => {
-    db = null;
-};
-
-db.onerror = () => {
-    db = null;
-};
-
-
-
-
 // ===== Notificação armazenamento cheio =====
         request.onerror = (event) => {
     const err = event.target.error;
@@ -869,125 +264,10 @@ db.onerror = () => {
 }
 
 
-
-
-// 1 ===== BLOCO BASE — INDEXEDDB (INFRA) =====
-
-
-// Inicializa o IndexedDB ao carregar o app (necessário)
-document.addEventListener("DOMContentLoaded", () => {
-    initDB();
-});
-
-
-
-// 3 ===== LEITURA INDEXEDDB (TESTE) =====
-
-async function getAllRecordsFromDB() {
-const database = await ensureDB();
-// 3 ===== not bug=====
-
-    return new Promise((resolve, reject) => {
-        if (!db) {
-            reject("DB não inicializado");
-            return;
-        }
-
-
-// 4 ===== not bug====
-
-      const tx = database.transaction(STORE_NAME, "readonly");
-        const store = tx.objectStore(STORE_NAME);
-        const request = store.getAll();
-
-
-        request.onsuccess = () => {
-            resolve(request.result);
-        };
-
-        request.onerror = () => {
-            reject(request.error);
-        };
-    });
-}
-
-
-// 3 ===== LEITURA INDEXEDDB (TESTE) =====
-
-
-// 4 ===== HISTÓRICO VIA INDEXEDDB =====
-async function getHistoryRecords() {
-    try {
-        const records = await getAllRecordsFromDB();
-        return records || [];
-    } catch (e) {
-        console.error("Erro ao ler histórico do IndexedDB", e);
-        return [];
-    }
-}
-// 4 ===== HISTÓRICO VIA INDEXEDDB =====
-
-
-
-    // Função para salvar o registro 👈
+// Função para salvar o registro 👈
     async function saveRecord() {
 
-     // Notificação armazenamento cheio 👈
-        const msg = document.getElementById("saveMessage");
-
-     if (msg) msg.innerText = "";
-
-if (msg) {
-    msg.innerText = "";
-    msg.style.color = "";
-}
- // Notificação armazenamento cheio 👈
-
-        const database = await ensureDB();
-        // 5 ===== not bug=====
-
-    const coordinates = document.getElementById("coordinates").innerText;
-    const address = document.getElementById("address").innerText;
-    const timestamp = document.getElementById("timestamp").innerText;
-
-
-   // Agora recupera o nome e o ID do usuário salvo no localStorage
-const userInput = localStorage.getItem("userName") || "Usuário";  
-const userID = localStorage.getItem("userID") || "Sem ID";  // Recupera o ID ou usa um valor padrão
-const description = document.getElementById("description").value || "Nenhuma descrição fornecida.";
-
-
-const record = {
-    userName: userInput,
-    userID: userID,  // Aqui estamos incluindo o ID no registro
-    coordinates,
-    address,
-    description,
-    timestamp,
-};
-
-
-// Captura do mapa atual em Base64- indeBD
-const mapElement = document.getElementById("map");
-const canvas = await html2canvas(mapElement, { useCORS: true, scale: 2 });
-record.mapImage = canvas.toDataURL("image/png");
-record.mapWidth = canvas.width;
-record.mapHeight = canvas.height;
-// Captura do mapa atual em Base64- indeBD
-
-
-
-// 2 ===== SALVAR TAMBÉM NO INDEXEDDB inicio =====
-       
-{
-const tx = database.transaction(STORE_NAME, "readwrite");
- // 6 ===== not bug===== apagar if (db) ==
-
-    const store = tx.objectStore(STORE_NAME);
-    store.add(record);
-}
-
-
+    
 //  ===== SALVAR TAMBÉM NO INDEXEDDB  =====
 
     const saveButton = document.querySelector("button[onclick='saveRecord()']");
@@ -996,26 +276,6 @@ const tx = database.transaction(STORE_NAME, "readwrite");
         saveButton.innerText = "Salvar Registro";
     }, 2000);
 }
-
-
-
-
-
-
-
-
-
-
-
-// ===== IMPORTANTE NÃO APAGAR ===== 👈
-function parseCoords(coordString) {
-    // coordString exemplo: "Latitude: -23.6766 Longitude: -46.1234"
-    const match = coordString.match(/Latitude:\s*([-0-9.]+)\s*Longitude:\s*([-0-9.]+)/);
-    if (!match) return null;  // Retorna null se não encontrar
-    return `${match[1]},${match[2]}`;  // Retorna "lat,lon"
-}
-// ===== IMPORTANTE NÃO APAGAR ===== 👈
-
 
 
    // Bloco= 1 inicio  Carregando mapa com atrazo projeto 42
@@ -1061,6 +321,7 @@ function trackLocation() {
 }).addTo(map);
 
 
+
 // Adiciona o marcador e a popup Mapa
             
 const userName = localStorage.getItem("userName") || "Usuário";
@@ -1096,38 +357,10 @@ navigator.geolocation.getCurrentPosition((position) => {
     });
 
 
-   L.marker([currentLatitude, currentLongitude], { icon: htmlPin })
-    .addTo(map)
-    .bindPopup(`
-        <div style="text-align: center;">
-            Eu estou aqui 😊<br>
-            <strong>${userName}</strong>
-        </div>
-    `)
-    .openPopup();
-
-
     // --- Círculo de precisão HTML ---
     function addAccuracyCircle() {
         const pixelRadius = metersToPixels(gpsAccuracy, currentLatitude, map);
 
-        // Ajuste para centralizar o círculo e evitar deslocamento
-        const htmlCircle = L.divIcon({
-            html: `<div style="
-                width: ${pixelRadius*3.4}px;
-                height: ${pixelRadius*3.4}px;
-                background: #007BFF2E;
-                border: 1px solid #007BFF;
-                border-radius: 50%;
-
-                transform: translate(-${pixelRadius}px, -${pixelRadius}px);
-
-                position: absolute;
-            "></div>`,
-            className: '',
-            iconSize: [pixelRadius*2, pixelRadius*2],
-            iconAnchor: [pixelRadius, pixelRadius]
-        });
 
         // Remove círculo antigo se houver
         if (window.accuracyMarker) map.removeLayer(window.accuracyMarker);
@@ -1135,15 +368,10 @@ navigator.geolocation.getCurrentPosition((position) => {
         window.accuracyMarker = L.marker([currentLatitude, currentLongitude], { icon: htmlCircle }).addTo(map);
     }
 
-    // Inicializa o círculo
-    addAccuracyCircle();
-
-    // Atualiza o círculo ao mudar o zoom
-    map.on('zoomend', addAccuracyCircle);
-
     // Centraliza o mapa na posição do usuário
     map.setView([currentLatitude, currentLongitude], 16);
 });
+
 
 
                 // Corrige o redimensionamento do mapa após a exibição
@@ -1167,17 +395,6 @@ navigator.geolocation.getCurrentPosition((position) => {
     }
 }
 
-
-// Função para exibir o GIF de carregamento
-function showLoading() {
-    document.getElementById("loadingImage").style.display = 'block';
-}
-
-// Função para esconder o GIF de carregamento
-function hideLoading() {
-    document.getElementById("loadingImage").style.display = 'none';
-}
-
 // Chama a função trackLocation quando a página for carregada
 window.onload = function () {
     trackLocation();
@@ -1193,85 +410,6 @@ function showLoading() {
 function hideLoading() {
     document.getElementById("loadingImage").style.display = 'none'; // Esconde o GIF de carregamento
 }
-
-// Chama a função trackLocation quando a página for carregada
-window.onload = function () {
-    trackLocation();
-};
-
-
-// Força atualização do GPS ao carregar a página
-window.addEventListener('load', () => {
-    if (navigator.geolocation) {
-        const watchID = navigator.geolocation.watchPosition(
-            (position) => {
-                console.log("GPS atualizado:");
-                console.log("Latitude:", position.coords.latitude);
-                console.log("Longitude:", position.coords.longitude);
-
-                // Para de assistir após a primeira atualização
-                navigator.geolocation.clearWatch(watchID);
-            },
-            (error) => {
-                console.error("Erro ao atualizar GPS:", error);
-            },
-            {
-                enableHighAccuracy: true,
-                timeout: 10000,
-                maximumAge: 0
-            }
-        );
-    } else {
-        console.error("Geolocalização não é suportada neste navegador.");
-    }
-});
-
-
-// Função para verificar se a localização está ativa
-function verificarLocalizacaoAtiva() {
-    if (navigator.geolocation) {
-        const watchID = navigator.geolocation.watchPosition(
-            (position) => {
-                console.log("Localização ativa");
-                document.getElementById("alerta-gps").style.display = "none"; // Esconde o alerta
-                navigator.geolocation.clearWatch(watchID); // Para de assistir
-            },
-            (error) => {
-                if (error.code === error.PERMISSION_DENIED || error.code === error.POSITION_UNAVAILABLE) {
-                    console.warn("Localização desativada ou indisponível.");
-                    document.getElementById("alerta-gps").style.display = "block"; // Mostra o alerta
-                }
-            },
-            {
-                enableHighAccuracy: true,
-                timeout: 10000,
-                maximumAge: 0
-            }
-        );
-    } else {
-        console.error("Geolocalização não é suportada neste navegador.");
-    }
-}
-
-// Chama a função ao carregar a página
-window.addEventListener('load', verificarLocalizacaoAtiva);
-
- // Bloco= 1 fim
-// Bloco mapa na tela fim
-
-
-
-    // Função para tocar um som
-    function playSound(soundFile) {
-        const audio = new Audio(soundFile);
-        audio.play();
-    }
-
-    // Chamada da função trackLocation ao carregar a página
-    window.onload = function () {
-        checkUserName();  // Verificar e carregar o nome do usuário salvo
-        trackLocation();   // Rastrear a localização do usuário
-    };
 
 </script>
 </head>
@@ -1292,10 +430,14 @@ window.addEventListener('load', verificarLocalizacaoAtiva);
     <!-- Inicio conteiner=1 principal -->
     <!-- Container Principal -->
     <div class="container">
- 
 
-        <!-- Div da bolha dentro do container -->
+
+   <!-- Div da bolha dentro do container -->
     <div class="bubble"></div>
+
+
+
+
 
 
         <h2 style="width: 90%; margin: 15px auto; text-align: left; font-size: 15px; color: #000;">
@@ -1313,8 +455,13 @@ window.addEventListener('load', verificarLocalizacaoAtiva);
     <img src="https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif" alt="Carregando..." style="width: 100px; height: 100px;">
 </div>
 
-    <!-- Local do mapa OpenStreetMap -->
+  
+
+  <!-- Local do mapa OpenStreetMap -->
         <div id="map" style="width: 100%; height: 300px;"></div>
+
+
+   
 
 
     <!-- Borda em volta conteudo -->
@@ -1381,6 +528,8 @@ window.addEventListener('load', verificarLocalizacaoAtiva);
 
 
 
+
+
 <!-- PARTE DO HISTÓRICO -->
 <!-- Inicio conteine=2 histórico -->
 <!-- Container para Exibir o Histórico de Presença -->
@@ -1390,8 +539,8 @@ window.addEventListener('load', verificarLocalizacaoAtiva);
         <!-- Lista de registros será carregada aqui -->
     </div>
 </div>
-<!-- Fim conteine=2 histórico -->
 
+<!-- Fim conteine=2 histórico -->
 
 
 <!-- BLOCO Input NOME USUÁRIO -->
@@ -1429,1013 +578,16 @@ window.addEventListener('load', verificarLocalizacaoAtiva);
 
 
 
-      <!-- Início conteúdo conteiner histórico -->
+
+
 <script>
-    <!-- Inicio conteúdo histórico -->
-    // Função para alternar a visibilidade do histórico
-
-
-    //IndexBD 
-            async function toggleHistory() {
-    const historyContainer = document.getElementById("history-container");
-    const records = await getHistoryRecords();
-
-
-            if (historyContainer.style.display === "none") {
-                historyContainer.style.display = "block";
-                const recordsList = document.getElementById("records-list");
-                recordsList.innerHTML = ""; // Limpar a lista antes de adicionar novamente
-
-
-// Ordenar os registros de forma decrescente (mais recente primeiro)
-records.reverse();  // Aqui é onde você inverte a ordem dos registros
-
-
-// Adicionar os registros parte ver na tela do app
-records.forEach((record, index) => {
-
-
-// Contagem de registros
-const numeroRegistro = records.length - index;
-
-
-
-                    const recordDiv = document.createElement("div");
-                    recordDiv.classList.add("record");
-                    recordDiv.innerHTML = `
-
-                    <p><strong>Registro da localização nº ${numeroRegistro}</strong></p>
-
-
-<div><strong>Usuário:</strong> ${record.userName}</div>
-<div><strong>ID:</strong> ${record.userID}</div>
-<div><strong>Data/Hora:</strong> ${record.timestamp}</div>                        
-<div><strong>Descrição:</strong> ${record.description}</div>
-<br> <!-- Pula uma linha depois da data -->
-
-<div><strong>Coordenadas:</strong> <span class="coords">${record.coordinates}</span></div>
-
-<div><strong>Endereço:</strong> ${record.address}</div>
-
-<br> <!-- Pula uma linha depois da data -->
-    <!-- Aqui está o booleano visível -->
-
-   <div class="toggle-container">
-    <label class="switch">
-        <input type="checkbox" class="toggle-btn" onchange="toggleButtonsVisibility(${index})">
-        <span class="slider"></span>
-    </label>
-   <span><strong>Mostrar ações</strong></span>
-
-</div>
-
-
-<div class="history-buttons">
-                  
-<!-- Botões histórico -->
-<div class="history-buttons">
-
-
-    <!-- Enviar texto WhatsApp -->
-    <button class="share-btn" onclick="shareLocationHistory(${index})">
-        Enviar texto WhatsApp
-    </button>
-
-    <!-- Mapa PDF -->
-    <button class="button" onclick="generateMapPDFHistory(${index})">
-        Mapa - Enviar / baixar
-    </button>
-
-    <!-- Declaração PDF -->
-    <button class="pdf-btn" onclick="generatePDFHistory(${index})">
-        Declaração - Enviar / baixar
-    </button>
-
- <!-- Alteração: Botão para abrir o local no Google Maps -->
-   <button class="button" onclick="openGoogleMaps('${parseCoords(record.coordinates)}')">Google Maps</button>
-
-    <!-- Delete -->
-<button class="delete-btn" onclick="deleteRecord(${index})">
-        Apagar
-    </button>
-
-
-</div>
-
-                       
-                    `;
-                    recordsList.appendChild(recordDiv);
-                    recordDiv.querySelector(".history-buttons").style.display = "none";
-
-                });
-            } else {
-                historyContainer.style.display = "none";
-            }
-        }
-    
-
-
-
-// 6 ===== DELETE REGISTRO NO INDEXEDDB COM CONFIRMAÇÃO =====
-window.deleteRecord = async function(index) {
-    const confirmar = confirm("Tem certeza que deseja apagar este registro?");
-    if (!confirmar) return;
-
-    try {
-        // Recupera todos os registros
-        const records = await getAllRecordsFromDB();
-
-        if (!records || records.length === 0) return;
-
-        // Corrige a inversão entre lista exibida e array real
-        const originalIndex = records.length - 1 - index;
-        const recordToDelete = records[originalIndex];
-
-        if (!recordToDelete) return;
-
-        // Abre transação de escrita
-        const tx = db.transaction(STORE_NAME, "readwrite");
-        const store = tx.objectStore(STORE_NAME);
-
-        // Deleta pelo id
-        store.delete(recordToDelete.id);
-
-        // Recarrega a página após deletar
-        tx.oncomplete = () => {
-            location.reload();
-        };
-    } catch (e) {
-        console.error("Erro ao deletar registro do IndexedDB", e);
-    }
-};
-// 6 ===== DELETE REGISTRO NO INDEXEDDB COM CONFIRMAÇÃO =====
-
-
-
-     // Bloco= 3 = novo bloco
-   
-   // Função para abrir a coordenada do registro no Google Maps
-function openGoogleMaps(coords) {
-    // coords deve estar no formato "latitude,longitude"
-    const url = `https://www.google.com/maps?q=${coords}`;
-    window.open(url, "_blank");
-}
-
-     // Bloco= 3 = fim novo bloco
-
-
-   // FUNÇÃO Boolean 
-function toggleButtonsVisibility(index) {
-    const records = document.querySelectorAll(".record");
-    const buttons = records[index].querySelector(".history-buttons");
-
-    const checkbox = records[index].querySelector(".toggle-btn");
-
-    if (checkbox.checked) {
-        buttons.style.display = "block";
-    } else {
-        buttons.style.display = "none";
-    }
-}
-
-   // FUNÇÃO Boolean 
-
-
-
-
-// =========================
-// FUNÇÃO COMPARTILHER TEXTO NO WHATSAPP
-// =========================
-     
-// Função para compartilhar no WhatsApp Texto a partir do histórico
-    async function shareLocationHistory(index) {
-    const records = await getAllRecordsFromDB() || [];
-
-
-    // Ordenar os registros de forma decrescente (mais recente primeiro)
-    records.reverse();
-
-    const record = records[index];  // Pega o registro com o índice passado
-
-
-    // 🔽 COLE EXATAMENTE AQUI
-  const coordsLimpa = record.coordinates
-    .match(/-?\d+(\.\d+)?/g)
-    .join(",");
-   
-
-    // Obtenção do nome e ID fixos
-    const userName = localStorage.getItem("userName") || "Usuário";  // Nome fixo
-    const userID = localStorage.getItem("userID");  // ID fixo
-
-
- // conferir se pode apagar
-console.log("Timestamp salvo no registro:", record.timestamp);
-
-
-// Descrição frase no zap
-
-const title = "Checkin+";
-const additionalMessage = ""; 
-const message = `*${title}*
-Registro da localização: 
-
-Eu estou aqui,
-Usuário: ${userName} (ID: ${userID})
-
-Data/hora local: ${record.timestamp}
-Descrição: ${record.description}
-
-${record.coordinates}
-${record.address}
-
-Google Mapas
-https://maps.google.com/?q=${coordsLimpa}
-A precisão da localização no Google Maps pode variar em um raio de 50 metros.
-
-Aplicativo disponível no Google Play`;
-
-// FUNÇÃO 
-
-    const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, '_blank');
-}
-
-// FUNÇÃO - Declaração TEXTO Wwhatsapp Checkin+ HISTORICO- fim
-
-
-
-// =========================
-// FUNDO GERAR PDF 1
-// =========================
-
-// Função DECLARAÇÃO PDF a partir do histórico (2ª parte) inicio
-
-async function generatePDFHistory(index) {
-
-    const records = await getAllRecordsFromDB() || [];
-
-    // Ordenar os registros de forma decrescente (mais recente primeiro)
-    records.reverse();
-
-    const record = records[index];
-
-
-// 🔽 COLE EXATAMENTE AQUI
-// Extrair somente números das coordenadas
-const coordsLimpa = record.coordinates
-  .match(/-?\d+(\.\d+)?/g)
-  .join(",");
-
-
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-
-
-// =========================
-// FUNDO PDF 1 PUBLIC if
-// =========================
-if (typeof window !== "undefined" && location.protocol !== "file:") {
-  doc.addImage(
-    "fundo-pdf.png",
-    "png",
-    0,
-    0,
-    doc.internal.pageSize.width,
-    doc.internal.pageSize.height
-  );
-}
-// =========================
-// FUNDO PDF 1 PUBLIC if
-// =========================
-
-
-// =========================
-// LOGO NO PDF 1 PUBLIC if
-// =========================
-if (typeof window !== "undefined" && location.protocol !== "file:") {
-  doc.addImage(
-    "logo-pdf.png",
-    "PNG",
-    177,
-    15,
-    22,
-    22
-  );
-}
-// =========================
-// LOGO NO PDF 1 PUBLIC if
-
-
-// =========================
-// GERAR QR CODE BASE64 (AJUSTADO)
-// =========================
-const qrCanvas = document.createElement("canvas");
-
-await QRCode.toCanvas(
-  qrCanvas,
-  `https://maps.google.com/?q=${coordsLimpa}`,
-  { width: 300 } // tamanho do QR Code
-);
-
-const qrBase64 = qrCanvas.toDataURL("image/png");
-
-// Adicionar QR Code ao PDF 1
-doc.addImage(qrBase64, "PNG", 175, 90, 25, 25);
-
-// =========================
-// GERAR QR CODE BASE64 (AJUSTADO)
-// =========================
-
-
-// =========================
-// MARCA D'ÁGUA (segura) DECLARAÇÃO
-// =========================
-doc.saveGraphicsState();
-doc.setGState(doc.GState({ opacity: 0.15 })); // transparência
-doc.setFont("helvetica", "bold");
-doc.setFontSize(20);
-doc.setTextColor("#02779e"); // cinza claro
-doc.text(
-    "Declaração de\nComparecimento",
-    90, 200,               // X e Y, ajuste conforme necessidade visual
-    { align: "left", angle: 45 }
-);
-doc.restoreGraphicsState();
-// =========================
-// MARCA D'ÁGUA (segura) DECLARAÇÃO
-// =========================
-
-
-    // Definir as margens
-    const margin = 10;  // 20mm = 2cm
-    const textX = margin + 0;  // Afastamento de 5mm da margem esquerda
-    const pageWidth = doc.internal.pageSize.width;
-    const pageHeight = doc.internal.pageSize.height;
-
-    // Ajustando a área útil do documento (sem contar as margens)
-    const contentWidth = pageWidth - 2 * margin;
-    const contentHeight = pageHeight - 2 * margin;
-
-    // Desenhando a margem (borda de 2cm ao redor)
- 
-
-    // Obtenção do nome e ID fixos
-    const userName = localStorage.getItem("userName") || "Usuário";  // Nome fixo
-    const userID = localStorage.getItem("userID");  // ID fixo
-
-
-// FUNÇÃO - Declaração PDF Checkin+ HISTORICO- 
-const title = "Checkin+";
-const additionalMessage = " ";
-const message = `Declaração de comparecimento: 
-
-Eu estou aqui,
-Usuário: ${userName} (ID: ${userID})
-
-Data/hora local: ${record.timestamp}
-Descrição: ${record.description}
-
-${record.coordinates}
-${record.address}
-
-Link e QR Code da localização:
-https://maps.google.com/?q=${coordsLimpa}
-
-A precisão da localização no Google Maps pode variar em um raio de 50 metros
-
-Aplicativo disponível no Google Play`;
-
-
-// FUNÇÃO - Declaração PDF Checkin+ HISTORICO- fim
-
-    // Título do PDF
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(16);
-    doc.text(title, textX, margin + 10);  // Afastamento de 5mm da margem esquerda
-
-    // Corpo do texto (mensagem principal)
-    doc.setFont("helvetica", "normal");
-    doc.setFontSize(12);
-
-
-doc.text(message, textX, margin + 15, { maxWidth: contentWidth - 10 });
-
-
-
-  // Mensagem adicional (em menor tamanho)
-// Calculando a posição vertical do link
-const linkYPosition = margin + 103;  // Aqui é onde o link do Google Maps está sendo colocado
-
-// Mensagem adicional (em menor tamanho)
-doc.setFontSize(12);  // Tamanho pequeno para a frase
-doc.setFont("helvetica", "normal");  // Fonte normal
-
-// Ajuste da posição Y para a frase ficar abaixo do link
-const additionalMessageY = linkYPosition + 8.5;  // Adicionando 10mm de espaçamento entre o link e a frase: Aprecisão da localização....
-
-doc.text(additionalMessage, textX, additionalMessageY, { maxWidth: contentWidth });
-
-
-    // Salvar o PDF gerado
-doc.save(
-  userName + "_Checkin+_Declaração_" +
-  String(new Date().getDate()).padStart(2, "0") + "-" +
-  String(new Date().getMonth() + 1).padStart(2, "0") + "-" +
-  new Date().getFullYear() + "_" +
-  String(new Date().getHours()).padStart(2, "0") + "-" +
-  String(new Date().getMinutes()).padStart(2, "0") + "-" +
-  String(new Date().getSeconds()).padStart(2, "0") +
-  ".pdf"
-);
-
-}
-
-// Função para gerar PDF a partir do histórico (2ª parte) fim 
-
-
-
-// =========================
-// FUNDO GERAR PDF 2 MAPA
-// =========================
-
-// MAPA - Função COMPLETA para gerar o PDF do mapa + declaração (HISTÓRICO)
-async function generateMapPDFHistory(index) {
-    const { jsPDF } = window.jspdf;
-
-
-    // Recuperar Lê os registros salvos
-const records = await getAllRecordsFromDB() || [];
-
-
-    // Corrigir índice por causa do reverse()
-    const originalIndex = records.length - 1 - index;
-    const record = records[originalIndex];
-
-
-
-// 🔽 COLE EXATAMENTE AQUI
-// Extrair somente números das coordenadas
-const coordsLimpa = record.coordinates
-  .match(/-?\d+(\.\d+)?/g)
-  .join(",");
-
-
-
-    if (!record) {
-        alert("Registro não encontrado.");
-        return;
-    }
-
-
-    // Captura o mapa indexBD
-    // Usa a imagem do mapa salva no registro
-if (!record.mapImage) {
-    alert("Imagem do mapa não encontrada no registro.");
-    return;
-}
-
-const imgData = record.mapImage;
-    // Captura o mapa indexBD
-
-
-    // Criar PDF
-    const pdf = new jsPDF("p", "mm", "a4");
-
-
-
-// =========================
-// FUNDO DA PÁGINA MAPA PUBLIC if
-// =========================
-if (typeof window !== "undefined" && location.protocol !== "file:") {
-  pdf.addImage(
-    "fundo-pdf.png",
-    "png",
-    0,
-    0,
-    pdf.internal.pageSize.width,
-    pdf.internal.pageSize.height
-  );
-}
-// FUNDO DA PÁGINA MAPA
-
-
-
- const pageWidth = pdf.internal.pageSize.getWidth();
- const pageHeight = pdf.internal.pageSize.getHeight();
-
-    // Captura o mapa indexBD
-   const margin = 10;
-const mapLeftMargin = 12;
-
-const imgWidth  = 186; // Largura
-const imgHeight = 130; // Altura
-let y = 12;   // margem do topo
-
-
-    // Captura o mapa indexBD
-
-
-    // Adiciona o mapa
-    pdf.addImage(imgData, "PNG", mapLeftMargin, y, imgWidth, imgHeight);
-    y += imgHeight + 8;
-
-
-
-// =========================
-// LOGO DA PÁGINA MAPA PUBLIC (condicional)
-// =========================
-if (typeof window !== "undefined" && location.protocol !== "file:") {
-  pdf.addImage(
-    "logo-pdf.png", // imagem na pasta public
-    "PNG",          // tipo correto
-    177,            // X (ajuste - X move para esquerda e direita)
-    15,            // Y (ajuste - y vertical sobe - desse)
-    22,             // largura
-    22              // altura
-  );
-}
-
-// =========================
-// LOGO NO PDF 3 (MAPA) – PUBLIC if
-
-
-
-    // DADOS DO REGISTRO (HISTÓRICO)
-    const userName = record.userName || "Usuário";
-    const userID = record.userID || "Sem ID";
-    const timestamp = record.timestamp;
-    const description = record.description || "Nenhuma observação registrada.";
-    const coordinates = record.coordinates;
-    const addressElement = record.address;
-
-    // TÍTULO
-    pdf.setFont("helvetica", "bold");
-    pdf.setFontSize(14);
-    pdf.text("Checkin+", margin + 5, y);
-    y += 1;
-
-    // SUBTÍTULOS
-    pdf.setFont("helvetica", "normal");
-    pdf.setFontSize(12);
-   
-    y += 4;
-
-    pdf.text("Registro da localização", margin + 5, y);
-    y += 8;
-
-    // TEXTO
-    pdf.setFontSize(12);
-
-    const text =
-`Eu estou aqui,
-Usuário: ${userName} (ID: ${userID})
-
-Data/Hora: ${timestamp}
-Descrição: ${description}
-
-${coordinates}
-${addressElement}
-
-Link e QR Code da localização:
-https://maps.google.com/?q=${coordsLimpa}
-A precisão da localização pode variar em um raio de até 50 metros.
-
-Aplicativo disponível no Google Play`;
-
-pdf.text(text, margin + 5, y, { maxWidth: pageWidth - 2 * margin - 5 });
-
-   
-   // =========================
-// QR CODE MAPA (PADRÃO 1º PDF)
-// =========================
-// BLOCO 1 — GERAR QR CODE (FUNCIONAL)
-const qrCanvas = document.createElement("canvas");
-
-
-await QRCode.toCanvas(
-    qrCanvas,
-    `https://maps.google.com/?q=${coordsLimpa}`,
-    { width: 300 }
-);
-
-
-const qrBase64 = qrCanvas.toDataURL("image/png");
-
-// Adicionar QR Code ao PDF Mapa
-pdf.addImage(qrBase64, "PNG", 175, 237, 25, 25);
-// =========================
-// QR CODE MAPA (PADRÃO 1º PDF)
-// =========================
-   
-    // Borda da página
-    
-// =========================
-// MARCA D'ÁGUA (segura) // MAPA- Historico
-// =========================
-pdf.saveGraphicsState();
-
-pdf.setFont("helvetica", "bold");
-pdf.setFontSize(20);
-pdf.setTextColor("#c9e0e8"); // cinza claro
-pdf.text(
-    "Registro da\nlocolização",
-    100, 220,               // X e Y, ajuste conforme necessidade visual
-    { align: "left", angle: 45 }
-);
-pdf.restoreGraphicsState();
-
-
-    // Salvar PDF
-    pdf.save(`Checkin+_Mapa_${timestamp}.pdf`);
-}
-
-// MAPA- Função COMPLETA para gerar o PDF do mapa > fim
-
-
-
-
-
-
-
-
-
-
-// =========================
-// FUNDO GERAR PDF 3 CHEGADA E SAIDA
-// =========================
-<!-- Função chegada e saída início -->
-
-  </script>
-  <!-- Modal -->
-
-<div id="arrival-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; 
-    background:rgba(0,0,0,0.6); z-index:999; overflow:auto; padding:40px 10px; box-sizing:border-box;">
-
-
-<div style="background:#f0f4f8; padding:20px; width:100%; max-width:400px; 
-
-    min-height:75vh; /* ajusta altura do pop-up */
- margin:50px auto; /* mesma distância do topo e da parte inferior */
-    border-radius:8px; box-shadow:0 0 10px rgba(0,0,0,0.3); box-sizing:border-box;">
-
-
-    <h3>Chegada / Saída</h3>
-    Selecione dois registros
-    <div id="arrival-list" style="max-height:calc(75vh - 120px); overflow-y:auto; margin-bottom:15px; border:1px solid #ccc; border-radius:4px;"></div>
-    
-    <div style="display:flex; justify-content:space-between;">
-      <button id="generate-pdf-btn" style="display:none;" onclick="generateArrivalDeparturePDF()">Gerar PDF</button>
-      <button onclick="closeArrivalDeparture()">Fechar</button>
-    </div>
-  </div>
-</div>
-
-<!-- Modal -->
-<script>
-
-let selected = [];
-let reversedRecords = [];
-
-/* ===============================
-   ABRIR CHEGADA / SAÍDA
-================================ */
-
-
-<!-- indeBD-->
-async function openArrivalDeparture() {
-const records = await getAllRecordsFromDB() || [];
-
-
-    if (records.length < 2) {
-        alert("É necessário pelo menos 2 registros.");
-        return;
-    }
-
-    reversedRecords = [...records].reverse();
-    selected = [];
-
-    const list = document.getElementById("arrival-list");
-    list.innerHTML = "";
-
-    document.getElementById("generate-pdf-btn").style.display = "none";
-
-
-    reversedRecords.forEach((record, index) => {
-        const div = document.createElement("div");
-        div.innerText = `${record.timestamp} - ${record.description}`;
-        div.style.cursor = "pointer";
-        div.style.padding = "6px";
-        div.style.borderBottom = "1px solid #ccc";
-
-     // Linha única
-        div.style.whiteSpace = "nowrap";
-div.style.overflow = "hidden";
-div.style.textOverflow = "ellipsis";
-
-
-        // Clique para selecionar/desmarcar
-        div.onclick = () => {
-            if (selected.includes(index)) {
-                selected = selected.filter(i => i !== index);
-                div.style.background = "";
-            } else {
-                if (selected.length >= 2) return;
-                selected.push(index);
-                div.style.background = "#d1f7d6";
-            }
-
-            document.getElementById("generate-pdf-btn").style.display = (selected.length === 2) ? "inline-block" : "none";
-        };
-
-        list.appendChild(div);
-    });
-
-    // Mostra o overlay
-    document.getElementById("arrival-overlay").style.display = "block";
-
-    document.body.style.overflow = "hidden";
-}
-
-
-
-/* ===============================
-   FECHAR
-================================ */
-function closeArrivalDeparture() {
-    document.getElementById("arrival-overlay").style.display = "none";
-
-    document.body.style.overflow = "";
-}
-
-
-
-/* ===============================
-   UTILIDADES
-================================ */
-
-
-function parseDateBR(dateStr) {
-    if (!dateStr) return null;
-
-    // Extrai números: dia, mês, ano, hora, minuto, segundo
-    const parts = dateStr.match(/\d+/g);
-
-    if (!parts || parts.length < 3) return null;
-
-    const [d, m, y, h = 0, min = 0, s = 0] = parts.map(Number);
-
-    return new Date(y, m - 1, d, h, min, s);
-}
-
-
-function formatCoordinates(coords) {
-    const matches = coords?.match(/-?\d+\.?\d*/g);
-    return matches && matches.length >= 2 ? `${matches[0]},${matches[1]}` : "";
-}
-
-
-/* ===============================
-   GERAR PDF
-================================ */
-
-
-async function generateArrivalDeparturePDF() {
-
-
-
-    if (selected.length !== 2) {
-        alert("Selecione dois registros.");
-        return;
-    }
-
-    const rec1 = reversedRecords[selected[0]];
-    const rec2 = reversedRecords[selected[1]];
-
-    const chegada = parseDateBR(rec1.timestamp) < parseDateBR(rec2.timestamp) ? rec1 : rec2;
-    const saida   = chegada === rec1 ? rec2 : rec1;
-
-    const start = parseDateBR(chegada.timestamp);
-    const end   = parseDateBR(saida.timestamp);
-    const diff  = end - start;
-
-    // Calcula dias, horas e minutos
-    const minutos = Math.floor(diff / 60000) % 60;
-    const horas   = Math.floor(diff / 3600000) % 24;
-    const dias    = Math.floor(diff / 86400000);
-
-    // =========================
-    // MONTA TEMPO TOTAL DE PERMANÊNCIA
-    // Mostra apenas unidades existentes, evitando 0 dias ou 0 horas
-    // =========================
-
-    let tempoParts = [];
-    if (dias > 0) tempoParts.push(`${dias} ${dias === 1 ? "dia" : "dias"}`);
-    if (horas > 0) tempoParts.push(`${horas} ${horas === 1 ? "hora" : "horas"}`);
-    tempoParts.push(`${minutos} ${minutos === 1 ? "minuto" : "minutos"}`); // sempre mostra minutos
-    const tempo = tempoParts.join(", ");
-
-    // Formata coordenadas com fallback caso estejam vazias
-    const chegadaCoords = formatCoordinates(chegada.coordinates) || "0,0";
-    const saidaCoords   = formatCoordinates(saida.coordinates) || "0,0";
-
-
-const { jsPDF } = window.jspdf;
-const doc = new jsPDF();
-
-
-
-// =========================
-// FUNDO PDF 1 CHEGADA E SAÍDA PUBLIC if
-// =========================
-if (typeof window !== "undefined" && location.protocol !== "file:") {
-  doc.addImage(
-    "fundo-pdf.png",
-    "png",
-    0,
-    0,
-    doc.internal.pageSize.width,
-    doc.internal.pageSize.height
-  );
-}
-// =========================
-// FUNDO PDF 1 CHEGADA E SAÍDA PUBLIC if
-// =========================
-
-// =========================
-// LOGO NO PDF 1 PUBLIC if
-// =========================
-if (typeof window !== "undefined" && location.protocol !== "file:") {
-  doc.addImage(
-    "logo-pdf.png",
-    "PNG",
-    177,
-    15,
-    22,
-    22
-  );
-}
-// =========================
-// LOGO NO PDF 1 PUBLIC if
-// =========================
-
-
-// =========================
-// Título e subtítulo
-// =========================
-doc.setFont("helvetica", "bold");
-doc.setFontSize(16);
-doc.text("Checkin+", 10, 20);
-
-doc.setFont("helvetica", "normal");
-doc.setFontSize(12);
-doc.text("Comprovante de chegada e saída", 10, 25);
-
-
-
-// =========================
-// Conteúdo antes de CHEGADA- 1
-// =========================
-const textoAntesChegada = `
-Usuário: ${chegada.userName}
-ID: ${chegada.userID}
-`;
-
-// Escreve o conteúdo antes de CHEGADA
-doc.setFont("helvetica", "normal");
-doc.setFontSize(12);
-doc.text(textoAntesChegada, 10, 30);
-
-// =========================
-// CHEGADA com bolinha verde
-// =========================
-let y = 22 + textoAntesChegada.split('\n').length * 7; // calcula Y logo após o texto anterior
-doc.setFillColor(0, 200, 0); // verde
-doc.circle(11, y - 2, 1.5, 'F'); // bolinha preenchida
-doc.text(" CHEGADA", 13, y); // texto logo após a bolinha
-
-
-// =========================
-// Conteúdo entre CHEGADA e SAÍDA
-// =========================
-const textoEntre = `
-Data/Hora: ${chegada.timestamp}
-Descrição: ${chegada.description}
-
-${chegada.coordinates || ""}
-${chegada.address || ""}
-Link e QR Code da localização:
-https://maps.google.com/?q=${chegadaCoords}
-`;
-
-// Escreve o conteúdo logo após CHEGADA
-y += 1; // pequeno espaço para separar da palavra CHEGADA
-doc.text(textoEntre, 10, y, { maxWidth: 180 });
-
-
-
-// =========================
-// GERAR QR CODES (CHEGADA E SAÍDA) - AJUSTADO
-// =========================
-const qrCanvasChegada = document.createElement("canvas");
-await QRCode.toCanvas(
-  qrCanvasChegada,
-  `https://maps.google.com/?q=${chegadaCoords}`,
-  { width: 300 }
-);
-const qrChegada = qrCanvasChegada.toDataURL("image/png");
-
-const qrCanvasSaida = document.createElement("canvas");
-await QRCode.toCanvas(
-  qrCanvasSaida,
-  `https://maps.google.com/?q=${saidaCoords}`,
-  { width: 300 }
-);
-const qrSaida = qrCanvasSaida.toDataURL("image/png");
-
-// Adiciona os QR Codes no PDF
-doc.addImage(qrChegada, "PNG", 175, 93, 25, 25);
-doc.addImage(qrSaida,   "PNG", 175, 192, 25, 25);
-
-
-
-// =========================
-// SAÍDA com bolinha azul
-// =========================
-y += textoEntre.split('\n').length * 6; // calcula Y para SAÍDA
-doc.setFillColor(0, 0, 200); // azul
-doc.circle(11, y - 2, 1.5, 'F'); // bolinha azul preenchida
-doc.text(" SAÍDA", 13, y); // texto logo após a bolinha
-
-// =========================
-// Conteúdo depois de SAÍDA
-// =========================
-const textoDepoisSaida = `
-Data/Hora: ${saida.timestamp}
-Descrição: ${saida.description}
-
-${saida.coordinates || ""}
-${saida.address || ""}
-Link e QR Code da localização:
-https://maps.google.com/?q=${saidaCoords}
-
-Tempo total de permanência:
-${tempo}
-
-Documento gerado em ${new Date().toLocaleString()}
-Aplicativo disponível no Google Play
-`;
-
-// Escreve o restante do conteúdo
-y += 1; // pequeno espaço
-doc.text(textoDepoisSaida, 10, y, { maxWidth: 180 });
-
-
-
-// =========================
-// MARCA D'ÁGUA (segura) CHEGADA E SAÍDA
-// =========================
-doc.saveGraphicsState();
-doc.setGState(doc.GState({ opacity: 0.15 })); // transparência
-doc.setFont("helvetica", "bold");
-doc.setFontSize(20);
-
-doc.setTextColor("#02779e"); // cinza claro ("#C8C8C8");
-
-doc.text(
-    "Comprovante de\nChegada e Saída",
-  90, 160,
-  { align: "left", angle: 45 }
-
-);
-doc.restoreGraphicsState();
-
-
-
-// =========================
-// Salvar PDF
-// =========================
-doc.save("Checkin+_Chegada_Saida.pdf");
-
-closeArrivalDeparture();
-
-}
-   </script>
-
-
-
-<!-- Bolha dentro do container -->
-    <div class="bubble"></div>
-
-
-    <script>
         // Script da bolha
         document.addEventListener("DOMContentLoaded", function () {
             const bubble = document.querySelector('.bubble');
 
             // Posição inicial
-            let x = Math.random() * (window.innerWidth - 40); // Posição aleatória horizontal, ajustada para o tamanho da bolha (80px)
-            let y = Math.random() * (window.innerHeight - 40); // Posição aleatória vertical, ajustada para o tamanho da bolha (80px)
+            let x = Math.random() * (window.innerWidth - 80); // Posição aleatória horizontal, ajustada para o tamanho da bolha (80px)
+            let y = Math.random() * (window.innerHeight - 80); // Posição aleatória vertical, ajustada para o tamanho da bolha (80px)
 
             // Velocidade da bolha (VX e VY)
             let vx = (Math.random() - 0.5) * 2; // Velocidade horizontal (ajuste o valor 2 para controlar a velocidade)
@@ -2449,9 +601,9 @@ closeArrivalDeparture();
 
                 // Verifica as colisões com as bordas
                   // Se a bolha encostar na borda esquerda ou direita, inverte a direção horizontal (VX)
-                if (x <= 0 || x >= window.innerWidth - 40) vx *= -1; // Ajuste o 80 para o tamanho da bolha
+                if (x <= 0 || x >= window.innerWidth - 80) vx *= -1; // Ajuste o 80 para o tamanho da bolha
                   // Se a bolha encostar na borda superior ou inferior, inverte a direção vertical (VY)
-                if (y <= 0 || y >= window.innerHeight - 40) vy *= -1; // Ajuste o 80 para o tamanho da bolha
+                if (y <= 0 || y >= window.innerHeight - 80) vy *= -1; // Ajuste o 80 para o tamanho da bolha
 
 
                 // Atualiza a posição da bolha no DOM
@@ -2470,6 +622,8 @@ closeArrivalDeparture();
 
 </body>
 </html>
+
+
 
 
 
