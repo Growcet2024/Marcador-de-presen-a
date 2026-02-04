@@ -38,7 +38,7 @@
             0 0 5px rgba(255,255,255,0.35);
 
         /* Zoom perceptível */
-        backdrop-filter: zoom(2.5);
+        backdrop-filter: zoom(2.9);
     }
 </style>
 </head>
@@ -55,15 +55,15 @@
 const bubble = document.querySelector(".bubble");
 
 
-const size = 60; // Reduzindo o tamanho da bolha
+const size = 40; // Reduzindo o tamanho da bolha
 
 
 let x = Math.random() * (window.innerWidth - size);
 let y = Math.random() * (window.innerHeight - size);
 
 
-let vx = 2.2; // Velocidade horizontal (controle da velocidade de movimento no eixo X)
-let vy = 1.9; // Velocidade vertical (controle da velocidade de movimento no eixo Y)
+let vx = 1.5; // Velocidade horizontal (controle da velocidade de movimento no eixo X)
+let vy = 1.2; // Velocidade vertical (controle da velocidade de movimento no eixo Y)
 
 
 
@@ -99,3 +99,4 @@ animate();
 
 </body>
 </html>
+
