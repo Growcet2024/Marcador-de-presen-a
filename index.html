@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bolha Lupa – Comportamento Corrigido</title>
+<title>Bolha Lupa – Fundo Jeans</title>
 
 <style>
     body {
@@ -11,15 +11,16 @@
         overflow: hidden;
         height: 100vh;
 
-        /* Fundo xadrez fino */
-        background-color: #f0f0f0;
+        /* Fundo azul tipo jeans */
+        background-color: #3b5998; /* azul jeans médio */
+
+        /* Textura de fios diagonais simulando tecido */
         background-image:
-            linear-gradient(45deg, #ccc 25%, transparent 25%),
-            linear-gradient(-45deg, #ccc 25%, transparent 25%),
-            linear-gradient(45deg, transparent 75%, #ccc 75%),
-            linear-gradient(-45deg, transparent 75%, #ccc 75%);
-        background-size: 20px 20px;
-        background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+            linear-gradient(45deg, rgba(255,255,255,0.05) 25%, transparent 25%),
+            linear-gradient(-45deg, rgba(255,255,255,0.05) 25%, transparent 25%),
+            linear-gradient(45deg, transparent 75%, rgba(255,255,255,0.05) 75%),
+            linear-gradient(-45deg, transparent 75%, rgba(255,255,255,0.05) 75%);
+        background-size: 10px 10px; /* espaçamento mais fino dos fios */
     }
 
     .bubble {
@@ -35,7 +36,7 @@
             inset 0 0 10px rgba(255,255,255,0.6),
             0 0 14px rgba(255,255,255,0.35);
 
-        /* Zoom MAIS perceptível */
+        /* Zoom perceptível */
         backdrop-filter: zoom(1.7);
     }
 </style>
@@ -61,31 +62,28 @@ function animate() {
     x += vx;
     y += vy;
 
-    // Verifica se a bolha tocou nas bordas e faz ela quicar
+    // Verifica colisão com bordas
     if (x <= 0) {
-        x = 0;  // Força a bolha para o limite esquerdo
-        vx = Math.abs(vx);  // Inverte a direção horizontal (vai para a direita)
+        x = 0;
+        vx = Math.abs(vx);
     } else if (x >= window.innerWidth - size) {
-        x = window.innerWidth - size;  // Força a bolha para o limite direito
-        vx = -Math.abs(vx);  // Inverte a direção horizontal (vai para a esquerda)
+        x = window.innerWidth - size;
+        vx = -Math.abs(vx);
     }
 
     if (y <= 0) {
-        y = 0;  // Força a bolha para o limite superior
-        vy = Math.abs(vy);  // Inverte a direção vertical (vai para baixo)
+        y = 0;
+        vy = Math.abs(vy);
     } else if (y >= window.innerHeight - size) {
-        y = window.innerHeight - size;  // Força a bolha para o limite inferior
-        vy = -Math.abs(vy);  // Inverte a direção vertical (vai para cima)
+        y = window.innerHeight - size;
+        vy = -Math.abs(vy);
     }
 
-    // Aplica a posição atual da bolha
     bubble.style.transform = `translate(${x}px, ${y}px)`;
 
-    // Chama a função recursivamente para continuar o movimento
     requestAnimationFrame(animate);
 }
 
-// Inicia a animação
 animate();
 </script>
 
