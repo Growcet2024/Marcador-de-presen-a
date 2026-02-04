@@ -18,8 +18,8 @@
         /* Adicionando o CSS da bolha */
         .bubble { 
             position: absolute;
-            width: 30px; /* Tamanho da bolinha (largura) */
-            height: 30px; /* Tamanho da bolinha (altura) */
+            width: 40px; /* Tamanho da bolinha (largura) */
+            height: 40px; /* Tamanho da bolinha (altura) */
             border-radius: 50%; /* Para manter a bolinha redonda */
             pointer-events: none;
 
@@ -58,8 +58,8 @@
             const bubble = document.querySelector('.bubble');
 
             // Posição inicial
-            let x = Math.random() * (window.innerWidth - 30); // Posição aleatória horizontal, ajustada para o tamanho da bolha (80px)
-            let y = Math.random() * (window.innerHeight - 30); // Posição aleatória vertical, ajustada para o tamanho da bolha (80px)
+            let x = Math.random() * (window.innerWidth - 40); // Posição aleatória horizontal, ajustada para o tamanho da bolha (80px)
+            let y = Math.random() * (window.innerHeight - 40); // Posição aleatória vertical, ajustada para o tamanho da bolha (80px)
 
             // Velocidade da bolha (VX e VY)
             let vx = (Math.random() - 0.5) * 2; // Velocidade horizontal (ajuste o valor 2 para controlar a velocidade)
@@ -73,9 +73,9 @@
 
                 // Verifica as colisões com as bordas
                   // Se a bolha encostar na borda esquerda ou direita, inverte a direção horizontal (VX)
-                if (x <= 0 || x >= window.innerWidth - 30) vx *= -1; // Ajuste o 80 para o tamanho da bolha
+                if (x <= 0 || x >= window.innerWidth - 40) vx *= -1; // Ajuste o 80 para o tamanho da bolha
                   // Se a bolha encostar na borda superior ou inferior, inverte a direção vertical (VY)
-                if (y <= 0 || y >= window.innerHeight - 30) vy *= -1; // Ajuste o 80 para o tamanho da bolha
+                if (y <= 0 || y >= window.innerHeight - 40) vy *= -1; // Ajuste o 80 para o tamanho da bolha
 
 
                 // Atualiza a posição da bolha no DOM
