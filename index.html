@@ -18,17 +18,18 @@
         /* Adicionando o CSS da bolha */
         .bubble { 
             position: absolute;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
+            width: 30px; /* Tamanho da bolinha (largura) */
+            height: 30px; /* Tamanho da bolinha (altura) */
+            border-radius: 50%; /* Para manter a bolinha redonda */
             pointer-events: none;
 
-            /* Lente */
-            border: 2px solid rgba(255,255,255,0.75);
+           /* Lente */
+           border: 2px solid #000000BF; /* Branco com 75% de opacidade */
+           box-shadow:
+           inset 0 0 5px #ffffff99,   /* Branco com 60% de opacidade */
+           0 0 5px #ffffff59;        /* Branco com 35% de opacidade */
 
-            box-shadow:
-                inset 0 0 5px rgba(255,255,255,0.6),
-                0 0 5px rgba(255,255,255,0.35);
+
 
             /* Zoom perceptível */
             backdrop-filter: zoom(2.9);
@@ -57,27 +58,34 @@
             const bubble = document.querySelector('.bubble');
 
             // Posição inicial
-            let x = Math.random() * (window.innerWidth - 80);
-            let y = Math.random() * (window.innerHeight - 80);
-            let vx = (Math.random() - 0.5) * 2;
-            let vy = (Math.random() - 0.5) * 2;
+            let x = Math.random() * (window.innerWidth - 30); // Posição aleatória horizontal, ajustada para o tamanho da bolha (80px)
+            let y = Math.random() * (window.innerHeight - 30); // Posição aleatória vertical, ajustada para o tamanho da bolha (80px)
 
+            // Velocidade da bolha (VX e VY)
+            let vx = (Math.random() - 0.5) * 2; // Velocidade horizontal (ajuste o valor 2 para controlar a velocidade)
+            let vy = (Math.random() - 0.5) * 2; // Velocidade vertical (ajuste o valor 2 para controlar a velocidade)
+
+
+            // Função para atualizar a posição da bolha
             function updateBubblePosition() {
-                x += vx;
-                y += vy;
+                x += vx; // Atualiza a posição X com a velocidade VX
+                y += vy; // Atualiza a posição Y com a velocidade VY
 
                 // Verifica as colisões com as bordas
-                if (x <= 0 || x >= window.innerWidth - 80) vx *= -1;
-                if (y <= 0 || y >= window.innerHeight - 80) vy *= -1;
+                  // Se a bolha encostar na borda esquerda ou direita, inverte a direção horizontal (VX)
+                if (x <= 0 || x >= window.innerWidth - 30) vx *= -1; // Ajuste o 80 para o tamanho da bolha
+                  // Se a bolha encostar na borda superior ou inferior, inverte a direção vertical (VY)
+                if (y <= 0 || y >= window.innerHeight - 30) vy *= -1; // Ajuste o 80 para o tamanho da bolha
 
-                // Atualiza a posição da bolha
-                bubble.style.transform = `translate(${x}px, ${y}px)`;
+
+                // Atualiza a posição da bolha no DOM
+                bubble.style.transform = `translate(${x}px, ${y}px)`; // Aplica a nova posição X e Y da bolha
             }
 
             // Animação contínua
             function animate() {
-                updateBubblePosition();
-                requestAnimationFrame(animate);
+                updateBubblePosition();         // Atualiza a posição da bolha a cada frame
+                requestAnimationFrame(animate); // Chama novamente a função de animação no próximo frame
             }
 
             animate();
@@ -86,4 +94,3 @@
 
 </body>
 </html>
-
