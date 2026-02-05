@@ -520,27 +520,17 @@ input:checked + .slider:before {
     z-index: 1; /* Mantém o mapa abaixo do menu */
 
 
-
-
-.bubble-layer {
-    position: absolute; /* agora relativo ao container */
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+/* Bolha  */
+.bubble {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: red; /* teste */
+    position: fixed;
     pointer-events: none;
     z-index: 9999;
 }
 
-.bubble {
-    position: absolute;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: red;
-    top: 50px;
-    left: 50px;
-}
 
 
 
@@ -1274,10 +1264,6 @@ window.addEventListener('load', verificarLocalizacaoAtiva);
 <body>
 
 
-
-
-
-
     <!-- Cabeçalho Tela principal-->
     <header>
 
@@ -1288,13 +1274,10 @@ window.addEventListener('load', verificarLocalizacaoAtiva);
     </header>
 
    
-
-
         <div class="container">
     <!-- BOLHA DE TESTE -->
-    <div class="bubble-layer">
-        <div class="bubble"></div>
-    </div>
+
+   
 
 
         <h2 style="width: 90%; margin: 15px auto; text-align: left; font-size: 15px; color: #000;">
@@ -2462,8 +2445,61 @@ closeArrivalDeparture();
         });
     </script>
 
+
+
+
+
+
+
+
+
+<script>
+window.addEventListener("load", function () {
+    // Criar a bolha
+    const bubble = document.createElement('div');
+    bubble.style.width = '40px';
+    bubble.style.height = '40px';
+    bubble.style.borderRadius = '50%';
+    bubble.style.background = 'red'; // apenas para teste
+    bubble.style.position = 'fixed'; // sobre toda a tela
+    bubble.style.top = '0px';
+    bubble.style.left = '0px';
+    bubble.style.pointerEvents = 'none';
+    bubble.style.zIndex = '9999';
+    document.body.appendChild(bubble);
+
+    // Posição inicial aleatória
+    let x = Math.random() * (window.innerWidth - 40);
+    let y = Math.random() * (window.innerHeight - 40);
+
+    // Velocidade
+    let vx = (Math.random() - 0.5) * 2;
+    let vy = (Math.random() - 0.5) * 2;
+
+    function update() {
+        x += vx;
+        y += vy;
+
+        if (x <= 0 || x >= window.innerWidth - 40) vx *= -1;
+        if (y <= 0 || y >= window.innerHeight - 40) vy *= -1;
+
+        bubble.style.transform = `translate(${x}px, ${y}px)`;
+        requestAnimationFrame(update);
+    }
+
+    update();
+});
+</script>
+
+
+
+
+
+
 </body>
 </html>
+
+
 
 
 
